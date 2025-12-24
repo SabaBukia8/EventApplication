@@ -26,5 +26,9 @@ enum class EventType {
     WORKSHOP,
     HAPPY_FRIDAY,
     CULTURAL,
-    WELLNESS
+    WELLNESS,
+    TRAINING,
+    SOCIAL,
+    CONFERENCE,
+    OTHER
 }

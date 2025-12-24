@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.eventapplication.R
 import com.example.eventapplication.databinding.ItemEventCardBinding
 import com.example.eventapplication.domain.model.Event
-import com.example.eventapplication.presentation.extensions.toFormattedDate
+import com.example.eventapplication.presentation.extensions.toMonthAbbreviation
+import com.example.eventapplication.presentation.extensions.toDayOfMonth
 import com.example.eventapplication.presentation.extensions.toTimeRange
 import com.example.eventapplication.presentation.extensions.visible
 import com.example.eventapplication.presentation.extensions.gone
@@ -37,12 +38,8 @@ class EventsAdapter(
 
         fun bind(event: Event) {
             with(binding) {
-                val formattedDate = event.startDateTime.toFormattedDate()
-                val parts = formattedDate.split(" ")
-                if (parts.size == 2) {
-                    tvMonth.text = parts[0]
-                    tvDay.text = parts[1]
-                }
+                tvMonth.text = event.startDateTime.toMonthAbbreviation()
+                tvDay.text = event.startDateTime.toDayOfMonth()
 
                 tvTitle.text = event.title
                 tvDescription.text = event.description

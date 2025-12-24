@@ -3,7 +3,7 @@ package com.example.eventapplication.data.mapper
 import com.example.eventapplication.data.remote.dto.response.EventTypeDto
 import com.example.eventapplication.domain.model.Category
 
-fun EventTypeDto.toDomain(eventCount: Int = 0): Category {
+fun EventTypeDto.toDomain(): Category {
     return Category(
         id = id,
         type = name.toEventType(),

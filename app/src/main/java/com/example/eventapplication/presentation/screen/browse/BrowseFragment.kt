@@ -69,9 +69,16 @@ class BrowseFragment : BaseFragment<FragmentBrowseEventsBinding>(
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
+                    if (state is BrowseState.IsLoading && state.isLoading) {
+                        binding.progressBar.visible()
+                    } else {
+                        binding.progressBar.gone()
+                    }
+
                     when (state) {
                         is BrowseState.Idle -> {}
-                        is BrowseState.IsLoading -> handleLoading(state.isLoading)
+                        is BrowseState.IsLoading -> {
+                        }
                         is BrowseState.Success -> {
                             buildBrowseItems(state)
 
@@ -103,7 +110,7 @@ class BrowseFragment : BaseFragment<FragmentBrowseEventsBinding>(
                         is BrowseSideEffect.ShowError -> {
                             val errorMessage = effect.error.toErrorMessage(requireContext())
                             showSnackbar(
-                                errorMessage, 
+                                errorMessage,
                                 Snackbar.LENGTH_LONG,
                                 getString(R.string.retry)
                             ) {
@@ -113,14 +120,6 @@ class BrowseFragment : BaseFragment<FragmentBrowseEventsBinding>(
                     }
                 }
             }
-        }
-    }
-
-    private fun handleLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.progressBar.visible()
-        } else {
-            binding.progressBar.gone()
         }
     }
 

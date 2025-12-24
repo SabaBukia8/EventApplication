@@ -179,6 +179,10 @@ class NewCategoryEventsAdapter(
                 EventType.HAPPY_FRIDAY -> context.getString(R.string.category_type_happy_friday)
                 EventType.CULTURAL -> context.getString(R.string.category_type_cultural)
                 EventType.WELLNESS -> context.getString(R.string.category_type_wellness)
+                EventType.TRAINING -> context.getString(R.string.training)
+                    EventType.SOCIAL -> context.getString(R.string.social)
+                        EventType.CONFERENCE -> context.getString(R.string.conference)
+                    EventType.OTHER -> context.getString(R.string.other)
             }
         }
     }

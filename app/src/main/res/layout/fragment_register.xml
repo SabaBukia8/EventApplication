@@ -280,13 +280,13 @@
             android:text="@string/department_label"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/llOtpSection" />
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilDepartment"
-            style="@style/Widget.App.TextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            app:boxBackgroundColor="@color/white"
             android:hint="@string/select_department"
             app:hintTextColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
@@ -302,7 +302,9 @@
                 android:inputType="none"
                 android:maxLines="1"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp" />
+                android:paddingEnd="16dp"
+                android:focusable="false"
+                android:clickable="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

@@ -7,5 +7,6 @@ data class EventTypeDto(
     val id: Int,
     val name: String,
     val description: String? = null,
-    val iconUrl: String? = null
+    val iconUrl: String? = null,
+    val eventCount: Int = 0
 )

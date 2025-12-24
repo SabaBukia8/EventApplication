@@ -6,9 +6,8 @@
     android:layout_height="wrap_content"
     android:background="@color/background_white"
     android:paddingHorizontal="@dimen/spacing_lg"
-    android:paddingVertical="@dimen/spacing_md">
+    android:paddingVertical="@dimen/spacing_lg">
 
-    <!-- App Logo -->
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/vLogo"
         android:layout_width="@dimen/icon_xl"
@@ -18,7 +17,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- App Name -->
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvAppName"
         android:layout_width="wrap_content"
@@ -32,7 +30,6 @@
         app:layout_constraintStart_toEndOf="@id/vLogo"
         app:layout_constraintTop_toTopOf="@id/vLogo" />
 
-    <!-- Notification Bell (with badge indicator) -->
     <android.widget.FrameLayout
         android:id="@+id/flNotificationBell"
         android:layout_width="wrap_content"
@@ -50,7 +47,6 @@
             android:src="@drawable/ic_notification"
             tools:ignore="ContentDescription" />
 
-        <!-- Notification Badge -->
         <View
             android:id="@+id/vNotificationBadge"
             android:layout_width="@dimen/badge_size"
@@ -62,7 +58,6 @@
 
     </android.widget.FrameLayout>
 
-    <!-- User Avatar -->
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivUserAvatar"
         android:layout_width="@dimen/avatar_size"
@@ -74,7 +69,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
 
-    <!-- Bottom Border -->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

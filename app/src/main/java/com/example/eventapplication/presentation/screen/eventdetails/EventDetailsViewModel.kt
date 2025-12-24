@@ -6,9 +6,9 @@ import com.example.eventapplication.data.local.datastore.DataStoreManager
 import com.example.eventapplication.domain.model.EventDetailsError
 import com.example.eventapplication.domain.model.NetworkError
 import com.example.eventapplication.domain.model.RegistrationStatus
-import com.example.eventapplication.domain.usecase.CancelRegistrationUseCase
-import com.example.eventapplication.domain.usecase.GetEventDetailsUseCase
-import com.example.eventapplication.domain.usecase.RegisterForEventUseCase
+import com.example.eventapplication.domain.usecase.auth.CancelRegistrationUseCase
+import com.example.eventapplication.domain.usecase.event.GetEventDetailsUseCase
+import com.example.eventapplication.domain.usecase.auth.RegisterForEventUseCase
 import com.example.eventapplication.domain.common.Resource
 import com.example.eventapplication.domain.util.preferences.PreferenceKeys
 import com.example.eventapplication.presentation.common.BaseViewModel

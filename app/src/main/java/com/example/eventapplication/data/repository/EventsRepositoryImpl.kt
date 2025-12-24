@@ -58,4 +58,18 @@ class EventsRepositoryImpl @Inject constructor(
             apiService.getEventTypes().toDomain()
         }
     }
+
+    override fun getTrendingEvents(count: Int): Flow<Resource<List<Event>>> {
+        return handleResponse.safeApiCall {
+            apiService.getTrendingEvents(count)
+        }.map { resource ->
+            when (resource) {
+                is Resource.Success -> Resource.Success(
+                    resource.data.map { it.toDomain() }
+                )
+                is Resource.Error -> resource
+                is Resource.Loader -> resource
+            }
+        }
+    }
 }

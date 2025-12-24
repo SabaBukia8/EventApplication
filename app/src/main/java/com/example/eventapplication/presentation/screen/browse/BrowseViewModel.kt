@@ -5,8 +5,9 @@ import com.example.eventapplication.domain.common.Resource
 import com.example.eventapplication.domain.model.BrowseError
 import com.example.eventapplication.domain.model.Category
 import com.example.eventapplication.domain.model.NetworkError
-import com.example.eventapplication.domain.usecase.GetCategoriesUseCase
-import com.example.eventapplication.domain.usecase.GetEventsUseCase
+import com.example.eventapplication.domain.model.SortOption
+import com.example.eventapplication.domain.usecase.event.GetCategoriesUseCase
+import com.example.eventapplication.domain.usecase.event.GetEventsUseCase
 import com.example.eventapplication.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
@@ -76,21 +77,25 @@ class BrowseViewModel @Inject constructor(
                             BrowseState.Success(
                                 events = emptyList(),
                                 categories = allCategories,
-                                selectedCategoryId = null,
+                                selectedCategoryId = 0,
                                 searchQuery = "",
                                 hasActiveFilters = false,
                                 filterState = FilterState()
                             )
                         }
 
-                        loadEvents()
+                        loadEvents(categoryId = 0)
                     }
                     is Resource.Error -> {
                         val browseError = mapNetworkErrorToBrowseError(resource.error)
                         updateState { BrowseState.Error(browseError) }
                         emitSideEffect(BrowseSideEffect.ShowError(browseError))
                     }
-                    is Resource.Loader -> {}
+                    is Resource.Loader -> {
+                        if (state.value !is BrowseState.Success) {
+                            updateState { BrowseState.IsLoading(resource.isLoading) }
+                        }
+                    }
                 }
             }
         }
@@ -109,13 +114,17 @@ class BrowseViewModel @Inject constructor(
     private fun handleCategorySelected(categoryId: Int?) {
         val currentState = state.value as? BrowseState.Success ?: return
 
+        val newId = if (categoryId == null) 0 else categoryId
+
+        if (currentState.selectedCategoryId == newId) return
+
         updateState {
-            currentState.copy(selectedCategoryId = categoryId)
+            currentState.copy(selectedCategoryId = newId)
         }
 
         loadEvents(
             searchQuery = currentState.searchQuery,
-            categoryId = categoryId,
+            categoryId = newId,
             filterState = currentFilterState
         )
     }
@@ -162,8 +171,10 @@ class BrowseViewModel @Inject constructor(
         filterState: FilterState = FilterState()
     ) {
         viewModelScope.launch {
+            val apiCategoryId = if (categoryId == 0) null else categoryId
+
             getEventsUseCase(
-                eventTypeId = categoryId,
+                eventTypeId = apiCategoryId,
                 location = filterState.location,
                 startDate = filterState.startDate,
                 endDate = filterState.endDate,
@@ -176,7 +187,7 @@ class BrowseViewModel @Inject constructor(
 
                         val sortedEvents = when (filterState.sortBy) {
                             SortOption.START_DATE -> resource.data.sortedBy { it.startDateTime }
-                            SortOption.REGISTRATION_COUNT -> resource.data.sortedByDescending { it.confirmedCount }
+                            SortOption.POPULARITY -> resource.data.sortedByDescending { it.confirmedCount }
                             SortOption.SPOTS_AVAILABLE -> resource.data.sortedByDescending { it.spotsLeft }
                         }
 
@@ -188,7 +199,11 @@ class BrowseViewModel @Inject constructor(
                         val browseError = mapNetworkErrorToBrowseError(resource.error)
                         emitSideEffect(BrowseSideEffect.ShowError(browseError))
                     }
-                    is Resource.Loader -> {}
+                    is Resource.Loader -> {
+                        if (state.value !is BrowseState.Success) {
+                            updateState { BrowseState.IsLoading(resource.isLoading) }
+                        }
+                    }
                 }
             }
         }

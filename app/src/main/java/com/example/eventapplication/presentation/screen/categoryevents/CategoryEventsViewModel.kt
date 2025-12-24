@@ -5,9 +5,9 @@ import com.example.eventapplication.domain.common.Resource
 import com.example.eventapplication.domain.model.Category
 import com.example.eventapplication.domain.model.CategoryEventsError
 import com.example.eventapplication.domain.model.NetworkError
-import com.example.eventapplication.domain.usecase.GetCategoriesUseCase
-import com.example.eventapplication.domain.usecase.GetEventsByCategoryUseCase
-import com.example.eventapplication.domain.usecase.SortOption
+import com.example.eventapplication.domain.model.SortOption
+import com.example.eventapplication.domain.usecase.event.GetCategoriesUseCase
+import com.example.eventapplication.domain.usecase.event.GetEventsByCategoryUseCase
 import com.example.eventapplication.presentation.model.FilterType
 import com.example.eventapplication.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +25,7 @@ class CategoryEventsViewModel @Inject constructor(
 ) {
 
     private var currentCategoryId: Int? = null
-    private var currentSortBy: SortOption = SortOption.DATE
+    private var currentSortBy: SortOption = SortOption.START_DATE
     private var currentFilterType: FilterType = FilterType.ALL_EVENTS
 
     override fun onEvent(event: CategoryEventsEvent) {

@@ -3,6 +3,7 @@ package com.example.eventapplication.presentation.screen.browse
 import com.example.eventapplication.domain.model.BrowseError
 import com.example.eventapplication.domain.model.Category
 import com.example.eventapplication.domain.model.Event
+import com.example.eventapplication.domain.model.SortOption
 
 sealed class BrowseState {
     object Idle : BrowseState()
@@ -44,10 +45,4 @@ data class FilterState(
 ) {
     fun hasActiveFilters(): Boolean =
         location != null || startDate != null || endDate != null || !showFullEvents
-}
-
-enum class SortOption {
-    START_DATE,
-    REGISTRATION_COUNT,
-    SPOTS_AVAILABLE
 }

@@ -24,4 +24,9 @@ interface EventsApiService {
 
     @GET("api/Events/types")
     suspend fun getEventTypes(): List<EventTypeDto>
+
+    @GET("api/Events/trending")
+    suspend fun getTrendingEvents(
+        @Query("count") count: Int = 5
+    ): List<EventDto>
 }

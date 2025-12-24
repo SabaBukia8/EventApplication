@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface NotificationsRepository {
 
-    fun getNotifications(userId: String): Flow<Resource<List<Notification>>>
+    fun getNotifications(): Flow<Resource<List<Notification>>>
 
     fun markAsRead(notificationId: String): Flow<Resource<Unit>>
 

@@ -226,5 +226,11 @@
     
     <!-- UI Placeholders -->
     <string name="image_placeholder">Image placeholder 300x160</string>
+    <string name="training">Training</string>
+    <string name="social">Social</string>
+    <string name="conference">Conference</string>
+    <string name="other">Other</string>
+    <string name="event_available">Available</string>
+    <string name="event_waitlist">Waitlist</string>
 
 </resources>

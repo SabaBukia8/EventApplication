@@ -21,7 +21,9 @@ class CategoryChipsAdapter(
 
     fun submitList(categories: List<Category>, selectedCategoryId: Int?) {
         val items = categories.map { category ->
-            CategoryItem(category, category.id == selectedCategoryId)
+            // Match if IDs match (including 0 for All)
+            val isSelected = category.id == selectedCategoryId
+            CategoryItem(category, isSelected)
         }
         super.submitList(items)
     }
@@ -53,10 +55,12 @@ class CategoryChipsAdapter(
                     category.type?.toDisplayName(context) ?: ""
                 }
 
+                setOnClickListener(null)
+
                 isChecked = isSelected
 
                 setOnClickListener {
-                    onCategoryClick(if (category.id == 0) null else category.id)
+                    onCategoryClick(category.id)
                 }
             }
         }

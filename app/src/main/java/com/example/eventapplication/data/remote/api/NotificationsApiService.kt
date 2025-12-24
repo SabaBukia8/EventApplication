@@ -7,8 +7,8 @@ import retrofit2.http.Path
 
 interface NotificationsApiService {
 
-    @GET("api/Notifications/user/{userId}")
-    suspend fun getNotifications(@Path("userId") userId: String): List<NotificationDto>
+    @GET("api/Notifications/my-notifications")
+    suspend fun getNotifications(): List<NotificationDto>
 
     @PUT("api/Notifications/{notificationId}/read")
     suspend fun markAsRead(@Path("notificationId") notificationId: String)

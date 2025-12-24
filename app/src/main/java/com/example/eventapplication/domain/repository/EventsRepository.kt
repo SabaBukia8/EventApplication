@@ -22,4 +22,6 @@ interface EventsRepository {
     ): Flow<Resource<PaginatedResult<Event>>>
 
     fun getEventTypes(): Flow<Resource<List<Category>>>
+
+    fun getTrendingEvents(count: Int): Flow<Resource<List<Event>>>
 }

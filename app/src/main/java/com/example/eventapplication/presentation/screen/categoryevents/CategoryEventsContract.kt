@@ -3,7 +3,7 @@ package com.example.eventapplication.presentation.screen.categoryevents
 import com.example.eventapplication.domain.model.Category
 import com.example.eventapplication.domain.model.CategoryEventsError
 import com.example.eventapplication.domain.model.Event
-import com.example.eventapplication.domain.usecase.SortOption
+import com.example.eventapplication.domain.model.SortOption
 import com.example.eventapplication.presentation.model.FilterType
 
 sealed class CategoryEventsState {

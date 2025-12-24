@@ -12,6 +12,10 @@ object EventTypeMapper {
             EventType.HAPPY_FRIDAY -> R.drawable.ic_happy_fridays
             EventType.CULTURAL -> R.drawable.ic_cultural
             EventType.WELLNESS -> R.drawable.ic_wellness
+            EventType.TRAINING -> R.drawable.ic_workshops
+            EventType.SOCIAL -> R.drawable.ic_team_building
+            EventType.CONFERENCE -> R.drawable.ic_workshops
+            EventType.OTHER -> R.drawable.ic_workshops
         }
     }
 
@@ -23,6 +27,10 @@ object EventTypeMapper {
             EventType.HAPPY_FRIDAY -> R.color.placeholder_medium
             EventType.CULTURAL -> R.color.placeholder_light
             EventType.WELLNESS -> R.color.placeholder_dark
+            EventType.TRAINING -> R.color.placeholder_dark
+            EventType.SOCIAL -> R.color.placeholder_medium
+            EventType.CONFERENCE -> R.color.placeholder_dark
+            EventType.OTHER -> R.color.placeholder_medium
         }
     }
 
@@ -34,6 +42,10 @@ object EventTypeMapper {
             EventType.HAPPY_FRIDAY -> context.getString(R.string.category_happy_fridays)
             EventType.CULTURAL -> context.getString(R.string.category_cultural)
             EventType.WELLNESS -> context.getString(R.string.category_wellness)
+            EventType.TRAINING -> "Training"
+            EventType.SOCIAL -> "Social"
+            EventType.CONFERENCE -> "Conference"
+            EventType.OTHER -> "Other"
         }
     }
 }

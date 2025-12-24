@@ -28,14 +28,14 @@ fun String.toFormattedTime(): String {
 fun String.toFormattedDateRange(endDateTime: String? = null): String {
     return try {
         val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
-        val startDate = inputFormat.parse(this) ?: return ""
+        val startDate = inputFormat.parse(this.replace("Z", "")) ?: return ""
 
         if (endDateTime == null) {
             val outputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
             return outputFormat.format(startDate)
         }
 
-        val endDate = inputFormat.parse(endDateTime) ?: return ""
+        val endDate = inputFormat.parse(endDateTime.replace("Z", "")) ?: return ""
         val startCal = Calendar.getInstance().apply { time = startDate }
         val endCal = Calendar.getInstance().apply { time = endDate }
 
@@ -55,7 +55,7 @@ fun String.toFormattedDateRange(endDateTime: String? = null): String {
         }
 
         val outputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-        "${outputFormat.format(startDate)} - ${outputFormat.format(endDate)}"
+        return "${outputFormat.format(startDate)} - ${outputFormat.format(endDate)}"
     } catch (e: Exception) {
         ""
     }

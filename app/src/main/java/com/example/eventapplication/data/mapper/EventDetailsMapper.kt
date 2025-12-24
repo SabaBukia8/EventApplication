@@ -64,18 +64,17 @@ fun SpeakerDto.toDomain(): Speaker {
 }
 
 fun String.toEventType(): EventType {
-    val normalized = this.uppercase().replace(" ", "_")
-    return when (normalized) {
-        "TEAM_BUILDING" -> EventType.TEAM_BUILDING
+    return when (this.trim().replace("\n", "").uppercase()) {
+        "TEAM BUILDING" -> EventType.TEAM_BUILDING
         "SPORTS" -> EventType.SPORTS
         "WORKSHOP" -> EventType.WORKSHOP
-        "HAPPY_FRIDAY" -> EventType.HAPPY_FRIDAY
+        "HAPPY FRIDAY" -> EventType.HAPPY_FRIDAY
         "CULTURAL" -> EventType.CULTURAL
         "WELLNESS" -> EventType.WELLNESS
-        "TRAINING" -> EventType.WELLNESS // Map Training to Wellness
-        "SOCIAL" -> EventType.TEAM_BUILDING // Map Social to Team Building
-        "CONFERENCE" -> EventType.WORKSHOP // Map Conference to Workshop
-        else -> EventType.TEAM_BUILDING // Default fallback
+        "TRAINING" -> EventType.TRAINING
+        "SOCIAL" -> EventType.SOCIAL
+        "CONFERENCE" -> EventType.CONFERENCE
+        else -> EventType.OTHER
     }
 }
 

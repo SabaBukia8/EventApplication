@@ -6,8 +6,8 @@ import com.example.eventapplication.domain.common.Resource
 import com.example.eventapplication.domain.model.Notification
 import com.example.eventapplication.domain.model.NotificationTabCategory
 import com.example.eventapplication.domain.model.NotificationsError
-import com.example.eventapplication.domain.usecase.GetNotificationsUseCase
-import com.example.eventapplication.domain.usecase.MarkNotificationAsReadUseCase
+import com.example.eventapplication.domain.usecase.notification.GetNotificationsUseCase
+import com.example.eventapplication.domain.usecase.notification.MarkNotificationAsReadUseCase
 import com.example.eventapplication.presentation.model.DateCategory
 import com.example.eventapplication.presentation.model.NotificationItem
 import com.example.eventapplication.presentation.model.toNotificationCard

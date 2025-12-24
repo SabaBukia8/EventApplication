@@ -5,7 +5,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.eventapplication.R
@@ -18,6 +17,8 @@ import com.example.eventapplication.presentation.model.BrowseItem
 import com.example.eventapplication.presentation.extensions.gone
 import com.example.eventapplication.presentation.extensions.toFormattedDate
 import com.example.eventapplication.presentation.extensions.toTimeRange
+import com.google.android.material.chip.Chip
+import com.example.eventapplication.presentation.screen.home.mapper.EventTypeMapper.toDisplayName
 import com.example.eventapplication.presentation.extensions.visible
 import androidx.core.graphics.toColorInt
 
@@ -116,21 +117,39 @@ class BrowseAdapter(
     }
 
     class CategoriesViewHolder(
-        binding: ItemBrowseCategoriesBinding,
-        onCategoryClick: (Int?) -> Unit
+        private val binding: ItemBrowseCategoriesBinding,
+        private val onCategoryClick: (Int?) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        private val categoryChipsAdapter = CategoryChipsAdapter(onCategoryClick)
-
-        init {
-            binding.rvCategories.apply {
-                adapter = categoryChipsAdapter
-                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            }
-        }
-
         fun bind(item: BrowseItem.Categories) {
-            categoryChipsAdapter.submitList(item.categories, item.selectedCategoryId)
+            with(binding.chipGroupCategories) {
+                removeAllViews()
+                
+                item.categories.forEach { category ->
+                    val chip = LayoutInflater.from(context)
+                        .inflate(R.layout.item_category_chip, this, false) as Chip
+
+                    chip.apply {
+                        id = category.id
+                        text = if (category.id == 0) {
+                            context.getString(R.string.browse_all_events)
+                        } else {
+                            category.type?.toDisplayName(context) ?: ""
+                        }
+                        isCheckable = true
+                        isChecked = (category.id == item.selectedCategoryId)
+                    }
+
+                    addView(chip)
+                }
+                
+                setOnCheckedStateChangeListener { group, checkedIds ->
+                    if (checkedIds.isNotEmpty()) {
+                        val selectedId = checkedIds.first()
+                        onCategoryClick(selectedId)
+                    }
+                }
+            }
         }
     }
 
@@ -153,20 +172,20 @@ class BrowseAdapter(
 
                 val timeRange = (event.startDateTime to event.endDateTime).toTimeRange()
                 tvTime.text = timeRange
-
+                
+                tvCapacityBadge.visible()
                 when {
                     event.isFull -> {
-                        tvCapacityBadge.visible()
                         tvCapacityBadge.text = root.context.getString(R.string.event_full)
-                        tvCapacityBadge.setBackgroundColor("#EF4444".toColorInt())
+                        tvCapacityBadge.setBackgroundColor("#737373".toColorInt())
                     }
-                    event.spotsLeft <= 10 -> {
-                        tvCapacityBadge.visible()
-                        tvCapacityBadge.text = root.context.getString(R.string.event_spots_left, event.spotsLeft)
-                        tvCapacityBadge.setBackgroundColor("#F59E0B".toColorInt())
+                    event.isWaitlisted -> {
+                        tvCapacityBadge.text = root.context.getString(R.string.event_waitlisted)
+                        tvCapacityBadge.setBackgroundColor("#737373".toColorInt())
                     }
                     else -> {
-                        tvCapacityBadge.gone()
+                        tvCapacityBadge.text = root.context.getString(R.string.event_available)
+                        tvCapacityBadge.setBackgroundColor("#737373".toColorInt())
                     }
                 }
 

@@ -14,9 +14,9 @@ class NotificationsRepositoryImpl @Inject constructor(
     private val handleResponse: HandleResponse
 ) : NotificationsRepository {
 
-    override fun getNotifications(userId: String): Flow<Resource<List<Notification>>> =
+    override fun getNotifications(): Flow<Resource<List<Notification>>> =
         handleResponse.safeApiCall {
-            apiService.getNotifications(userId).toDomain()
+            apiService.getNotifications().toDomain()
         }
 
     override fun markAsRead(notificationId: String): Flow<Resource<Unit>> =
