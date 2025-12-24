@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/spacing_xl"
+    android:background="@color/white">
+
+    <!-- Close Button -->
+    <ImageButton
+        android:id="@+id/btnClose"
+        android:layout_width="@dimen/icon_lg"
+        android:layout_height="@dimen/icon_lg"
+        android:layout_gravity="end"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_arrow_right" />
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_sm"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/text_size_h3"
+        android:textStyle="bold"
+        tools:text="Event Registration Confirmed" />
+
+    <!-- Message -->
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_md"
+        android:textColor="@color/text_secondary"
+        android:textSize="@dimen/text_size_body"
+        tools:text="You have successfully registered for Annual Team Building Summit. You will receive a confirmation email shortly with event details and instructions." />
+
+    <!-- Time -->
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_md"
+        android:textColor="@color/text_tertiary"
+        android:textSize="@dimen/text_size_caption"
+        tools:text="Dec 24, 2025 at 10:30 AM" />
+
+</LinearLayout>

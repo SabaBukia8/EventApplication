@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "EventApplication"
 include(":app")
+include(":app:lib")
  

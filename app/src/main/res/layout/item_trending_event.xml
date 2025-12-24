@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/trending_card_width"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/spacing_md"
+    app:cardBackgroundColor="@color/background_white"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/card_elevation"
+    app:strokeColor="@color/border_light"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Event Image Placeholder -->
+        <View
+            android:id="@+id/vImagePlaceholder"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/trending_card_image_height"
+            android:background="@color/placeholder_light" />
+
+        <!-- Event Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_md">
+
+            <!-- Event Title -->
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/text_size_h3"
+                android:textStyle="bold"
+                tools:text="Tech Talk: AI in Business" />
+
+            <!-- Event Date -->
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xs"
+                android:drawablePadding="@dimen/spacing_xs"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_size_caption"
+                app:drawableStartCompat="@drawable/ic_calendar"
+                tools:text="Jan 26, 2025" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

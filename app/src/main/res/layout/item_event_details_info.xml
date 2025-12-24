@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background_white"
+    android:padding="@dimen/spacing_lg">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/badge_waitlist"
+        android:paddingHorizontal="@dimen/spacing_md"
+        android:paddingVertical="@dimen/spacing_xs"
+        android:textColor="@color/badge_waitlist_text"
+        android:textSize="@dimen/text_size_caption"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="TEAM BUILDING" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_md"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/text_size_h1"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvCategory"
+        tools:text="Annual Team Building Summit" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/icDate"
+        android:layout_width="@dimen/icon_md"
+        android:layout_height="@dimen/icon_md"
+        android:layout_marginTop="@dimen/spacing_lg"
+        android:src="@drawable/ic_calendar"
+        app:tint="@color/text_secondary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_sm"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/text_size_body"
+        app:layout_constraintBottom_toBottomOf="@id/icDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/icDate"
+        app:layout_constraintTop_toTopOf="@id/icDate"
+        tools:text="December 20, 2025" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/icTime"
+        android:layout_width="@dimen/icon_md"
+        android:layout_height="@dimen/icon_md"
+        android:layout_marginTop="@dimen/spacing_md"
+        android:src="@drawable/ic_clock"
+        app:tint="@color/text_secondary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/icDate" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_sm"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/text_size_body"
+        app:layout_constraintBottom_toBottomOf="@id/icTime"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/icTime"
+        app:layout_constraintTop_toTopOf="@id/icTime"
+        tools:text="02:00 PM - 04:30 PM" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/icLocation"
+        android:layout_width="@dimen/icon_md"
+        android:layout_height="@dimen/icon_md"
+        android:layout_marginTop="@dimen/spacing_md"
+        android:src="@drawable/ic_location"
+        app:tint="@color/text_secondary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/icTime" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvLocation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_sm"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/text_size_body"
+        app:layout_constraintBottom_toBottomOf="@id/icLocation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/icLocation"
+        app:layout_constraintTop_toTopOf="@id/icLocation"
+        tools:text="Main Conference Hall" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/icCapacity"
+        android:layout_width="@dimen/icon_md"
+        android:layout_height="@dimen/icon_md"
+        android:layout_marginTop="@dimen/spacing_md"
+        android:src="@drawable/ic_people"
+        app:tint="@color/text_secondary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/icLocation" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvCapacity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_sm"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/text_size_body"
+        app:layout_constraintBottom_toBottomOf="@id/icCapacity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/icCapacity"
+        app:layout_constraintTop_toTopOf="@id/icCapacity"
+        tools:text="45/50 Registered • 5 spots left" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTags"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_lg"
+        android:textColor="@color/text_secondary"
+        android:textSize="@dimen/text_size_caption"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/icCapacity"
+        tools:text="#teambuilding #workshop #skills" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

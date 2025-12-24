@@ -1,3 +1,230 @@
 <resources>
     <string name="app_name">EventApplication</string>
+
+    <!-- Login Screen - Updated -->
+    <string name="login_title">Sign In</string>
+    <string name="login_subtitle">Enter your credentials to access your account</string>
+    <string name="login_button">Sign In</string>
+    <string name="login_register_prompt">Don\'t have an account? <b>Sign up</b></string>
+    <string name="remember_me">Remember me</string>
+    <string name="forgot_password">Forgot password?</string>
+
+    <!-- Register Screen - Updated -->
+    <string name="register_title">Create Account</string>
+    <string name="register_subtitle">Enter your details to get started</string>
+    <string name="register_button">Create Account</string>
+    <string name="register_login_prompt">Already have an account? <b>Sign In</b></string>
+
+    <!-- Common Fields -->
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="confirm_password_hint">Confirm Password</string>
+    <string name="full_name_hint">Full Name</string>
+
+    <!-- Field Labels -->
+    <string name="email_label">Email</string>
+    <string name="password_label">Password</string>
+    <string name="confirm_password_label">Confirm Password</string>
+    <string name="first_name_label">First Name</string>
+    <string name="last_name_label">Last Name</string>
+    <string name="phone_label">Phone Number</string>
+    <string name="otp_code_label">Enter OTP Code</string>
+    <string name="department_label">Department</string>
+
+    <!-- New Registration Fields -->
+    <string name="first_name_hint">First Name</string>
+    <string name="last_name_hint">Last Name</string>
+    <string name="phone_hint">Phone Number</string>
+    <string name="send_otp_button">Send OTP</string>
+    <string name="otp_code_hint">OTP Code</string>
+    <string name="department_hint">Department</string>
+    <string name="terms_of_service">I agree to the <b>Terms of Service and Privacy Policy</b></string>
+
+    <!-- Password Requirements -->
+    <string name="password_requirements">Password must be at least 8 characters with uppercase, lowercase, and number</string>
+
+    <!-- OTP Related -->
+    <string name="code_expires_in">Code expires in %1$s</string>
+    <string name="otp_placeholder">Enter 6-digit code</string>
+
+    <!-- Validation Messages -->
+    <!-- Email Validation -->
+    <string name="error_email_empty">Email cannot be empty</string>
+    <string name="error_email_invalid">Invalid email format</string>
+
+    <!-- Password Validation -->
+    <string name="error_password_empty">Password cannot be empty</string>
+    <string name="error_password_too_short">Password must be at least 8 characters</string>
+    <string name="error_password_no_uppercase">Password must contain at least one uppercase letter</string>
+    <string name="error_password_no_lowercase">Password must contain at least one lowercase letter</string>
+    <string name="error_password_no_digit">Password must contain at least one number</string>
+
+    <!-- Name Validation (Generic - accepts field name parameter) -->
+    <string name="error_name_empty">%s cannot be empty</string>
+    <string name="error_name_too_short">%s must be at least 2 characters</string>
+
+    <!-- Phone Validation -->
+    <string name="error_phone_empty">Phone number cannot be empty</string>
+    <string name="error_phone_invalid">Please enter a valid phone number</string>
+
+    <!-- Specific Field Validation -->
+    <string name="error_first_name_empty">First name cannot be empty</string>
+    <string name="error_last_name_empty">Last name cannot be empty</string>
+    <string name="error_first_name_short">First name must be at least 2 characters</string>
+    <string name="error_last_name_short">Last name must be at least 2 characters</string>
+    <string name="error_department_required">Please select a department</string>
+    <string name="error_terms_required">You must accept the terms of service</string>
+    <string name="error_otp_invalid">Please enter a valid 6-digit OTP</string>
+
+    <!-- Department Options -->
+    <string name="department_select">Select Department</string>
+    <string name="department_engineering">Engineering</string>
+    <string name="department_marketing">Marketing</string>
+    <string name="department_sales">Sales</string>
+    <string name="department_hr">Human Resources</string>
+    <string name="department_finance">Finance</string>
+    <string name="department_operations">Operations</string>
+    <string name="department_other">Other</string>
+
+    <!-- Home Screen -->
+    <string name="home_welcome_title">Welcome back, %s</string>
+    <string name="home_welcome_subtitle">Stay connected with upcoming company events and activities.</string>
+    <string name="home_upcoming_events">Upcoming Events</string>
+    <string name="home_view_all">View all</string>
+    <string name="home_browse_category">Browse by Category</string>
+    <string name="home_trending">Trending Events</string>
+    <string name="home_trending_subtitle">Popular events with high registration rates.</string>
+    <string name="app_logo_title">EventHub</string>
+
+    <!-- Event Card -->
+    <string name="event_registered">%d registered</string>
+    <string name="event_spots_left">%d spots left</string>
+    <string name="event_full">Full</string>
+    <string name="event_waitlisted">Waitlisted</string>
+    <string name="event_view_details">View Details</string>
+
+    <!-- Category Names -->
+    <string name="category_team_building">Team Building</string>
+    <string name="category_sports">Sports</string>
+    <string name="category_workshops">Workshops</string>
+    <string name="category_happy_fridays">Happy Fridays</string>
+    <string name="category_cultural">Cultural</string>
+    <string name="category_wellness">Wellness</string>
+    <string name="category_events_count">%d events</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_browse">Browse</string>
+    <string name="nav_my_events">My Events</string>
+    <string name="nav_updates">Updates</string>
+    <string name="nav_profile">Profile</string>
+
+    <!-- Error Messages -->
+    <string name="error_network">Network error. Please check your connection and try again.</string>
+    <string name="error_unauthorized">You are not authorized. Please login again.</string>
+    <string name="error_server">Server error (code: %d). Please try again later.</string>
+    <string name="error_unknown">An unexpected error occurred. Please try again.</string>
+    <string name="error_event_not_found">Event not found.</string>
+    <string name="error_event_full">This event is full. Join the waitlist instead.</string>
+    <string name="error_already_registered">You are already registered for this event.</string>
+    <string name="error_registration_not_found">Registration not found.</string>
+    <string name="error_no_internet">No internet connection. Please check your network.</string>
+    <string name="error_forbidden">You do not have permission to access this resource.</string>
+    <string name="error_not_found">The requested item could not be found.</string>
+    <string name="error_server_error">Server error. Please try again later.</string>
+    <string name="error_timeout">The connection timed out. Please try again.</string>
+
+
+    <!-- Event Details Screen -->
+    <string name="event_details_title">Event Details</string>
+    <string name="back">Back</string>
+    <string name="menu">Menu</string>
+    <string name="register_now">Register Now</string>
+    <string name="description">Description</string>
+    <string name="agenda">Agenda</string>
+    <string name="agenda_item_format">%1$s - %2$s</string>
+    <string name="speakers">Speakers</string>
+    <string name="featured_speakers">Featured Speakers</string>
+    <string name="event_date_time">%1$s • %2$s</string>
+    <string name="event_capacity_info">%1$d/%2$d Registered • %3$d spots left</string>
+
+    <!-- Placeholder strings (used by existing layouts) -->
+    <string name="enter_your_email">Enter your email</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="john">John</string>
+    <string name="doe">Doe</string>
+    <string name="john_doe_company_com">john.doe@company.com</string>
+    <string name="_1_000_000_0000">+1 (000) 000-0000</string>
+    <string name="code_expires_in_00_00">Code expires in 00:00</string>
+    <string name="select_department">Select Department</string>
+    <string name="create_password">Create Password</string>
+    <string name="confirm_password">Confirm Password</string>
+
+    <!-- Browse Events -->
+    <string name="browse_search_hint">Search events...</string>
+    <string name="browse_all_events">All Events</string>
+    <string name="browse_clear_filters">Clear Filters</string>
+    <string name="browse_no_results">No events found</string>
+    <string name="browse_no_results_subtitle">Try adjusting your search or filters</string>
+    <string name="browse_filter_location">Location</string>
+    <string name="browse_filter_date_range">Date Range</string>
+    <string name="browse_filter_show_full">Show full events</string>
+    <string name="browse_filter_sort_by">Sort by</string>
+    <string name="browse_filter_apply">Apply Filters</string>
+
+    <!-- Category Events Screen -->
+    <string name="no_events">No Events</string>
+    <string name="no_events_title">No events found</string>
+    <string name="no_events_subtitle">There are no events in this category yet</string>
+    <string name="time">Time</string>
+    <string name="location">Location</string>
+    <string name="date">Date</string>
+    <string name="error_category_not_found">Category not found</string>
+    <string name="error_no_events_found">No events found for this category</string>
+    <string name="spots_left">%d spots left</string>
+    <string name="all_events">All Events</string>
+    <string name="filter_date">Date</string>
+    <string name="filter_location">Location</string>
+    <string name="view_details">View Details</string>
+    <string name="notifications">Notifications</string>
+    <string name="registered">Registered</string>
+    <string name="cancel_registration">Cancel Registration</string>
+
+    <!-- ViewModels Messages -->
+    <string name="guest_user">Guest User</string>
+    <string name="user_not_logged_in">User not logged in</string>
+    <string name="registration_successful">Registration successful!</string>
+    <string name="operation_failed">Operation failed</string>
+    <string name="no_active_registration">No active registration found</string>
+    <string name="registration_cancelled">Registration cancelled</string>
+    <string name="waitlisted">Waitlisted</string>
+    <string name="join_waitlist">Join Waitlist</string>
+    <string name="register_now_button">Register Now</string>
+    <string name="failed_to_load_departments">Failed to load departments</string>
+    <string name="otp_feature_disabled">OTP feature is currently disabled</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+    <string name="registration_failed">Registration failed</string>
+    <string name="login_failed">Login failed</string>
+    <string name="invalid_credentials">Invalid credentials</string>
+    <string name="forgot_password_coming_soon">Forgot password feature coming soon</string>
+    <string name="navigate_to_notifications">Navigate to notifications</string>
+    <string name="navigate_to_profile">Navigate to profile</string>
+    <string name="filter_dialog_not_implemented">Filter dialog not yet implemented</string>
+    <string name="retry">Retry</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="notifications_not_implemented">Notifications not yet implemented</string>
+    <string name="events">Events</string>
+    <string name="error_navigating_to_category">Error navigating to category: %1$s</string>
+
+    <!-- Category Type Names -->
+    <string name="category_type_team_building">Team Building</string>
+    <string name="category_type_sports">Sports</string>
+    <string name="category_type_workshop">Workshop</string>
+    <string name="category_type_happy_friday">Happy Friday</string>
+    <string name="category_type_cultural">Cultural</string>
+    <string name="category_type_wellness">Wellness</string>
+    
+    <!-- UI Placeholders -->
+    <string name="image_placeholder">Image placeholder 300x160</string>
+
 </resources>

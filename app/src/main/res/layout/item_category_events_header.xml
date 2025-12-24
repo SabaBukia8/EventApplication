@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:elevation="0dp">
+
+    <!-- Top Navigation Row -->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- Back Button -->
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btnBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_arrow_right"
+            android:rotation="180"
+            android:padding="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/back"
+            app:tint="@color/text_primary" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <!-- Category Title -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvCategoryTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/text_primary"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            tools:text="Cultural Events" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <!-- Notification Button -->
+        <FrameLayout
+            android:id="@+id/flNotificationButton"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_notification"
+                android:contentDescription="@string/notifications"
+                app:tint="@color/text_primary" />
+
+            <!-- Notification Badge -->
+            <View
+                android:id="@+id/vNotificationBadge"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_gravity="end|top"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/bg_circle_gray"
+                android:backgroundTint="@color/badge_notification"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </FrameLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <!-- Filter Chips Row -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:scrollbars="none">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- All Events Chip -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/chipAllEvents"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginEnd="12dp"
+                android:text="@string/all_events"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:fontFamily="sans-serif"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:backgroundTint="@color/black"
+                app:cornerRadius="9999dp"
+                app:icon="@drawable/ic_events"
+                app:iconSize="14dp"
+                app:iconTint="@color/white"
+                app:iconPadding="8dp" />
+
+            <!-- Date Filter Chip -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/chipDate"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_marginEnd="12dp"
+                android:text="@string/filter_date"
+                android:textSize="14sp"
+                android:textColor="@color/label_text"
+                android:fontFamily="sans-serif"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:backgroundTint="@color/otp_box_background"
+                app:strokeColor="@color/border_gray"
+                app:strokeWidth="1dp"
+                app:cornerRadius="9999dp"
+                app:iconSize="12dp"
+                app:iconTint="@color/label_text"
+                app:iconPadding="8dp" />
+
+            <!-- Location Filter Chip -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/chipLocation"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:text="@string/filter_location"
+                android:textSize="14sp"
+                android:textColor="@color/label_text"
+                android:fontFamily="sans-serif"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:backgroundTint="@color/otp_box_background"
+                app:strokeColor="@color/border_gray"
+                app:strokeWidth="1dp"
+                app:cornerRadius="9999dp"
+                app:iconSize="12dp"
+                app:iconTint="@color/label_text"
+                app:iconPadding="8dp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </HorizontalScrollView>
+
+    <!-- Bottom Border -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/border_light" />
+</androidx.appcompat.widget.LinearLayoutCompat>

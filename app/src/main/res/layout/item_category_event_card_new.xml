@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/border_light"
+    android:clickable="true"
+    android:focusable="true">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Event Image Placeholder -->
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:background="@color/placeholder_light"
+            android:layout_marginBottom="12dp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvImagePlaceholder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:fontFamily="sans-serif"
+                tools:text="Image placeholder 300x160" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <!-- Event Title and Category Badge Row -->
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Event Title -->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvEventTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:textSize="16sp"
+                android:textColor="@color/text_primary"
+                android:fontFamily="sans-serif"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:text="Annual Team Building Retreat" />
+
+            <!-- Category Badge -->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvCategoryBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:textSize="12sp"
+                android:textColor="@color/label_text"
+                android:fontFamily="sans-serif"
+                android:background="@drawable/circular_badge_background"
+                android:backgroundTint="@color/otp_box_background"
+                tools:text="Wellness" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <!-- Event Description -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvEventDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="14sp"
+            android:textColor="@color/secondary_text"
+            android:fontFamily="sans-serif"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="Join us for a full day of team building activities" />
+
+        <!-- Event Details Section -->
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical">
+
+            <!-- Date Row -->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="6dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_calendar"
+                    android:contentDescription="@string/date"
+                    app:tint="@color/placeholder_medium" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvEventDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_tertiary"
+                    android:fontFamily="sans-serif"
+                    tools:text="December 28, 2025" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <!-- Time Row -->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="6dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_clock"
+                    android:contentDescription="@string/time"
+                    app:tint="@color/placeholder_medium" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvEventTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_tertiary"
+                    android:fontFamily="sans-serif"
+                    tools:text="9:00 AM - 5:00 PM" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <!-- Location Row -->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_location"
+                    android:contentDescription="@string/location"
+                    app:tint="@color/placeholder_medium" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvEventLocation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_tertiary"
+                    android:fontFamily="sans-serif"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    tools:text="Mountain View Retreat Center" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/border_light" />
+
+        <!-- Action Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAction"
+            style="@style/Widget.Material3.Button"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/view_details"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:fontFamily="sans-serif"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            app:backgroundTint="@color/black"
+            app:cornerRadius="6dp" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</com.google.android.material.card.MaterialCardView>

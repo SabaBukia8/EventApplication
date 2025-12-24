@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/spacing_xs"
+    app:cardBackgroundColor="@color/background_white"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/card_elevation"
+    app:strokeColor="@color/border_light"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_lg">
+
+        <!-- Category Icon -->
+        <ImageView
+            android:id="@+id/ivCategoryIcon"
+            android:layout_width="@dimen/icon_lg"
+            android:layout_height="@dimen/icon_lg"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_shield"
+            tools:ignore="ContentDescription" />
+
+        <!-- Category Name -->
+        <TextView
+            android:id="@+id/tvCategoryName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_sm"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_size_body"
+            android:textStyle="bold"
+            tools:text="Team\nBuilding" />
+
+        <!-- Event Count -->
+        <TextView
+            android:id="@+id/tvEventCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xs"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_size_caption"
+            tools:text="12 events" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

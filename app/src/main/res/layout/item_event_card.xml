@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/spacing_lg"
+    android:layout_marginVertical="@dimen/spacing_sm"
+    app:cardBackgroundColor="@color/background_white"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/card_elevation"
+    app:strokeColor="@color/border_light"
+    app:strokeWidth="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/spacing_lg">
+
+        <!-- Date Section (Left) -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvMonth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/event_card_date_month_size"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="JAN" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/event_card_date_day_size"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvMonth"
+            tools:text="18" />
+
+        <!-- Waitlisted Badge (Optional) -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvWaitlistedBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/badge_waitlist"
+            android:paddingHorizontal="@dimen/spacing_sm"
+            android:paddingVertical="@dimen/spacing_xs"
+            android:text="@string/event_waitlisted"
+            android:textColor="@color/badge_waitlist_text"
+            android:textSize="@dimen/text_size_caption"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
+        <!-- Event Title -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_lg"
+            android:layout_marginEnd="@dimen/spacing_sm"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/event_card_title_size"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/tvWaitlistedBadge"
+            app:layout_constraintStart_toEndOf="@id/tvDay"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Annual Team Building Summit" />
+
+        <!-- Time and Location -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_lg"
+            android:layout_marginTop="@dimen/spacing_xs"
+            android:drawablePadding="@dimen/spacing_xs"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/event_card_meta_size"
+            app:drawableStartCompat="@drawable/ic_clock"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvDay"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            tools:text="08:00 AM - 05:00 PM" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_lg"
+            android:layout_marginTop="@dimen/spacing_xs"
+            android:drawablePadding="@dimen/spacing_xs"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/event_card_meta_size"
+            app:drawableStartCompat="@drawable/ic_location"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvDay"
+            app:layout_constraintTop_toBottomOf="@id/tvTime"
+            tools:text="Grand Conference Hall" />
+
+        <!-- Description -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/text_tertiary"
+            android:textSize="@dimen/event_card_description_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvLocation"
+            tools:text="Join us for a full day of team building activities, workshops, and networking opportunities." />
+
+        <!-- Registration Info -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvRegistrationInfo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:drawablePadding="@dimen/spacing_xs"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/event_card_meta_size"
+            app:drawableStartCompat="@drawable/ic_people"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDescription"
+            tools:text="102 registered • 8 spots left" />
+
+        <!-- View Details Link -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvViewDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_md"
+            android:drawablePadding="@dimen/spacing_xs"
+            android:text="@string/event_view_details"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_size_body"
+            android:textStyle="bold"
+            app:drawableEndCompat="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toBottomOf="@id/tvRegistrationInfo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvRegistrationInfo" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

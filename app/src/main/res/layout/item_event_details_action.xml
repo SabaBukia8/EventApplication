@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/background_white"
+    android:paddingHorizontal="@dimen/spacing_lg"
+    android:paddingVertical="@dimen/spacing_md">
+
+    <!-- Register Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAction"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="@string/register_now"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_h3"
+        android:textStyle="bold"
+        app:backgroundTint="@color/button_dark"
+        app:cornerRadius="@dimen/card_corner_radius"
+        tools:text="Register Now" />
+
+
+    <!-- Registration Deadline -->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvRegistrationDeadline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_xs"
+        android:gravity="center"
+        android:textColor="@color/text_secondary"
+        android:textSize="@dimen/text_size_caption"
+        tools:text="Registration closes on Dec 19, 2025 at 5:00 PM." />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

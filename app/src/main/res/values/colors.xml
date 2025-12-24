@@ -1,10 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Brand Colors -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
+    <color name="purple_2002">#A3A3A3</color>
+
+    <!-- Base Colors -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Text Colors -->
+    <color name="text_hint">#99000000</color>
+    <color name="text_secondary">#737373</color>
+    <color name="text_link">#2196F3</color>
+    <color name="label_text">#404040</color>
+    <color name="placeholder_text">#9CA3AF</color>
+    <color name="secondary_text">#737373</color>
+    <color name="text_dark">#171717</color>
+
+    <!-- Button Colors -->
+    <color name="button_dark">#212121</color>
+
+    <!-- Border & Background Colors -->
+    <color name="border_gray">#D4D4D4</color>
+    <color name="background_white">#FFFFFF</color>
+
+    <!-- OTP Box Colors -->
+    <color name="otp_box_border">#DDDDDD</color>
+    <color name="otp_box_background">#F5F5F5</color>
+
+    <!-- Error Color -->
+    <color name="error_red">#D32F2F</color>
+
+    <!-- Home Screen Colors -->
+    <!-- Brand -->
+    <color name="brand_black">#171717</color>
+    <color name="brand_logo_bg">#171717</color>
+
+    <!-- Text -->
+    <color name="text_primary">#171717</color>
+    <color name="text_tertiary">#525252</color>
+    <color name="text_disabled">#A3A3A3</color>
+
+    <!-- Background -->
+    <color name="background_main">#FAFAFA</color>
+
+    <!-- Border -->
+    <color name="border_light">#E5E5E5</color>
+
+    <!-- Badge -->
+    <color name="badge_notification">#737373</color>
+    <color name="badge_waitlist">#F5F5F5</color>
+    <color name="badge_waitlist_text">#262626</color>
+
+    <!-- Placeholder -->
+    <color name="placeholder_light">#D4D4D4</color>
+    <color name="placeholder_medium">#A3A3A3</color>
+    <color name="placeholder_dark">#737373</color>
+
+    <!-- Navigation -->
+    <color name="nav_active">#171717</color>
+    <color name="nav_inactive">#737373</color>
 </resources>

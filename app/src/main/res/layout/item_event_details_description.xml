@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/background_white"
+    android:padding="@dimen/spacing_lg">
+
+    <!-- Section Header -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/description"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/text_size_h2"
+        android:textStyle="bold" />
+
+    <!-- Description Content -->
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_md"
+        android:textColor="@color/text_secondary"
+        android:textSize="@dimen/text_size_body"
+        android:lineSpacingExtra="4dp"
+        tools:text="Join us for an engaging team building experience that will strengthen collaboration and boost morale across the organization." />
+
+</LinearLayout>

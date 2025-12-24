@@ -1,0 +1,129 @@
+package com.example.eventapplication.presentation.screen.categoryevents
+
+import androidx.lifecycle.viewModelScope
+import com.example.eventapplication.domain.common.Resource
+import com.example.eventapplication.domain.model.Category
+import com.example.eventapplication.domain.model.CategoryEventsError
+import com.example.eventapplication.domain.model.NetworkError
+import com.example.eventapplication.domain.usecase.GetCategoriesUseCase
+import com.example.eventapplication.domain.usecase.GetEventsByCategoryUseCase
+import com.example.eventapplication.domain.usecase.SortOption
+import com.example.eventapplication.presentation.model.FilterType
+import com.example.eventapplication.presentation.common.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class CategoryEventsViewModel @Inject constructor(
+    private val getEventsByCategoryUseCase: GetEventsByCategoryUseCase,
+    private val getCategoriesUseCase: GetCategoriesUseCase
+) : BaseViewModel<CategoryEventsState, CategoryEventsEvent, CategoryEventsSideEffect>(
+    initialState = CategoryEventsState.Idle
+) {
+
+    private var currentCategoryId: Int? = null
+    private var currentSortBy: SortOption = SortOption.DATE
+    private var currentFilterType: FilterType = FilterType.ALL_EVENTS
+
+    override fun onEvent(event: CategoryEventsEvent) {
+        when (event) {
+            is CategoryEventsEvent.LoadEvents -> loadEvents(event.categoryId)
+            is CategoryEventsEvent.OnSortChanged -> changeSorting(event.sortBy)
+            is CategoryEventsEvent.OnFilterChanged -> changeFilter(event.filterType)
+            is CategoryEventsEvent.OnFilterClicked -> emitSideEffect(CategoryEventsSideEffect.ShowFilterDialog)
+            is CategoryEventsEvent.OnEventClicked -> emitSideEffect(CategoryEventsSideEffect.NavigateToEventDetails(event.eventId))
+            is CategoryEventsEvent.OnBackClicked -> emitSideEffect(CategoryEventsSideEffect.NavigateBack)
+            is CategoryEventsEvent.OnNotificationClicked -> emitSideEffect(CategoryEventsSideEffect.NavigateToNotifications)
+            is CategoryEventsEvent.OnRetry -> currentCategoryId?.let { loadEvents(it) }
+        }
+    }
+
+    private fun loadEvents(categoryId: Int) {
+        currentCategoryId = categoryId
+        updateState { CategoryEventsState.IsLoading(true) }
+
+        viewModelScope.launch {
+            try {
+                val category = getCategoryById(categoryId)
+                if (category == null) {
+                    updateState { CategoryEventsState.Error(CategoryEventsError.CategoryNotFound) }
+                    emitSideEffect(CategoryEventsSideEffect.ShowError(CategoryEventsError.CategoryNotFound))
+                    return@launch
+                }
+
+                getEventsByCategoryUseCase(categoryId, currentSortBy).collect { resource ->
+                    when (resource) {
+                        is Resource.Loader -> {
+                            updateState { CategoryEventsState.IsLoading(resource.isLoading) }
+                        }
+                        is Resource.Success -> {
+                            updateState {
+                                CategoryEventsState.Success(
+                                    category = category,
+                                    events = resource.data,
+                                    sortBy = currentSortBy,
+                                    hasActiveFilters = false,
+                                    selectedFilter = currentFilterType,
+                                    hasNotifications = false
+                                )
+                            }
+                        }
+                        is Resource.Error -> {
+                            val error = mapNetworkError(resource.error)
+                            updateState { CategoryEventsState.Error(error) }
+                            emitSideEffect(CategoryEventsSideEffect.ShowError(error))
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                updateState { CategoryEventsState.Error(CategoryEventsError.UnknownError(e.message ?: "Unknown error")) }
+                emitSideEffect(CategoryEventsSideEffect.ShowError(CategoryEventsError.UnknownError(e.message ?: "Unknown error")))
+            }
+        }
+    }
+
+    private suspend fun getCategoryById(categoryId: Int): Category? {
+        return try {
+            getCategoriesUseCase()
+                .mapNotNull { resource ->
+                    if (resource is Resource.Success) {
+                        resource.data.find { it.id == categoryId }
+                    } else null
+                }
+                .firstOrNull()
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    private fun changeSorting(sortBy: SortOption) {
+        currentSortBy = sortBy
+        currentCategoryId?.let { loadEvents(it) }
+    }
+
+    private fun changeFilter(filterType: FilterType) {
+        currentFilterType = filterType
+        val currentState = state.value
+        if (currentState is CategoryEventsState.Success) {
+            updateState {
+                currentState.copy(selectedFilter = filterType)
+            }
+        }
+    }
+
+    private fun mapNetworkError(error: NetworkError): CategoryEventsError {
+        return when (error) {
+            NetworkError.Unauthorized -> CategoryEventsError.UnauthorizedError
+            NetworkError.ServerError -> CategoryEventsError.ServerError
+            NetworkError.NoInternet -> CategoryEventsError.NetworkError
+            NetworkError.Forbidden -> CategoryEventsError.UnknownError(error.toString())
+            NetworkError.NotFound -> CategoryEventsError.UnknownError(error.toString())
+            NetworkError.Timeout -> CategoryEventsError.NetworkError
+            is NetworkError.Unknown -> CategoryEventsError.UnknownError(error.message ?: "Unknown error")
+            else -> CategoryEventsError.UnknownError("Unknown error")
+        }
+    }
+}

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Spacing -->
+    <dimen name="spacing_xs">4dp</dimen>
+    <dimen name="spacing_sm">8dp</dimen>
+    <dimen name="spacing_md">12dp</dimen>
+    <dimen name="spacing_lg">16dp</dimen>
+    <dimen name="spacing_xl">24dp</dimen>
+
+    <!-- Card -->
+    <dimen name="card_corner_radius">8dp</dimen>
+    <dimen name="card_elevation">0dp</dimen>
+
+    <!-- Icons -->
+    <dimen name="icon_xs">10dp</dimen>
+    <dimen name="icon_sm">12dp</dimen>
+    <dimen name="icon_md">20dp</dimen>
+    <dimen name="icon_lg">24dp</dimen>
+    <dimen name="icon_xl">32dp</dimen>
+
+    <!-- Avatar -->
+    <dimen name="avatar_size">32dp</dimen>
+
+    <!-- Badge -->
+    <dimen name="badge_size">8dp</dimen>
+
+    <!-- Event Card -->
+    <dimen name="event_card_date_month_size">12sp</dimen>
+    <dimen name="event_card_date_day_size">24sp</dimen>
+    <dimen name="event_card_title_size">16sp</dimen>
+    <dimen name="event_card_description_size">14sp</dimen>
+    <dimen name="event_card_meta_size">12sp</dimen>
+
+    <!-- Trending Event Card -->
+    <dimen name="trending_card_width">240dp</dimen>
+    <dimen name="trending_card_image_height">128dp</dimen>
+
+    <!-- Typography -->
+    <dimen name="text_size_h1">24sp</dimen>
+    <dimen name="text_size_h2">18sp</dimen>
+    <dimen name="text_size_h3">16sp</dimen>
+    <dimen name="text_size_body">14sp</dimen>
+    <dimen name="text_size_caption">12sp</dimen>
+
+    <!-- Bottom Navigation -->
+    <dimen name="bottom_nav_height">64dp</dimen>
+</resources>

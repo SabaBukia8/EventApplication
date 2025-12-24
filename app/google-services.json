@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "88176783602",
+    "project_id": "mtg-collection-manager-b988e",
+    "storage_bucket": "mtg-collection-manager-b988e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:88176783602:android:10472e728a2a0f066ca06b",
+        "android_client_info": {
+          "package_name": "com.example.eventapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCV_Hsgs4vhMjH98g16r3EAqdq9K-PLVdk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

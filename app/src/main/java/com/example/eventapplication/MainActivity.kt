@@ -1,47 +1,83 @@
 package com.example.eventapplication
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.eventapplication.ui.theme.EventApplicationTheme
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
+import com.example.eventapplication.databinding.ActivityMainBinding
+import com.example.eventapplication.presentation.extensions.gone
+import com.example.eventapplication.presentation.extensions.visible
+import dagger.hilt.android.AndroidEntryPoint
 
-class MainActivity : ComponentActivity() {
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
+    private lateinit var appBarConfiguration: AppBarConfiguration
+
+    private val topLevelDestinations = setOf(
+        R.id.homeFragment,
+        R.id.browseFragment
+    )
+
+    private val authScreens = setOf(
+        R.id.splashFragment,
+        R.id.loginFragment,
+        R.id.registerFragment
+    )
+
+    private val detailScreens = setOf(
+        R.id.categoryEventsFragment,
+        R.id.eventDetailsFragment
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            EventApplicationTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+        
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        
+        setupNavigation()
+    }
+
+    private fun setupNavigation() = with(binding) {
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as androidx.navigation.fragment.NavHostFragment
+        navController = navHostFragment.navController
+
+        appBarConfiguration = AppBarConfiguration(topLevelDestinations)
+
+        bottomNavigation.setupWithNavController(navController)
+
+        bottomNavigation.setOnItemReselectedListener {}
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            updateBottomNavVisibility(destination)
+        }
+    }
+    
+    private fun updateBottomNavVisibility(destination: NavDestination) = with(binding) {
+        when (destination.id) {
+            in authScreens -> {
+                bottomNavigation.gone()
+            }
+            in detailScreens -> {
+                bottomNavigation.visible()
+                bottomNavigation.menu.setGroupCheckable(0, false, true)
+            }
+            else -> {
+                bottomNavigation.visible()
+                bottomNavigation.menu.setGroupCheckable(0, true, true)
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    EventApplicationTheme {
-        Greeting("Android")
+    
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tvHeaderTitle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="@dimen/spacing_lg"
+    android:paddingTop="@dimen/spacing_md"
+    android:paddingBottom="@dimen/spacing_sm"
+    android:textColor="@color/text_secondary"
+    android:textSize="@dimen/text_size_caption"
+    android:textStyle="bold"
+    tools:text="TODAY" />
