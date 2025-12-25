@@ -1,7 +1,11 @@
 package com.example.eventapplication.presentation.screen.auth.register
 
+import android.content.Context
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -23,10 +27,44 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
 ) {
 
     private val viewModel: RegisterViewModel by viewModels()
+    private lateinit var otpInputs: List<AppCompatEditText>
 
     override fun bind() {
+        setupOtpInputs()
         observeState()
         observeSideEffects()
+    }
+
+    private fun setupOtpInputs() {
+        binding.apply {
+            otpInputs = listOf(etOtp1, etOtp2, etOtp3, etOtp4, etOtp5, etOtp6)
+
+            otpInputs.forEachIndexed { index, editText ->
+                // Text watcher for digit changes
+                editText.addTextChangedListener { text ->
+                    val digit = text?.toString() ?: ""
+                    // Only trigger event if length is 0 or 1
+                    if (digit.length <= 1) {
+                        viewModel.onEvent(RegisterEvent.OtpDigitChanged(index, digit))
+                    } else {
+                        // If more than 1 character, keep only the first
+                        editText.setText(digit.take(1))
+                        editText.setSelection(1)
+                    }
+                }
+
+                // Backspace handling
+                editText.setOnKeyListener { _, keyCode, event ->
+                    if (keyCode == KeyEvent.KEYCODE_DEL && event.action == KeyEvent.ACTION_DOWN) {
+                        if (editText.text.isNullOrEmpty() && index > 0) {
+                            otpInputs[index - 1].requestFocus()
+                            return@setOnKeyListener true
+                        }
+                    }
+                    false
+                }
+            }
+        }
     }
 
     override fun listeners() {
@@ -102,6 +140,9 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
                         if (cbTerms.isChecked != state.termsAccepted) {
                             cbTerms.isChecked = state.termsAccepted
                         }
+
+                        // Handle OTP flow state
+                        handleOtpFlowState(state.otpFlowState, state.otpTimerSeconds)
                     }
                 }
             }
@@ -133,9 +174,74 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
                         is RegisterSideEffect.ShowMessageString -> {
                             showSnackbar(sideEffect.message, Snackbar.LENGTH_SHORT)
                         }
+                        is RegisterSideEffect.FocusOtpField -> {
+                            otpInputs.first().requestFocus()
+                            val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                            imm.showSoftInput(otpInputs.first(), InputMethodManager.SHOW_IMPLICIT)
+                        }
+                        is RegisterSideEffect.MoveFocusToOtpPosition -> {
+                            if (sideEffect.position in otpInputs.indices) {
+                                otpInputs[sideEffect.position].requestFocus()
+                            }
+                        }
+                        is RegisterSideEffect.ClearOtpFields -> {
+                            otpInputs.forEach { it.text?.clear() }
+                            otpInputs.first().requestFocus()
+                        }
                     }
                 }
             }
         }
+    }
+
+    private fun handleOtpFlowState(flowState: OtpFlowState, timerSeconds: Int) {
+        binding.apply {
+            when (flowState) {
+                OtpFlowState.Initial -> {
+                    etPhone.isEnabled = true
+                    btnSendOtp.isEnabled = true
+                    btnSendOtp.text = getString(R.string.send_otp_button)
+                    llOtpSection.alpha = 0.5f
+                    otpInputs.forEach { it.isEnabled = false }
+                    tvCodeExpires.visibility = View.GONE
+                }
+                OtpFlowState.OtpSending -> {
+                    btnSendOtp.isEnabled = false
+                }
+                OtpFlowState.OtpSent -> {
+                    etPhone.isEnabled = false
+                    btnSendOtp.isEnabled = false
+                    llOtpSection.alpha = 1.0f
+                    otpInputs.forEach { it.isEnabled = true }
+                    tvCodeExpires.visibility = View.VISIBLE
+                    updateTimerDisplay(timerSeconds)
+                }
+                OtpFlowState.OtpVerifying -> {
+                    otpInputs.forEach { it.isEnabled = false }
+                }
+                OtpFlowState.OtpVerified -> {
+                    llOtpSection.alpha = 0.5f
+                    otpInputs.forEach { it.isEnabled = false }
+                    tvCodeExpires.visibility = View.GONE
+                    btnSendOtp.visibility = View.GONE
+                }
+                OtpFlowState.OtpExpired -> {
+                    btnSendOtp.isEnabled = true
+                    btnSendOtp.text = getString(R.string.resend_otp_button)
+                    btnSendOtp.visibility = View.VISIBLE
+                    tvCodeExpires.text = getString(R.string.otp_expired)
+                    otpInputs.forEach { it.isEnabled = false }
+                }
+            }
+        }
+    }
+
+    private fun updateTimerDisplay(seconds: Int) {
+        val minutes = seconds / 60
+        val secs = seconds % 60
+        binding.tvCodeExpires.text = getString(
+            R.string.code_expires_in,
+            String.format("%02d:%02d", minutes, secs)
+        )
     }
 }

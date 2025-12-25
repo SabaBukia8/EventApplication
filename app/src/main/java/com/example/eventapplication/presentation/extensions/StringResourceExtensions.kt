@@ -5,6 +5,7 @@ import com.example.eventapplication.R
 import com.example.eventapplication.domain.model.NetworkError
 import com.example.eventapplication.domain.validation.EmailValidationError
 import com.example.eventapplication.domain.validation.NameValidationError
+import com.example.eventapplication.domain.validation.OtpValidationError
 import com.example.eventapplication.domain.validation.PasswordValidationError
 import com.example.eventapplication.domain.validation.PhoneValidationError
 
@@ -40,6 +41,14 @@ fun PhoneValidationError.toStringResource(): Int {
     return when (this) {
         PhoneValidationError.Empty -> R.string.error_phone_empty
         PhoneValidationError.InvalidFormat -> R.string.error_phone_invalid
+    }
+}
+
+fun OtpValidationError.toStringResource(): Int {
+    return when (this) {
+        OtpValidationError.EMPTY -> R.string.error_otp_empty
+        OtpValidationError.INVALID_LENGTH -> R.string.error_otp_invalid
+        OtpValidationError.INVALID_FORMAT -> R.string.error_otp_invalid
     }
 }
 

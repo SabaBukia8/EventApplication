@@ -67,6 +67,12 @@
     <string name="error_phone_empty">Phone number cannot be empty</string>
     <string name="error_phone_invalid">Please enter a valid phone number</string>
 
+    <!-- OTP Verification -->
+    <string name="resend_otp_button">Resend OTP</string>
+    <string name="otp_expired">Code expired. Tap to resend.</string>
+    <string name="error_otp_empty">Please enter OTP code</string>
+    <string name="error_phone_not_verified">Please verify your phone number with OTP</string>
+
     <!-- Specific Field Validation -->
     <string name="error_first_name_empty">First name cannot be empty</string>
     <string name="error_last_name_empty">Last name cannot be empty</string>

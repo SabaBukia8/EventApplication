@@ -42,7 +42,8 @@
       "Bash(D:/AndroidProjects/EventApplication/gradlew.bat clean assembleDebug)",
       "Bash(D:/AndroidProjects/EventApplication/gradlew.bat assembleDebug --info)",
       "Bash(D:/AndroidProjects/EventApplication/gradlew.bat assembleDebug:*)",
-      "Bash(D:/AndroidProjects/EventApplication/gradlew.bat clean build)"
+      "Bash(D:/AndroidProjects/EventApplication/gradlew.bat clean build)",
+      "Bash(tree:*)"
     ]
   }
 }
