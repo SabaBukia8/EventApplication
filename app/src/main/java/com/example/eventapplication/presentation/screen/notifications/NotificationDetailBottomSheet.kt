@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.eventapplication.R
 import com.example.eventapplication.databinding.BottomSheetNotificationDetailBinding
 import com.example.eventapplication.domain.model.Notification
 import com.example.eventapplication.presentation.util.toFormattedDateTime
@@ -15,6 +16,8 @@ class NotificationDetailBottomSheet : BottomSheetDialogFragment() {
         fun onViewEventClicked(eventId: String?)
         fun onMarkAsReadClicked(notificationId: String)
     }
+
+    override fun getTheme(): Int = R.style.Theme_App_BottomSheetDialog
 
     private var _binding: BottomSheetNotificationDetailBinding? = null
     private val binding get() = _binding!!
@@ -60,19 +63,16 @@ class NotificationDetailBottomSheet : BottomSheetDialogFragment() {
     private fun setupUI() {
         binding.apply {
             tvTitle.text = notification.title
-            tvMessage.text = notification.message
-            tvTime.text = notification.createdAt.toFormattedDateTime()
 
-            // Show/hide buttons based on notification state
-            btnMarkAsRead.visibility = if (notification.isRead) View.GONE else View.VISIBLE
+            tvDateTime.text = notification.createdAt.toFormattedDateTime()
+
+            // Hide location views (can be shown if location data is available)
+            ivLocation.visibility = View.GONE
+            tvLocation.visibility = View.GONE
+
             btnViewEvent.visibility = if (notification.eventId != null) View.VISIBLE else View.GONE
 
             btnClose.setOnClickListener {
-                dismiss()
-            }
-
-            btnMarkAsRead.setOnClickListener {
-                actionListener?.onMarkAsReadClicked(notification.id)
                 dismiss()
             }
 

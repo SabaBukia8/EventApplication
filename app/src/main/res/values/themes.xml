@@ -2,4 +2,11 @@
 <resources>
 
     <style name="Theme.EventApplication" parent="Theme.Material3.Light.NoActionBar" />
+
+    <!-- Bottom Sheet Dialog Theme with Dark Overlay -->
+    <style name="Theme.App.BottomSheetDialog" parent="Theme.Material3.Light.BottomSheetDialog">
+        <item name="android:backgroundDimAmount">0.4</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
 </resources>

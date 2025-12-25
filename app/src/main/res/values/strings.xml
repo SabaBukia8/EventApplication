@@ -268,5 +268,7 @@
     <string name="badge_waitlisted">Waitlisted</string>
     <string name="error_icon">Error icon</string>
     <string name="empty_state_icon">Empty state icon</string>
+    <string name="view_event">View Event</string>
+    <string name="close">Close</string>
 
 </resources>
