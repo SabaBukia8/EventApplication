@@ -3,6 +3,8 @@ package com.example.eventapplication.presentation.screen.categoryevents
 import com.example.eventapplication.domain.model.Category
 import com.example.eventapplication.domain.model.CategoryEventsError
 import com.example.eventapplication.domain.model.Event
+import com.example.eventapplication.domain.model.EventFilters
+import com.example.eventapplication.domain.model.EventRegistrationStatus
 import com.example.eventapplication.domain.model.SortOption
 import com.example.eventapplication.presentation.model.FilterType
 
@@ -13,9 +15,12 @@ sealed class CategoryEventsState {
         val category: Category,
         val events: List<Event>,
         val sortBy: SortOption,
-        val hasActiveFilters: Boolean,
+        val filters: EventFilters = EventFilters(),
         val selectedFilter: FilterType = FilterType.ALL_EVENTS,
-        val hasNotifications: Boolean = false
+        val hasNotifications: Boolean = false,
+        val registrationStatuses: Map<Int, EventRegistrationStatus> = emptyMap(),
+        val availableLocations: List<String> = emptyList(),
+        val isLoadingStatuses: Boolean = false
     ) : CategoryEventsState()
     data class Error(val error: CategoryEventsError) : CategoryEventsState()
 }
@@ -29,6 +34,10 @@ sealed class CategoryEventsEvent {
     object OnBackClicked : CategoryEventsEvent()
     object OnNotificationClicked : CategoryEventsEvent()
     object OnRetry : CategoryEventsEvent()
+    data class OnLocationSelected(val location: String?) : CategoryEventsEvent()
+    data class OnDateRangeSelected(val startDate: String?, val endDate: String?) : CategoryEventsEvent()
+    data class OnAvailabilityToggled(val onlyAvailable: Boolean) : CategoryEventsEvent()
+    object OnClearFilters : CategoryEventsEvent()
 }
 
 sealed class CategoryEventsSideEffect {

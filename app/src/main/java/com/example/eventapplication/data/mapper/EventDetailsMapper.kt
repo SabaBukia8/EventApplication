@@ -13,11 +13,19 @@ import com.example.eventapplication.domain.model.RegistrationStatus
 import com.example.eventapplication.domain.model.Speaker
 
 fun EventDetailsDto.toDomain(registrationStatus: RegistrationStatus? = null): EventDetails {
+    val location = when {
+        !onlineAddress.isNullOrBlank() -> onlineAddress
+        !venueName.isNullOrBlank() && !address.isNullOrBlank() -> "$venueName, $address"
+        !venueName.isNullOrBlank() -> venueName
+        !address.isNullOrBlank() -> address
+        else -> "Location TBA"
+    }
+
     return EventDetails(
         id = id,
         title = title,
         description = description,
-        eventType = eventType.toEventType(),
+        eventType = eventTypeName.toEventType(),
         startDateTime = startDateTime,
         endDateTime = endDateTime,
         location = location,
@@ -27,10 +35,15 @@ fun EventDetailsDto.toDomain(registrationStatus: RegistrationStatus? = null): Ev
         isFull = isFull,
         registrationStatus = registrationStatus,
         imageUrl = imageUrl,
-        organizer = organizer.toDomain(),
+        organizer = Organizer(
+            id = 0,
+            name = createdBy,
+            email = "",
+            avatarUrl = null
+        ),
         tags = tags,
-        agenda = agenda.map { it.toDomain() },
-        speakers = speakers.map { it.toDomain() },
+        agenda = emptyList(),
+        speakers = emptyList(),
         registrationDeadline = registrationDeadline
     )
 }

@@ -2,6 +2,7 @@ package com.example.eventapplication.domain.usecase.event
 
 import com.example.eventapplication.domain.common.Resource
 import com.example.eventapplication.domain.model.Event
+import com.example.eventapplication.domain.model.EventFilters
 import com.example.eventapplication.domain.model.SortOption
 import com.example.eventapplication.domain.repository.EventsRepository
 import kotlinx.coroutines.flow.Flow
@@ -13,12 +14,17 @@ class GetEventsByCategoryUseCase @Inject constructor(
 ) {
     operator fun invoke(
         categoryId: Int,
+        filters: EventFilters = EventFilters(),
         sortBy: SortOption = SortOption.START_DATE,
         pageNumber: Int = 1,
         pageSize: Int = 50
     ): Flow<Resource<List<Event>>> {
         return repository.getEvents(
             eventTypeId = categoryId,
+            location = filters.location,
+            startDate = filters.startDate,
+            endDate = filters.endDate,
+            onlyAvailable = if (filters.onlyAvailable) true else null,
             eventStatus = "Upcoming",
             pageNumber = pageNumber,
             pageSize = pageSize

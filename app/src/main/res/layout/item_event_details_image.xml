@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <!-- Header Bar -->
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,7 +14,6 @@
         android:gravity="center_vertical"
         android:background="@color/background_white">
 
-        <!-- Back Button -->
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivBack"
             android:layout_width="@dimen/icon_xl"
@@ -25,7 +23,6 @@
             android:contentDescription="@string/back"
             app:tint="@color/brand_black" />
 
-        <!-- Title -->
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -36,24 +33,21 @@
             android:textSize="@dimen/text_size_h3"
             android:textStyle="bold" />
 
-        <!-- Menu Button -->
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivMenu"
             android:layout_width="@dimen/icon_xl"
             android:layout_height="@dimen/icon_xl"
-            android:src="@drawable/ic_shield"
+            android:src="@drawable/ic_three_dots"
             android:contentDescription="@string/menu"
             app:tint="@color/brand_black" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <!-- Divider -->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/border_light" />
 
-    <!-- Event Image Placeholder -->
     <View
         android:id="@+id/vImagePlaceholder"
         android:layout_width="match_parent"

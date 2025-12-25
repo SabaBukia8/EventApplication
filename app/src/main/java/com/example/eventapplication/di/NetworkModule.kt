@@ -5,6 +5,7 @@ import com.example.eventapplication.data.common.NetworkConstants
 import com.example.eventapplication.data.local.datastore.DataStoreManager
 import com.example.eventapplication.data.remote.api.DepartmentApiService
 import com.example.eventapplication.data.remote.api.EventDetailsApiService
+import com.example.eventapplication.data.remote.api.EventRegistrationStatusApiService
 import com.example.eventapplication.data.remote.api.EventsApiService
 import com.example.eventapplication.data.remote.api.LoginApiService
 import com.example.eventapplication.data.remote.api.NotificationsApiService
@@ -148,5 +149,11 @@ object NetworkModule {
     @Singleton
     fun provideUserRegistrationsApiService(retrofit: Retrofit): UserRegistrationsApiService {
         return retrofit.create(UserRegistrationsApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideEventRegistrationStatusApiService(retrofit: Retrofit): EventRegistrationStatusApiService {
+        return retrofit.create(EventRegistrationStatusApiService::class.java)
     }
 }

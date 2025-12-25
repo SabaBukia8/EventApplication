@@ -101,6 +101,7 @@
     <string name="event_spots_left">%d spots left</string>
     <string name="event_full">Full</string>
     <string name="event_waitlisted">Waitlisted</string>
+    <string name="event_registered_badge">Registered</string>
     <string name="event_view_details">View Details</string>
 
     <!-- Category Names -->
@@ -232,5 +233,18 @@
     <string name="other">Other</string>
     <string name="event_available">Available</string>
     <string name="event_waitlist">Waitlist</string>
+
+    <!-- Filter Strings -->
+    <string name="select_date_range">Select Date Range</string>
+    <string name="only_available">Available Only</string>
+    <string name="clear_filters">Clear</string>
+    <string name="all_locations">All Locations</string>
+    <string name="date_range_format">%1$s - %2$s</string>
+
+    <!-- Registration Status Strings -->
+    <string name="spots_left_format">%1$d spots left</string>
+    <string name="status_registered">Registered</string>
+    <string name="status_waitlisted">Waitlisted</string>
+    <string name="status_full">Full (Waitlist)</string>
 
 </resources>

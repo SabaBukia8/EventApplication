@@ -1,13 +1,18 @@
 package com.example.eventapplication.presentation.screen.categoryevents.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.eventapplication.R
 import com.example.eventapplication.databinding.ItemCategoryEventCardNewBinding
 import com.example.eventapplication.databinding.ItemCategoryEventsHeaderBinding
+import com.example.eventapplication.domain.model.Event
+import com.example.eventapplication.domain.model.EventRegistrationStatus
 import com.example.eventapplication.domain.model.EventType
 import com.example.eventapplication.presentation.model.CategoryEventsItem
 import com.example.eventapplication.presentation.model.FilterType
@@ -20,7 +25,10 @@ import com.example.eventapplication.presentation.extensions.visible
 class NewCategoryEventsAdapter(
     private val onBackClick: () -> Unit,
     private val onNotificationClick: () -> Unit,
-    private val onFilterClick: (FilterType) -> Unit,
+    private val onLocationSelected: (String?) -> Unit,
+    private val onDateRangeClick: () -> Unit,
+    private val onAvailabilityToggled: (Boolean) -> Unit,
+    private val onClearFiltersClick: () -> Unit,
     private val onEventClick: (Int) -> Unit
 ) : ListAdapter<CategoryEventsItem, RecyclerView.ViewHolder>(CategoryEventsItemDiffCallback()) {
 
@@ -42,7 +50,8 @@ class NewCategoryEventsAdapter(
         return when (viewType) {
             VIEW_TYPE_HEADER -> {
                 val binding = ItemCategoryEventsHeaderBinding.inflate(inflater, parent, false)
-                HeaderViewHolder(binding, onBackClick, onNotificationClick, onFilterClick)
+                HeaderViewHolder(binding, onBackClick, onNotificationClick, onLocationSelected,
+                    onDateRangeClick, onAvailabilityToggled, onClearFiltersClick)
             }
             VIEW_TYPE_EVENT_CARD -> {
                 val binding = ItemCategoryEventCardNewBinding.inflate(inflater, parent, false)
@@ -65,61 +74,71 @@ class NewCategoryEventsAdapter(
         private val binding: ItemCategoryEventsHeaderBinding,
         private val onBackClick: () -> Unit,
         private val onNotificationClick: () -> Unit,
-        private val onFilterClick: (FilterType) -> Unit
+        private val onLocationSelected: (String?) -> Unit,
+        private val onDateRangeClick: () -> Unit,
+        private val onAvailabilityToggled: (Boolean) -> Unit,
+        private val onClearFiltersClick: () -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: CategoryEventsItem.Header) {
             with(binding) {
                 tvCategoryTitle.text = item.categoryName
-                
+
                 if (item.hasNotifications) {
                     vNotificationBadge.visible()
                 } else {
                     vNotificationBadge.gone()
                 }
-                
+
                 btnBack.setOnClickListener { onBackClick() }
                 flNotificationButton.setOnClickListener { onNotificationClick() }
-                
-                updateFilterChips(item.selectedFilter)
-                
-                chipAllEvents.setOnClickListener { onFilterClick(FilterType.ALL_EVENTS) }
-                chipDate.setOnClickListener { onFilterClick(FilterType.DATE) }
-                chipLocation.setOnClickListener { onFilterClick(FilterType.LOCATION) }
+
+                setupLocationSpinner(item.availableLocations, item.selectedLocation)
+
+                btnDateRange.text = item.dateRangeText ?: root.context.getString(R.string.select_date_range)
+                btnDateRange.setOnClickListener { onDateRangeClick() }
+
+                switchOnlyAvailable.setOnCheckedChangeListener(null)
+                switchOnlyAvailable.isChecked = item.onlyAvailable
+                switchOnlyAvailable.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked != item.onlyAvailable) {
+                        onAvailabilityToggled(isChecked)
+                    }
+                }
+
+                if (item.hasActiveFilters) {
+                    btnClearFilters.visible()
+                    btnClearFilters.setOnClickListener { onClearFiltersClick() }
+                } else {
+                    btnClearFilters.gone()
+                }
             }
         }
 
-        private fun updateFilterChips(selectedFilter: FilterType) {
-            with(binding) {
-                chipAllEvents.apply {
-                    setBackgroundColor(context.getColor(
-                        if (selectedFilter == FilterType.ALL_EVENTS) R.color.black else R.color.otp_box_background
-                    ))
-                    setTextColor(context.getColor(
-                        if (selectedFilter == FilterType.ALL_EVENTS) R.color.white else R.color.label_text
-                    ))
-                    iconTint = context.getColorStateList(
-                        if (selectedFilter == FilterType.ALL_EVENTS) R.color.white else R.color.label_text
-                    )
+        private fun setupLocationSpinner(locations: List<String>, selectedLocation: String?) {
+            val context = binding.root.context
+            val items = listOf(context.getString(R.string.all_locations)) + locations
+            val adapter = ArrayAdapter(context, android.R.layout.simple_spinner_item, items)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+            binding.spinnerLocation.adapter = adapter
+
+            val selectedIndex = if (selectedLocation != null) {
+                locations.indexOf(selectedLocation) + 1
+            } else 0
+
+            binding.spinnerLocation.onItemSelectedListener = null
+            binding.spinnerLocation.setSelection(selectedIndex)
+
+            binding.spinnerLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    val location = if (position == 0) null else locations[position - 1]
+                    if (location != selectedLocation) {
+                        onLocationSelected(location)
+                    }
                 }
 
-                chipDate.apply {
-                    setBackgroundColor(context.getColor(
-                        if (selectedFilter == FilterType.DATE) R.color.black else R.color.otp_box_background
-                    ))
-                    setTextColor(context.getColor(
-                        if (selectedFilter == FilterType.DATE) R.color.white else R.color.label_text
-                    ))
-                }
-
-                chipLocation.apply {
-                    setBackgroundColor(context.getColor(
-                        if (selectedFilter == FilterType.LOCATION) R.color.black else R.color.otp_box_background
-                    ))
-                    setTextColor(context.getColor(
-                        if (selectedFilter == FilterType.LOCATION) R.color.white else R.color.label_text
-                    ))
-                }
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
         }
     }
@@ -133,19 +152,19 @@ class NewCategoryEventsAdapter(
             val event = item.event
             with(binding) {
                 tvImagePlaceholder.text = root.context.getString(R.string.image_placeholder)
-                
+
                 tvEventTitle.text = event.title
-                
-                tvCategoryBadge.text = formatEventType(event.eventType)
-                
+
+                displayRegistrationStatus(item.registrationStatus, event)
+
                 tvEventDescription.text = event.description
-                
+
                 tvEventDate.text = event.startDateTime.toFormattedDate()
-                
+
                 tvEventTime.text = event.startDateTime.toTimeString(event.endDateTime)
-                
+
                 tvEventLocation.text = event.location
-                
+
                 if (item.isRegistered) {
                     btnAction.text = root.context.getString(R.string.registered)
                     btnAction.setBackgroundColor(root.context.getColor(R.color.white))
@@ -164,26 +183,33 @@ class NewCategoryEventsAdapter(
                     btnAction.setTextColor(root.context.getColor(R.color.white))
                     btnAction.strokeWidth = 0
                 }
-                
+
                 root.setOnClickListener { onEventClick(event.id) }
                 btnAction.setOnClickListener { onEventClick(event.id) }
             }
         }
 
-        private fun formatEventType(eventType: EventType): String {
-            val context = binding.root.context
-            return when (eventType) {
-                EventType.TEAM_BUILDING -> context.getString(R.string.category_type_team_building)
-                EventType.SPORTS -> context.getString(R.string.category_type_sports)
-                EventType.WORKSHOP -> context.getString(R.string.category_type_workshop)
-                EventType.HAPPY_FRIDAY -> context.getString(R.string.category_type_happy_friday)
-                EventType.CULTURAL -> context.getString(R.string.category_type_cultural)
-                EventType.WELLNESS -> context.getString(R.string.category_type_wellness)
-                EventType.TRAINING -> context.getString(R.string.training)
-                    EventType.SOCIAL -> context.getString(R.string.social)
-                        EventType.CONFERENCE -> context.getString(R.string.conference)
-                    EventType.OTHER -> context.getString(R.string.other)
+        private fun displayRegistrationStatus(
+            status: EventRegistrationStatus?,
+            event: Event
+        ) = with(binding){
+            val context = root.context
+
+            val badgeText = when {
+                status?.isRegistered == true -> context.getString(R.string.status_registered)
+                status?.isWaitlisted == true -> context.getString(R.string.status_waitlisted)
+                event.isFull -> context.getString(R.string.status_full)
+                else -> {
+                    val spotsLeft = event.spotsLeft.coerceAtLeast(0)
+                    context.getString(R.string.spots_left_format, spotsLeft)
+                }
             }
+
+            tvCategoryBadge.text = badgeText
+            tvCategoryBadge.backgroundTintList =
+                context.getColorStateList(R.color.badge_waitlist)
+            tvCategoryBadge.setTextColor(context.getColor(R.color.badge_waitlist_text))
+            tvCategoryBadge.visible()
         }
     }
     

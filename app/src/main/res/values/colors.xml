@@ -53,8 +53,10 @@
 
     <!-- Badge -->
     <color name="badge_notification">#737373</color>
-    <color name="badge_waitlist">#F5F5F5</color>
-    <color name="badge_waitlist_text">#262626</color>
+    <color name="badge_waitlist">#FFF3E0</color>
+    <color name="badge_waitlist_text">#E65100</color>
+    <color name="badge_registered">#E8F5E9</color>
+    <color name="badge_registered_text">#2E7D32</color>
 
     <!-- Placeholder -->
     <color name="placeholder_light">#D4D4D4</color>
@@ -64,4 +66,13 @@
     <!-- Navigation -->
     <color name="nav_active">#171717</color>
     <color name="nav_inactive">#737373</color>
+
+    <!-- Registration Status Badge Colors -->
+    <color name="status_registered">#4CAF50</color>      <!-- Green -->
+    <color name="status_waitlisted">#FF9800</color>      <!-- Orange -->
+    <color name="status_full">#F44336</color>            <!-- Red -->
+    <color name="status_available">#2196F3</color>       <!-- Blue -->
+
+    <!-- Error Color (for clear filters button) -->
+    <color name="error">#F44336</color>
 </resources>

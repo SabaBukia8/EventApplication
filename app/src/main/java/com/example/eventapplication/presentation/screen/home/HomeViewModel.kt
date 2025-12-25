@@ -23,6 +23,7 @@ class HomeViewModel @Inject constructor(
     private val getUpcomingEventsUseCase: GetUpcomingEventsUseCase,
     private val getTrendingEventsUseCase: GetTrendingEventsUseCase,
     private val getCategoriesUseCase: GetCategoriesUseCase,
+    private val getEventRegistrationStatusUseCase: com.example.eventapplication.domain.usecase.event.GetEventRegistrationStatusUseCase,
     private val logoutUseCase: com.example.eventapplication.domain.usecase.auth.LogoutUseCase,
     private val stringProvider: StringResourceProvider
 ) : BaseViewModel<HomeState, HomeEvent, HomeSideEffect>(
@@ -68,6 +69,23 @@ class HomeViewModel @Inject constructor(
                 if (upcomingResult is Resource.Success) {
                     upcomingEvents = upcomingResult.data
                     android.util.Log.d("HomeViewModel", "Upcoming events loaded: ${upcomingEvents.size}")
+
+                    upcomingEvents = upcomingEvents.map { event ->
+                        try {
+                            val statusResult = getEventRegistrationStatusUseCase(event.id).first {
+                                it is Resource.Success || it is Resource.Error
+                            }
+                            if (statusResult is Resource.Success) {
+                                val status = statusResult.data
+                                event.copy(registrationStatus = status.status)
+                            } else {
+                                event
+                            }
+                        } catch (e: Exception) {
+                            android.util.Log.e("HomeViewModel", "Error loading registration status for event ${event.id}", e)
+                            event
+                        }
+                    }
                 } else if (upcomingResult is Resource.Error) {
                     android.util.Log.e("HomeViewModel", "Error loading upcoming events: ${upcomingResult.error}")
                 }
@@ -136,7 +154,6 @@ class HomeViewModel @Inject constructor(
 
     private fun navigateToNotifications() {
         emitSideEffect(HomeSideEffect.NavigateToNotifications)
-        // We can also show a message that this feature is coming soon
         emitSideEffect(HomeSideEffect.ShowErrorMessage(R.string.navigate_to_notifications))
     }
 

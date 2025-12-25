@@ -48,10 +48,20 @@ class EventsAdapter(
                 val timeRange = (event.startDateTime to event.endDateTime).toTimeRange()
                 tvTime.text = timeRange
 
-                if (event.isWaitlisted) {
-                    tvWaitlistedBadge.visible()
-                } else {
-                    tvWaitlistedBadge.gone()
+                // Show badge based on registration status
+                when (event.registrationStatus) {
+                    com.example.eventapplication.domain.model.RegistrationStatus.CONFIRMED -> {
+                        tvRegisteredBadge.visible()
+                        tvWaitlistedBadge.gone()
+                    }
+                    com.example.eventapplication.domain.model.RegistrationStatus.WAITLISTED -> {
+                        tvRegisteredBadge.gone()
+                        tvWaitlistedBadge.visible()
+                    }
+                    else -> {
+                        tvRegisteredBadge.gone()
+                        tvWaitlistedBadge.gone()
+                    }
                 }
 
                 val registrationInfo = buildString {

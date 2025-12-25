@@ -8,6 +8,7 @@ import com.example.eventapplication.data.repository.EventsRepositoryImpl
 import com.example.eventapplication.data.repository.LoginRepositoryImpl
 import com.example.eventapplication.data.repository.NotificationsRepositoryImpl
 import com.example.eventapplication.data.repository.RegisterRepositoryImpl
+import com.example.eventapplication.data.repository.RegistrationsRepositoryImpl
 import com.example.eventapplication.data.repository.TokenRepositoryImpl
 import com.example.eventapplication.data.repository.UserRegistrationsRepositoryImpl
 import com.example.eventapplication.domain.repository.DepartmentRepository
@@ -16,6 +17,7 @@ import com.example.eventapplication.domain.repository.EventsRepository
 import com.example.eventapplication.domain.repository.LoginRepository
 import com.example.eventapplication.domain.repository.NotificationsRepository
 import com.example.eventapplication.domain.repository.RegisterRepository
+import com.example.eventapplication.domain.repository.RegistrationsRepository
 import com.example.eventapplication.domain.repository.TokenRepository
 import com.example.eventapplication.domain.repository.UserRegistrationsRepository
 import dagger.Binds
@@ -81,4 +83,10 @@ abstract class DataModule {
     abstract fun bindUserRegistrationsRepository(
         impl: UserRegistrationsRepositoryImpl
     ): UserRegistrationsRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindRegistrationsRepository(
+        impl: RegistrationsRepositoryImpl
+    ): RegistrationsRepository
 }

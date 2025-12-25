@@ -9,6 +9,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.os.Bundle
 import android.view.View
+import com.example.eventapplication.R
 import com.example.eventapplication.databinding.FragmentCategoryEventsBinding
 import com.example.eventapplication.presentation.screen.categoryevents.CategoryEventsFragmentArgs
 import com.example.eventapplication.presentation.screen.categoryevents.CategoryEventsFragmentDirections
@@ -19,9 +20,12 @@ import com.example.eventapplication.presentation.extensions.gone
 import com.example.eventapplication.presentation.extensions.showSnackbar
 import com.example.eventapplication.presentation.extensions.toErrorMessage
 import com.example.eventapplication.presentation.extensions.visible
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 @AndroidEntryPoint
 class CategoryEventsFragment : BaseFragment<FragmentCategoryEventsBinding>(
@@ -53,8 +57,17 @@ class CategoryEventsFragment : BaseFragment<FragmentCategoryEventsBinding>(
             onNotificationClick = {
                 viewModel.onEvent(CategoryEventsEvent.OnNotificationClicked)
             },
-            onFilterClick = { filterType ->
-                viewModel.onEvent(CategoryEventsEvent.OnFilterChanged(filterType))
+            onLocationSelected = { location ->
+                viewModel.onEvent(CategoryEventsEvent.OnLocationSelected(location))
+            },
+            onDateRangeClick = {
+                showDateRangePicker()
+            },
+            onAvailabilityToggled = { onlyAvailable ->
+                viewModel.onEvent(CategoryEventsEvent.OnAvailabilityToggled(onlyAvailable))
+            },
+            onClearFiltersClick = {
+                viewModel.onEvent(CategoryEventsEvent.OnClearFilters)
             },
             onEventClick = { eventId ->
                 viewModel.onEvent(CategoryEventsEvent.OnEventClicked(eventId))
@@ -130,20 +143,33 @@ class CategoryEventsFragment : BaseFragment<FragmentCategoryEventsBinding>(
     private fun handleSuccess(state: CategoryEventsState.Success) {
         val items = mutableListOf<CategoryEventsItem>()
 
+        val dateRangeText = if (state.filters.startDate != null && state.filters.endDate != null) {
+            val startFormatted = formatDateForDisplay(state.filters.startDate)
+            val endFormatted = formatDateForDisplay(state.filters.endDate)
+            getString(R.string.date_range_format, startFormatted, endFormatted)
+        } else null
+
         items.add(
             CategoryEventsItem.Header(
                 categoryName = formatCategoryName(state.category.type?.name),
                 hasNotifications = state.hasNotifications,
-                selectedFilter = state.selectedFilter
+                selectedFilter = state.selectedFilter,
+                availableLocations = state.availableLocations,
+                selectedLocation = state.filters.location,
+                dateRangeText = dateRangeText,
+                onlyAvailable = state.filters.onlyAvailable,
+                hasActiveFilters = state.filters.hasActiveFilters
             )
         )
 
         items.addAll(
             state.events.map { event ->
+                val registrationStatus = state.registrationStatuses[event.id]
                 CategoryEventsItem.EventCard(
                     event = event,
-                    isRegistered = event.registrationStatus != null,
-                    isWaitlisted = event.isWaitlisted
+                    isRegistered = registrationStatus?.isRegistered ?: false,
+                    isWaitlisted = registrationStatus?.isWaitlisted ?: false,
+                    registrationStatus = registrationStatus
                 )
             }
         )
@@ -166,5 +192,45 @@ class CategoryEventsFragment : BaseFragment<FragmentCategoryEventsBinding>(
         }
 
         return if (formattedName.contains("Events")) formattedName else "$formattedName Events"
+    }
+
+    private fun showDateRangePicker() {
+        val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
+            .setTitleText("Select Date Range")
+            .setSelection(
+                androidx.core.util.Pair(
+                    MaterialDatePicker.todayInUtcMilliseconds(),
+                    MaterialDatePicker.todayInUtcMilliseconds()
+                )
+            )
+            .build()
+
+        dateRangePicker.addOnPositiveButtonClickListener { selection ->
+            val startDate = formatDateForApi(selection.first)
+            val endDate = formatDateForApi(selection.second)
+            viewModel.onEvent(CategoryEventsEvent.OnDateRangeSelected(startDate, endDate))
+        }
+
+        dateRangePicker.show(parentFragmentManager, "DATE_RANGE_PICKER")
+    }
+
+    private fun formatDateForApi(millis: Long): String {
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        calendar.timeInMillis = millis
+        val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
+        format.timeZone = TimeZone.getTimeZone("UTC")
+        return format.format(calendar.time)
+    }
+
+    private fun formatDateForDisplay(isoDate: String): String {
+        return try {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
+            inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+            val date = inputFormat.parse(isoDate)
+            val outputFormat = SimpleDateFormat("MMM dd", Locale.US)
+            outputFormat.format(date!!)
+        } catch (e: Exception) {
+            isoDate
+        }
     }
 }

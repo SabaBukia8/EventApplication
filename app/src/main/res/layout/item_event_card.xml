@@ -40,6 +40,22 @@
             app:layout_constraintTop_toBottomOf="@id/tvMonth"
             tools:text="18" />
 
+        <!-- Registered Badge (Optional) -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvRegisteredBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/badge_registered"
+            android:paddingHorizontal="@dimen/spacing_sm"
+            android:paddingVertical="@dimen/spacing_xs"
+            android:text="@string/event_registered_badge"
+            android:textColor="@color/badge_registered_text"
+            android:textSize="@dimen/text_size_caption"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
+
         <!-- Waitlisted Badge (Optional) -->
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvWaitlistedBadge"
@@ -68,7 +84,7 @@
             android:textColor="@color/text_primary"
             android:textSize="@dimen/event_card_title_size"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@id/tvWaitlistedBadge"
+            app:layout_constraintEnd_toStartOf="@id/tvRegisteredBadge"
             app:layout_constraintStart_toEndOf="@id/tvDay"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Annual Team Building Summit" />
