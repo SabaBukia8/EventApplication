@@ -1,6 +1,7 @@
 package com.example.eventapplication.presentation.screen.notifications
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,15 +11,18 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.eventapplication.MainActivity
 import com.example.eventapplication.databinding.FragmentNotificationsBinding
 import com.example.eventapplication.domain.model.Notification
 import com.example.eventapplication.domain.model.NotificationTabCategory
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class NotificationsFragment : Fragment() {
+class NotificationsFragment : Fragment(),
+    NotificationDetailBottomSheet.NotificationActionListener {
 
     private var _binding: FragmentNotificationsBinding? = null
     private val binding get() = _binding!!
@@ -83,6 +87,10 @@ class NotificationsFragment : Fragment() {
             toolbar.setNavigationOnClickListener {
                 findNavController().navigateUp()
             }
+
+            tvMarkAllRead.setOnClickListener {
+                viewModel.onEvent(NotificationsEvent.MarkAllAsRead)
+            }
         }
     }
 
@@ -95,19 +103,27 @@ class NotificationsFragment : Fragment() {
     }
 
     private fun handleState(state: NotificationsState) {
+        Log.d("NotificationsFragment", ">>> handleState: ${state::class.simpleName}")
         when (state) {
-            NotificationsState.Idle -> {}
+            NotificationsState.Idle -> {
+                Log.d("NotificationsFragment", "State: Idle")
+            }
 
             is NotificationsState.IsLoading -> {
+                Log.d("NotificationsFragment", "State: Loading = ${state.isLoading}")
                 binding.swipeRefresh.isRefreshing = state.isLoading
             }
 
             is NotificationsState.Success -> {
+                Log.d("NotificationsFragment", "✓ Success with ${state.notifications.size} items, ${state.unreadCount} unread")
                 notificationsAdapter.submitList(state.notifications)
                 updateUnreadBadge(state.unreadCount)
+                binding.tvMarkAllRead.isEnabled = state.unreadCount > 0
+                binding.tvMarkAllRead.alpha = if (state.unreadCount > 0) 1.0f else 0.5f
             }
 
             is NotificationsState.Error -> {
+                Log.e("NotificationsFragment", "✗ Error: ${state.error}")
                 showError(state.error.toString())
             }
         }
@@ -137,6 +153,7 @@ class NotificationsFragment : Fragment() {
 
     private fun showNotificationDetailBottomSheet(notification: Notification) {
         NotificationDetailBottomSheet.newInstance(notification)
+            .apply { setActionListener(this@NotificationsFragment) }
             .show(childFragmentManager, NotificationDetailBottomSheet.TAG)
     }
 
@@ -145,11 +162,45 @@ class NotificationsFragment : Fragment() {
     }
 
     private fun updateUnreadBadge(count: Int) {
-        // Update badge on bottom navigation if needed
+        (requireActivity() as? MainActivity)?.updateNotificationBadge(count)
+    }
+
+    override fun onViewEventClicked(eventId: String?) {
+        // Handle null eventId
+        if (eventId == null) {
+            Toast.makeText(requireContext(), "Event information not available", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Convert String to Int safely
+        val eventIdInt = eventId.toIntOrNull()
+        if (eventIdInt == null) {
+            Toast.makeText(requireContext(), "Invalid event ID", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Navigate to event details
+        val action = NotificationsFragmentDirections
+            .actionUpdatesFragmentToEventDetailsFragment(eventIdInt)
+        findNavController().navigate(action)
+    }
+
+    override fun onMarkAsReadClicked(notificationId: String) {
+        viewModel.onEvent(NotificationsEvent.MarkAsRead(notificationId))
     }
 
     private fun showError(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        Log.e("NotificationsFragment", "Showing error to user: $message")
+
+        // Toast
+        Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_LONG).show()
+
+        // Snackbar with retry
+        Snackbar.make(binding.root, "Failed to load notifications", Snackbar.LENGTH_LONG)
+            .setAction("Retry") {
+                viewModel.onEvent(NotificationsEvent.RefreshNotifications)
+            }
+            .show()
     }
 
     override fun onDestroyView() {

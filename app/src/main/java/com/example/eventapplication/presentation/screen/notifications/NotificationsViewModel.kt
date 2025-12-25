@@ -1,12 +1,15 @@
 package com.example.eventapplication.presentation.screen.notifications
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.eventapplication.domain.common.Resource
+import com.example.eventapplication.domain.model.NetworkError
 import com.example.eventapplication.domain.model.Notification
 import com.example.eventapplication.domain.model.NotificationTabCategory
 import com.example.eventapplication.domain.model.NotificationsError
 import com.example.eventapplication.domain.usecase.notification.GetNotificationsUseCase
+import com.example.eventapplication.domain.usecase.notification.MarkAllAsReadUseCase
 import com.example.eventapplication.domain.usecase.notification.MarkNotificationAsReadUseCase
 import com.example.eventapplication.presentation.model.DateCategory
 import com.example.eventapplication.presentation.model.NotificationItem
@@ -25,7 +28,8 @@ import javax.inject.Inject
 @HiltViewModel
 class NotificationsViewModel @Inject constructor(
     private val getNotificationsUseCase: GetNotificationsUseCase,
-    private val markNotificationAsReadUseCase: MarkNotificationAsReadUseCase
+    private val markNotificationAsReadUseCase: MarkNotificationAsReadUseCase,
+    private val markAllAsReadUseCase: MarkAllAsReadUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<NotificationsState>(NotificationsState.Idle)
@@ -53,15 +57,32 @@ class NotificationsViewModel @Inject constructor(
     }
 
     private fun loadNotifications() {
+        Log.d("NotificationsViewModel", ">>> loadNotifications() called")
         viewModelScope.launch {
             getNotificationsUseCase().collect { resource ->
+                Log.d("NotificationsViewModel", "Received: ${resource::class.simpleName}")
                 when (resource) {
-                    is Resource.Loader -> _state.value = NotificationsState.IsLoading(resource.isLoading)
+                    is Resource.Loader -> {
+                        Log.d("NotificationsViewModel", "Loading: ${resource.isLoading}")
+                        _state.value = NotificationsState.IsLoading(resource.isLoading)
+                    }
                     is Resource.Success -> {
+                        Log.d("NotificationsViewModel", "✓ Success! ${resource.data.size} notifications")
                         allNotifications = resource.data
                         updateStateWithFiltered()
                     }
-                    is Resource.Error -> _state.value = NotificationsState.Error(resource.error as NotificationsError)
+                    is Resource.Error -> {
+                        Log.e("NotificationsViewModel", "✗ Error: ${resource.error}")
+                        val notificationError = when (val error = resource.error) {
+                            is NotificationsError -> error
+                            is NetworkError.Unknown -> NotificationsError.Unknown(error.message.orEmpty())
+                            is NetworkError.ServerError -> NotificationsError.ServerError
+                            is NetworkError.NoInternet -> NotificationsError.NetworkUnavailable
+                            is NetworkError.Unauthorized -> NotificationsError.Unauthorized
+                            else -> NotificationsError.Unknown("An unexpected error occurred")
+                        }
+                        _state.value = NotificationsState.Error(notificationError)
+                    }
                 }
             }
         }
@@ -154,6 +175,21 @@ class NotificationsViewModel @Inject constructor(
     }
 
     private fun markAllAsRead() {
-        // Will be implemented when needed
+        viewModelScope.launch {
+            markAllAsReadUseCase().collect { resource ->
+                when (resource) {
+                    is Resource.Success -> {
+                        allNotifications = allNotifications.map {
+                            it.copy(isRead = true)
+                        }
+                        updateStateWithFiltered()
+                    }
+                    is Resource.Error -> {
+                        _sideEffect.emit(NotificationsSideEffect.ShowError("Failed to mark all as read"))
+                    }
+                    else -> {}
+                }
+            }
+        }
     }
 }

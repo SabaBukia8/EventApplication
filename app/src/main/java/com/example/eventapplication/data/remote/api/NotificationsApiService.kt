@@ -13,6 +13,6 @@ interface NotificationsApiService {
     @PUT("api/Notifications/{notificationId}/read")
     suspend fun markAsRead(@Path("notificationId") notificationId: String)
 
-    @PUT("api/Notifications/user/{userId}/read-all")
-    suspend fun markAllAsRead(@Path("userId") userId: String)
+    @PUT("api/Notifications/mark-all-read")
+    suspend fun markAllAsRead()
 }

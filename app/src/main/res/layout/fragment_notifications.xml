@@ -20,7 +20,23 @@
             android:background="@color/white"
             app:navigationIcon="@drawable/ic_arrow_right"
             app:title="Notifications"
-            app:titleTextColor="@color/text_primary" />
+            app:titleTextColor="@color/text_primary">
+
+            <TextView
+                android:id="@+id/tvMarkAllRead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/spacing_md"
+                android:text="Mark all as read"
+                android:textColor="@color/text_link"
+                android:textSize="@dimen/text_size_body"
+                android:padding="@dimen/spacing_sm"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"

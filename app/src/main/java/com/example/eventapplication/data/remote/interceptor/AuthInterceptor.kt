@@ -1,5 +1,6 @@
 package com.example.eventapplication.data.remote.interceptor
 
+import android.util.Log
 import com.example.eventapplication.data.local.datastore.DataStoreManager
 import com.example.eventapplication.domain.util.preferences.PreferenceKeys
 import kotlinx.coroutines.flow.firstOrNull
@@ -14,11 +15,12 @@ class AuthInterceptor @Inject constructor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
+        val path = originalRequest.url.encodedPath
 
-        val path = originalRequest.url.encodedPath.lowercase()
-        if (path.contains("auth/login") ||
-            path.contains("auth/register") ||
-            path.contains("departments")) {
+        if (path.lowercase().contains("auth/login") ||
+            path.lowercase().contains("auth/register") ||
+            path.lowercase().contains("departments")) {
+            Log.d("AuthInterceptor", "Bypassing auth for: $path")
             return chain.proceed(originalRequest)
         }
 
@@ -27,12 +29,15 @@ class AuthInterceptor @Inject constructor(
                 .firstOrNull()
         }
 
+        Log.d("AuthInterceptor", "Request: $path | Token: ${if (token.isNullOrEmpty()) "MISSING" else "Present"}")
+
         return if (!token.isNullOrEmpty()) {
             val newRequest = originalRequest.newBuilder()
                 .header("Authorization", "Bearer $token")
                 .build()
             chain.proceed(newRequest)
         } else {
+            Log.w("AuthInterceptor", "⚠ No token for: $path")
             chain.proceed(originalRequest)
         }
     }

@@ -43,7 +43,12 @@
       "Bash(D:/AndroidProjects/EventApplication/gradlew.bat assembleDebug --info)",
       "Bash(D:/AndroidProjects/EventApplication/gradlew.bat assembleDebug:*)",
       "Bash(D:/AndroidProjects/EventApplication/gradlew.bat clean build)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(D:/AndroidProjects/EventApplication/gradlew.bat build --console=plain)",
+      "Bash(D:/AndroidProjects/EventApplication/gradlew.bat clean build --console=plain)",
+      "Bash(D:/AndroidProjects/EventApplication/gradlew.bat clean generateSafeArgsDebug --console=plain)",
+      "Bash(dir:*)",
+      "Bash(cmd /c \"dir D:\\\\AndroidProjects\\\\EventApplication\\\\app\\\\build\\\\generated\\\\source\\\\navigation-args\\\\debug /s /b | findstr Directions\")"
     ]
   }
 }

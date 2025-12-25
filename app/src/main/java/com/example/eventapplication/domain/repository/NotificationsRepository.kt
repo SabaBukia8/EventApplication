@@ -10,5 +10,5 @@ interface NotificationsRepository {
 
     fun markAsRead(notificationId: String): Flow<Resource<Unit>>
 
-    fun markAllAsRead(userId: String): Flow<Resource<Unit>>
+    fun markAllAsRead(): Flow<Resource<Unit>>
 }

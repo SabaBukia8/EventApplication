@@ -19,9 +19,21 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
 
+    fun updateNotificationBadge(count: Int) {
+        val badge = binding.bottomNavigation.getOrCreateBadge(R.id.updatesFragment)
+        if (count > 0) {
+            badge.isVisible = true
+            badge.number = count
+        } else {
+            badge.isVisible = false
+        }
+    }
+
     private val topLevelDestinations = setOf(
         R.id.homeFragment,
-        R.id.browseFragment
+        R.id.browseFragment,
+        R.id.myEventsFragment,
+        R.id.updatesFragment
     )
 
     private val authScreens = setOf(

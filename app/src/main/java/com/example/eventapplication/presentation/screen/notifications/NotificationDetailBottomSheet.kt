@@ -11,12 +11,23 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class NotificationDetailBottomSheet : BottomSheetDialogFragment() {
 
+    interface NotificationActionListener {
+        fun onViewEventClicked(eventId: String?)
+        fun onMarkAsReadClicked(notificationId: String)
+    }
+
     private var _binding: BottomSheetNotificationDetailBinding? = null
     private val binding get() = _binding!!
+
+    private var actionListener: NotificationActionListener? = null
 
     private val notification: Notification by lazy {
         arguments?.getParcelable<Notification>(ARG_NOTIFICATION)
             ?: throw IllegalArgumentException("Notification required")
+    }
+
+    fun setActionListener(listener: NotificationActionListener) {
+        this.actionListener = listener
     }
 
     companion object {
@@ -52,7 +63,21 @@ class NotificationDetailBottomSheet : BottomSheetDialogFragment() {
             tvMessage.text = notification.message
             tvTime.text = notification.createdAt.toFormattedDateTime()
 
+            // Show/hide buttons based on notification state
+            btnMarkAsRead.visibility = if (notification.isRead) View.GONE else View.VISIBLE
+            btnViewEvent.visibility = if (notification.eventId != null) View.VISIBLE else View.GONE
+
             btnClose.setOnClickListener {
+                dismiss()
+            }
+
+            btnMarkAsRead.setOnClickListener {
+                actionListener?.onMarkAsReadClicked(notification.id)
+                dismiss()
+            }
+
+            btnViewEvent.setOnClickListener {
+                actionListener?.onViewEventClicked(notification.eventId)
                 dismiss()
             }
         }

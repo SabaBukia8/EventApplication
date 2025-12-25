@@ -49,4 +49,33 @@
         android:textSize="@dimen/text_size_caption"
         tools:text="Dec 24, 2025 at 10:30 AM" />
 
+    <!-- Action Buttons Container -->
+    <LinearLayout
+        android:id="@+id/layoutActions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_lg"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <!-- Mark as Read Button (only show if unread) -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnMarkAsRead"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mark as read"
+            android:textColor="@color/text_primary" />
+
+        <!-- View Event Button (only show if eventId exists) -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnViewEvent"
+            style="@style/Widget.Material3.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_sm"
+            android:text="View Event" />
+
+    </LinearLayout>
+
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.example.eventapplication.data.repository
 
+import android.util.Log
 import com.example.eventapplication.data.common.HandleResponse
 import com.example.eventapplication.data.mapper.toDomain
 import com.example.eventapplication.data.remote.api.NotificationsApiService
@@ -16,7 +17,17 @@ class NotificationsRepositoryImpl @Inject constructor(
 
     override fun getNotifications(): Flow<Resource<List<Notification>>> =
         handleResponse.safeApiCall {
-            apiService.getNotifications().toDomain()
+            Log.d("NotificationsRepo", ">>> Making API call: GET /api/Notifications/my-notifications")
+            val response = apiService.getNotifications()
+            Log.d("NotificationsRepo", "✓ API returned ${response.size} notification DTOs")
+            if (response.isNotEmpty()) {
+                response.take(3).forEach { dto ->
+                    Log.d("NotificationsRepo", "  - ${dto.message.take(50)}... (type: ${dto.type})")
+                }
+            }
+            val mapped = response.toDomain()
+            Log.d("NotificationsRepo", "✓ Mapped to ${mapped.size} domain notifications")
+            mapped
         }
 
     override fun markAsRead(notificationId: String): Flow<Resource<Unit>> =
@@ -24,8 +35,8 @@ class NotificationsRepositoryImpl @Inject constructor(
             apiService.markAsRead(notificationId)
         }
 
-    override fun markAllAsRead(userId: String): Flow<Resource<Unit>> =
+    override fun markAllAsRead(): Flow<Resource<Unit>> =
         handleResponse.safeApiCall {
-            apiService.markAllAsRead(userId)
+            apiService.markAllAsRead()
         }
 }
