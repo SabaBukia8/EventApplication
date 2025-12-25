@@ -8,5 +8,6 @@ class LogoutUseCase @Inject constructor(
 ) {
     suspend operator fun invoke() {
         tokenRepository.clearToken()
+        tokenRepository.setSessionPersistence(false)
     }
 }

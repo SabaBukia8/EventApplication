@@ -108,11 +108,20 @@
             app:destination="@id/eventDetailsFragment" />
     </fragment>
 
-    <!-- Placeholder destinations that redirect to home -->
-    <action
+    <!-- My Events Fragment -->
+    <fragment
         android:id="@+id/myEventsFragment"
-        app:destination="@id/homeFragment" />
+        android:name="com.example.eventapplication.presentation.screen.myevents.MyEventsFragment"
+        android:label="My Events">
+        <action
+            android:id="@+id/action_myEventsFragment_to_eventDetailsFragment"
+            app:destination="@id/eventDetailsFragment" />
+        <action
+            android:id="@+id/action_myEventsFragment_to_browseFragment"
+            app:destination="@id/browseFragment" />
+    </fragment>
 
+    <!-- Placeholder destinations that redirect to notifications -->
     <action
         android:id="@+id/updatesFragment"
         app:destination="@id/notificationsFragment" />

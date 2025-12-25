@@ -53,7 +53,7 @@ class EventDetailsRepositoryImpl @Inject constructor(
         userId: Int
     ): Flow<Resource<RegistrationStatus?>> {
         return handleResponse.safeApiCall {
-            val allRegistrations = userRegistrationsApiService.getUserRegistrations(userId)
+            val allRegistrations = userRegistrationsApiService.getUserRegistrations()
             val eventRegistration = allRegistrations.firstOrNull { it.eventId == eventId }
             eventRegistration?.status?.toRegistrationStatus()
         }

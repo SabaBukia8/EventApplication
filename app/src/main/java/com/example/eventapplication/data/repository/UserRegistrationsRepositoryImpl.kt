@@ -14,9 +14,9 @@ class UserRegistrationsRepositoryImpl @Inject constructor(
     private val handleResponse: HandleResponse
 ) : UserRegistrationsRepository {
 
-    override fun getUserRegistrations(userId: Int): Flow<Resource<List<UserEventRegistration>>> {
+    override fun getUserRegistrations(): Flow<Resource<List<UserEventRegistration>>> {
         return handleResponse.safeApiCall {
-            apiService.getUserRegistrations(userId).toDomain()
+            apiService.getUserRegistrations().toDomain()
         }
     }
 }

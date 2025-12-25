@@ -2,22 +2,19 @@ package com.example.eventapplication.data.repository
 
 import com.example.eventapplication.data.common.HandleResponse
 import com.example.eventapplication.data.local.datastore.DataStoreManager
-import com.example.eventapplication.data.mapper.toDomain
-import com.example.eventapplication.data.remote.api.UserApiService
 import com.example.eventapplication.domain.common.Resource
 import com.example.eventapplication.domain.model.AuthResult
 import com.example.eventapplication.domain.model.User
 import com.example.eventapplication.domain.repository.TokenRepository
 import com.example.eventapplication.domain.util.preferences.PreferenceKeys
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class TokenRepositoryImpl @Inject constructor(
     private val dataStoreManager: DataStoreManager,
-    private val userApiService: UserApiService,
-    private val handleResponse: HandleResponse
 ) : TokenRepository {
 
     override suspend fun saveToken(token: String) {
@@ -56,21 +53,16 @@ class TokenRepositoryImpl @Inject constructor(
             val fullName = dataStoreManager.getPreference(PreferenceKeys.USER_FULL_NAME, "")
             val role = dataStoreManager.getPreference(PreferenceKeys.USER_ROLE, "")
 
-            // DEBUG LOG to see what is happening
             android.util.Log.d("TokenRepo", "Listening for User updates...")
 
             kotlinx.coroutines.flow.combine(userId, email, fullName, role) { id, em, name, r ->
-                // Create User object whenever any data changes
                 User(id = id, email = em, fullName = name, role = r)
             }.collect { user ->
-                // Log the value we found (so we know if it's empty)
                 android.util.Log.d("TokenRepo", "DataStore Update -> Name: '${user.fullName}'")
 
                 if (user.fullName.isNotEmpty()) {
-                    // FOUND THE USER! Emit Success.
                     emit(Resource.Success(user))
                 } else {
-                    // Name is empty -> Emit Guest User
                     emit(
                         Resource.Success(
                             User(
@@ -82,17 +74,20 @@ class TokenRepositoryImpl @Inject constructor(
                         )
                     )
                 }
-                // REMOVED: emit(Resource.Loader(false))
-                // Why? Because 'collect' runs forever. If we emit Loader here,
-                // the UI thinks "Loading finished but no data" and reverts to Guest.
             }
         } catch (e: kotlinx.coroutines.CancellationException) {
-            // Don't catch cancellation - this is normal Flow cancellation
             throw e
         } catch (e: Exception) {
             android.util.Log.e("TokenRepo", "Error reading user", e)
-            // Fallback for crashes
             emit(Resource.Success(User(0, "", "Guest User", "")))
         }
+    }
+
+    override suspend fun setSessionPersistence(shouldPersist: Boolean) {
+        dataStoreManager.setPreference(PreferenceKeys.SESSION_SHOULD_PERSIST, shouldPersist)
+    }
+
+    override suspend fun shouldSessionPersist(): Boolean {
+        return dataStoreManager.getPreference(PreferenceKeys.SESSION_SHOULD_PERSIST, false).map { it }.first()
     }
 }

@@ -19,4 +19,5 @@ object PreferenceKeys {
 
     val REMEMBER_ME_ENABLED = booleanPreferencesKey("remember_me_enabled")
     val REMEMBERED_EMAIL = stringPreferencesKey("remembered_email")
+    val SESSION_SHOULD_PERSIST = booleanPreferencesKey("session_should_persist")
 }

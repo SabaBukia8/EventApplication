@@ -11,4 +11,6 @@ interface TokenRepository {
     suspend fun clearToken()
     suspend fun saveUserData(authResult: AuthResult, email: String)
     fun getCurrentUser(): Flow<Resource<User>>
+    suspend fun setSessionPersistence(shouldPersist: Boolean)
+    suspend fun shouldSessionPersist(): Boolean
 }

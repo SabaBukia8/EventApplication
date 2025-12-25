@@ -99,14 +99,17 @@ class LoginViewModel @Inject constructor(
                         loginUseCase.saveToken(resource.data.token)
                         loginUseCase.saveUserData(resource.data, email)
 
-                        // 2. Handle "Remember Me" for next app launch auto-fill
+                        // 2. Save session persistence preference
+                        loginUseCase.setSessionPersistence(rememberMe)
+
+                        // 3. Handle "Remember Me" for next app launch auto-fill
                         if (rememberMe) {
                             saveRememberMeUseCase(true, email)
                         } else {
                             saveRememberMeUseCase(false, "")
                         }
 
-                        // 3. CRITICAL FIX: Wait for DataStore to finish writing to disk
+                        // 4. CRITICAL FIX: Wait for DataStore to finish writing to disk
                         // Without this, the Home Screen loads before the name is saved.
                         delay(500)
 

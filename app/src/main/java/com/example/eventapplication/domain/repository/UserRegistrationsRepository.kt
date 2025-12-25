@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserRegistrationsRepository {
 
-    fun getUserRegistrations(userId: Int): Flow<Resource<List<UserEventRegistration>>>
+    fun getUserRegistrations(): Flow<Resource<List<UserEventRegistration>>>
 }

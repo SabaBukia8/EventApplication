@@ -247,4 +247,18 @@
     <string name="status_waitlisted">Waitlisted</string>
     <string name="status_full">Full (Waitlist)</string>
 
+    <!-- My Events Screen -->
+    <string name="my_events_title">My Events</string>
+    <string name="my_events_list_view">List</string>
+    <string name="my_events_calendar_view">Calendar</string>
+    <string name="my_events_empty_message">You haven\'t registered for any events yet</string>
+    <string name="my_events_browse_button">Browse Events</string>
+    <string name="my_events_calendar_coming_soon">Calendar view coming soon!</string>
+    <string name="my_events_error_message">Unable to load your events</string>
+    <string name="my_events_retry">Retry</string>
+    <string name="badge_confirmed">Confirmed</string>
+    <string name="badge_waitlisted">Waitlisted</string>
+    <string name="error_icon">Error icon</string>
+    <string name="empty_state_icon">Empty state icon</string>
+
 </resources>

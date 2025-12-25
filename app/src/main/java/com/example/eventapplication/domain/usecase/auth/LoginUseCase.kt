@@ -26,4 +26,8 @@ class LoginUseCase @Inject constructor(
     suspend fun saveUserData(authResult: AuthResult, email: String) {
         tokenRepository.saveUserData(authResult, email)
     }
+
+    suspend fun setSessionPersistence(shouldPersist: Boolean) {
+        tokenRepository.setSessionPersistence(shouldPersist)
+    }
 }
