@@ -15,17 +15,14 @@ class ValidatePasswordUseCase @Inject constructor() {
             return ValidationResult.Error(PasswordValidationError.TooShort)
         }
 
-        // Check for uppercase
         if (!password.any { it.isUpperCase() }) {
             return ValidationResult.Error(PasswordValidationError.NoUppercase)
         }
 
-        // Check for lowercase
         if (!password.any { it.isLowerCase() }) {
             return ValidationResult.Error(PasswordValidationError.NoLowercase)
         }
 
-        // Check for digit
         if (!password.any { it.isDigit() }) {
             return ValidationResult.Error(PasswordValidationError.NoDigit)
         }

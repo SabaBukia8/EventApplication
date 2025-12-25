@@ -17,7 +17,10 @@ class NotificationsRepositoryImpl @Inject constructor(
 
     override fun getNotifications(): Flow<Resource<List<Notification>>> =
         handleResponse.safeApiCall {
-            Log.d("NotificationsRepo", ">>> Making API call: GET /api/Notifications/my-notifications")
+            Log.d(
+                "NotificationsRepo",
+                ">>> Making API call: GET /api/Notifications/my-notifications"
+            )
             val response = apiService.getNotifications()
             Log.d("NotificationsRepo", "✓ API returned ${response.size} notification DTOs")
             if (response.isNotEmpty()) {

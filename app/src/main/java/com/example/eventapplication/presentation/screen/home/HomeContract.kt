@@ -14,6 +14,7 @@ sealed class HomeState {
         val categories: List<Category>,
         val trendingEvents: List<Event>
     ) : HomeState()
+
     data class Error(val error: HomeError) : HomeState()
 }
 
@@ -35,5 +36,8 @@ sealed class HomeSideEffect {
     object NavigateToNotifications : HomeSideEffect()
     object NavigateToLogin : HomeSideEffect()
     data class ShowError(val error: HomeError) : HomeSideEffect()
-    data class ShowErrorMessage(@param:androidx.annotation.StringRes val messageResId: Int, val formatArgs: Array<Any> = emptyArray()) : HomeSideEffect()
+    data class ShowErrorMessage(
+        @param:androidx.annotation.StringRes val messageResId: Int,
+        val formatArgs: Array<Any> = emptyArray()
+    ) : HomeSideEffect()
 }

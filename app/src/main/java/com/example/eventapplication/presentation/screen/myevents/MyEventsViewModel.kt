@@ -11,7 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,9 +45,9 @@ class MyEventsViewModel @Inject constructor(
                         val activeRegistrations = result.data
                             .filter {
                                 it.event != null && (
-                                    it.status == RegistrationStatus.CONFIRMED ||
-                                    it.status == RegistrationStatus.WAITLISTED
-                                )
+                                        it.status == RegistrationStatus.CONFIRMED ||
+                                                it.status == RegistrationStatus.WAITLISTED
+                                        )
                             }
                             .sortedBy { parseDateTime(it.event!!.startDateTime) }
 
@@ -63,10 +63,12 @@ class MyEventsViewModel @Inject constructor(
                             }
                         }
                     }
+
                     is Resource.Error -> {
                         val errorMessage = getErrorMessage(result.error)
                         updateState { MyEventsState.Error(errorMessage) }
                     }
+
                     is Resource.Loader -> {
                         updateState { MyEventsState.IsLoading(result.isLoading) }
                     }
@@ -95,9 +97,9 @@ class MyEventsViewModel @Inject constructor(
         return registrations
             .filter {
                 it.event != null && (
-                    it.status == RegistrationStatus.CONFIRMED ||
-                    it.status == RegistrationStatus.WAITLISTED
-                )
+                        it.status == RegistrationStatus.CONFIRMED ||
+                                it.status == RegistrationStatus.WAITLISTED
+                        )
             }
             .firstOrNull { registration ->
                 val eventTime = parseDateTime(registration.event!!.startDateTime)
@@ -110,11 +112,11 @@ class MyEventsViewModel @Inject constructor(
         return try {
             val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
             format.parse(dateTimeString.replace("Z", ""))?.time ?: 0L
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             0L
         }
     }
-    
+
     private fun getErrorMessage(error: NetworkError): String {
         return when (error) {
             is NetworkError.Unknown -> error.message ?: "Unknown error occurred"

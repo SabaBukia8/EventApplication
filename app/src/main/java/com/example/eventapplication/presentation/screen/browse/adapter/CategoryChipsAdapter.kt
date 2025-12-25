@@ -12,21 +12,14 @@ import com.example.eventapplication.presentation.screen.home.mapper.EventTypeMap
 
 class CategoryChipsAdapter(
     private val onCategoryClick: (Int?) -> Unit
-) : ListAdapter<CategoryChipsAdapter.CategoryItem, CategoryChipsAdapter.CategoryChipViewHolder>(CategoryDiffCallback()) {
+) : ListAdapter<CategoryChipsAdapter.CategoryItem, CategoryChipsAdapter.CategoryChipViewHolder>(
+    CategoryDiffCallback()
+) {
 
     data class CategoryItem(
         val category: Category,
         val isSelected: Boolean
     )
-
-    fun submitList(categories: List<Category>, selectedCategoryId: Int?) {
-        val items = categories.map { category ->
-            // Match if IDs match (including 0 for All)
-            val isSelected = category.id == selectedCategoryId
-            CategoryItem(category, isSelected)
-        }
-        super.submitList(items)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryChipViewHolder {
         val binding = ItemCategoryChipBinding.inflate(

@@ -22,14 +22,14 @@ enum class NotificationType {
     ORGANIZER_UPDATE,
     WAITLIST_PROMOTION;
 
-    fun getDisplayName(): String = when(this) {
+    fun getDisplayName(): String = when (this) {
         REGISTRATION_CONFIRMATION -> "Registration"
         EVENT_REMINDER -> "Alert"
         ORGANIZER_UPDATE -> "Update"
         WAITLIST_PROMOTION -> "Alert"
     }
 
-    fun getTabCategory(): NotificationTabCategory = when(this) {
+    fun getTabCategory(): NotificationTabCategory = when (this) {
         REGISTRATION_CONFIRMATION -> NotificationTabCategory.REGISTRATIONS
         EVENT_REMINDER -> NotificationTabCategory.ALERTS
         ORGANIZER_UPDATE -> NotificationTabCategory.UPDATES

@@ -10,6 +10,7 @@ sealed class EventDetailsState {
         val eventDetails: EventDetails,
         val isRegistering: Boolean = false
     ) : EventDetailsState()
+
     data class Error(val error: EventDetailsError) : EventDetailsState()
 }
 
@@ -22,7 +23,11 @@ sealed class EventDetailsEvent {
 
 sealed class EventDetailsSideEffect {
     data class ShowError(val error: EventDetailsError) : EventDetailsSideEffect()
-    data class ShowToast(val message: String) : EventDetailsSideEffect() // For backward compatibility
-    data class ShowToastResource(@androidx.annotation.StringRes val messageResId: Int) : EventDetailsSideEffect()
+    data class ShowToast(val message: String) :
+        EventDetailsSideEffect() // For backward compatibility
+
+    data class ShowToastResource(@param:androidx.annotation.StringRes val messageResId: Int) :
+        EventDetailsSideEffect()
+
     object NavigateBack : EventDetailsSideEffect()
 }

@@ -8,11 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.eventapplication.R
 import com.example.eventapplication.databinding.ItemEventCardBinding
 import com.example.eventapplication.domain.model.Event
-import com.example.eventapplication.presentation.extensions.toMonthAbbreviation
+import com.example.eventapplication.presentation.extensions.gone
 import com.example.eventapplication.presentation.extensions.toDayOfMonth
+import com.example.eventapplication.presentation.extensions.toMonthAbbreviation
 import com.example.eventapplication.presentation.extensions.toTimeRange
 import com.example.eventapplication.presentation.extensions.visible
-import com.example.eventapplication.presentation.extensions.gone
 
 class EventsAdapter(
     private val onEventClick: (Int) -> Unit
@@ -54,10 +54,12 @@ class EventsAdapter(
                         tvRegisteredBadge.visible()
                         tvWaitlistedBadge.gone()
                     }
+
                     com.example.eventapplication.domain.model.RegistrationStatus.WAITLISTED -> {
                         tvRegisteredBadge.gone()
                         tvWaitlistedBadge.visible()
                     }
+
                     else -> {
                         tvRegisteredBadge.gone()
                         tvWaitlistedBadge.gone()

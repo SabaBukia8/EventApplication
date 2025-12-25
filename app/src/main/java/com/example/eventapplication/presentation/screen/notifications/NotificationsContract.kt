@@ -13,6 +13,7 @@ sealed class NotificationsState {
         val unreadCount: Int,
         val selectedTab: NotificationTabCategory
     ) : NotificationsState()
+
     data class Error(val error: NotificationsError) : NotificationsState()
 }
 

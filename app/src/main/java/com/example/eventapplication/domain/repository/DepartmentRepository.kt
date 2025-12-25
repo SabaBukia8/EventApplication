@@ -1,7 +1,7 @@
 package com.example.eventapplication.domain.repository
 
-import com.example.eventapplication.domain.model.Department
 import com.example.eventapplication.domain.common.Resource
+import com.example.eventapplication.domain.model.Department
 import kotlinx.coroutines.flow.Flow
 
 interface DepartmentRepository {

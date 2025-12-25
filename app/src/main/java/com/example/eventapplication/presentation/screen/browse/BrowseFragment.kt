@@ -9,15 +9,13 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.eventapplication.R
 import com.example.eventapplication.databinding.FragmentBrowseEventsBinding
-import com.example.eventapplication.presentation.screen.browse.BrowseFragmentArgs
-import com.example.eventapplication.presentation.screen.browse.BrowseFragmentDirections
-import com.example.eventapplication.presentation.screen.browse.adapter.BrowseAdapter
-import com.example.eventapplication.presentation.model.BrowseItem
 import com.example.eventapplication.presentation.common.BaseFragment
 import com.example.eventapplication.presentation.extensions.gone
 import com.example.eventapplication.presentation.extensions.showSnackbar
 import com.example.eventapplication.presentation.extensions.toErrorMessage
 import com.example.eventapplication.presentation.extensions.visible
+import com.example.eventapplication.presentation.model.BrowseItem
+import com.example.eventapplication.presentation.screen.browse.adapter.BrowseAdapter
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -79,6 +77,7 @@ class BrowseFragment : BaseFragment<FragmentBrowseEventsBinding>(
                         is BrowseState.Idle -> {}
                         is BrowseState.IsLoading -> {
                         }
+
                         is BrowseState.Success -> {
                             buildBrowseItems(state)
 
@@ -87,6 +86,7 @@ class BrowseFragment : BaseFragment<FragmentBrowseEventsBinding>(
                                 viewModel.onEvent(BrowseEvent.OnCategorySelected(args.categoryId))
                             }
                         }
+
                         is BrowseState.Error -> {}
                     }
                 }
@@ -104,9 +104,14 @@ class BrowseFragment : BaseFragment<FragmentBrowseEventsBinding>(
                                 .actionBrowseFragmentToEventDetailsFragment(effect.eventId)
                             findNavController().navigate(action)
                         }
+
                         is BrowseSideEffect.ShowFilterDialog -> {
-                            showSnackbar(R.string.filter_dialog_not_implemented, Snackbar.LENGTH_SHORT)
+                            showSnackbar(
+                                R.string.filter_dialog_not_implemented,
+                                Snackbar.LENGTH_SHORT
+                            )
                         }
+
                         is BrowseSideEffect.ShowError -> {
                             val errorMessage = effect.error.toErrorMessage(requireContext())
                             showSnackbar(

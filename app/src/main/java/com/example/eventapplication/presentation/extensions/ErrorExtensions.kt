@@ -6,7 +6,6 @@ import com.example.eventapplication.domain.model.BrowseError
 import com.example.eventapplication.domain.model.CategoryEventsError
 import com.example.eventapplication.domain.model.EventDetailsError
 import com.example.eventapplication.domain.model.HomeError
-import com.example.eventapplication.domain.model.NetworkError
 
 fun HomeError.toErrorMessage(context: Context): String {
     return when (this) {
@@ -30,18 +29,6 @@ fun EventDetailsError.toErrorMessage(context: Context): String {
     }
 }
 
-fun NetworkError.asString(context: Context): String {
-    return when (this) {
-        NetworkError.NoInternet -> context.getString(R.string.error_no_internet)
-        NetworkError.Unauthorized -> context.getString(R.string.error_unauthorized)
-        NetworkError.Forbidden -> context.getString(R.string.error_forbidden)
-        NetworkError.NotFound -> context.getString(R.string.error_not_found)
-        NetworkError.ServerError -> context.getString(R.string.error_server_error)
-        NetworkError.Timeout -> context.getString(R.string.error_timeout)
-        is NetworkError.Unknown -> message ?: context.getString(R.string.error_unknown)
-        else -> context.getString(R.string.error_unknown)
-    }
-}
 
 fun BrowseError.toErrorMessage(context: Context): String {
     return when (this) {

@@ -10,10 +10,8 @@ class ValidatePhoneUseCase @Inject constructor() {
         if (phone.isBlank()) {
             return ValidationResult.Error(PhoneValidationError.Empty)
         }
-
-        // Basic phone validation - accepts +1 (123) 456-7890 format and variations
-        // Accepts 10-13 digits with optional + at the beginning and optional formatting
-        val phonePattern = "^[+]?[0-9]{10,13}$|^[+]?\\(?[0-9]{3}\\)?[\\s.-]?[0-9]{3}[\\s.-]?[0-9]{4}$".toRegex()
+        val phonePattern =
+            "^[+]?[0-9]{10,13}$|^[+]?\\(?[0-9]{3}\\)?[\\s.-]?[0-9]{3}[\\s.-]?[0-9]{4}$".toRegex()
         if (!phone.matches(phonePattern)) {
             return ValidationResult.Error(PhoneValidationError.InvalidFormat)
         }

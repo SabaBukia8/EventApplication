@@ -2,6 +2,8 @@ package com.example.eventapplication.presentation.screen.auth.register
 
 import androidx.lifecycle.viewModelScope
 import com.example.eventapplication.R
+import com.example.eventapplication.domain.common.Resource
+import com.example.eventapplication.domain.model.NetworkError
 import com.example.eventapplication.domain.usecase.auth.RegisterUseCase
 import com.example.eventapplication.domain.usecase.auth.SendOtpUseCase
 import com.example.eventapplication.domain.usecase.auth.VerifyOtpUseCase
@@ -11,12 +13,9 @@ import com.example.eventapplication.domain.usecase.validation.ValidateNameUseCas
 import com.example.eventapplication.domain.usecase.validation.ValidateOtpUseCase
 import com.example.eventapplication.domain.usecase.validation.ValidatePasswordUseCase
 import com.example.eventapplication.domain.usecase.validation.ValidatePhoneUseCase
-import com.example.eventapplication.domain.common.Resource
-import com.example.eventapplication.domain.model.NetworkError
 import com.example.eventapplication.domain.validation.ValidationResult
 import com.example.eventapplication.presentation.common.BaseViewModel
 import com.example.eventapplication.presentation.extensions.toStringResource
-import com.example.eventapplication.presentation.screen.auth.register.OtpFlowState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -61,9 +60,11 @@ class RegisterViewModel @Inject constructor(
                     is Resource.Success -> {
                         updateState { it.copy(departments = resource.data) }
                     }
+
                     is Resource.Error -> {
                         emitSideEffect(RegisterSideEffect.ShowError(R.string.failed_to_load_departments))
                     }
+
                     is Resource.Loader -> {
                     }
                 }
@@ -76,46 +77,72 @@ class RegisterViewModel @Inject constructor(
             is RegisterEvent.FirstNameChanged -> {
                 firstName = event.firstName
             }
+
             is RegisterEvent.LastNameChanged -> {
                 lastName = event.lastName
             }
+
             is RegisterEvent.EmailChanged -> {
                 email = event.email
             }
+
             is RegisterEvent.PhoneChanged -> {
+                val previousPhone = phone
                 phone = event.phone
+                // Reset verification if phone number changed after verification
+                if (previousPhone != event.phone && state.value.isPhoneNumberVerified) {
+                    updateState {
+                        it.copy(
+                            isPhoneNumberVerified = false,
+                            otpFlowState = OtpFlowState.Initial,
+                            otpTimerSeconds = 0
+                        )
+                    }
+                    otpDigits.fill("")
+                    timerJob?.cancel()
+                }
             }
+
             is RegisterEvent.DepartmentSelected -> {
                 department = event.department
                 val dept = state.value.departments.find { it.name == event.department }
                 selectedDepartmentId = dept?.id
                 updateState { it.copy(selectedDepartment = event.department) }
             }
+
             is RegisterEvent.PasswordChanged -> {
                 password = event.password
             }
+
             is RegisterEvent.ConfirmPasswordChanged -> {
                 confirmPassword = event.confirmPassword
             }
+
             is RegisterEvent.TermsAcceptedChanged -> {
                 termsAccepted = event.accepted
                 updateState { it.copy(termsAccepted = event.accepted) }
             }
+
             is RegisterEvent.SendOtpClicked -> {
                 handleSendOtp()
             }
+
             is RegisterEvent.ResendOtpClicked -> {
                 handleResendOtp()
             }
+
             is RegisterEvent.OtpDigitChanged -> {
                 handleOtpDigitChanged(event.position, event.digit)
             }
+
             is RegisterEvent.OtpChanged -> {
                 otp = event.otp
             }
+
             is RegisterEvent.RegisterClicked -> {
                 handleRegister()
             }
+
             is RegisterEvent.NavigateToLoginClicked -> {
                 emitSideEffect(RegisterSideEffect.NavigateToLogin)
             }
@@ -132,14 +159,26 @@ class RegisterViewModel @Inject constructor(
         // Validate first name
         val firstNameValidation = validateNameUseCase(firstName)
         if (firstNameValidation is ValidationResult.Error) {
-            emitSideEffect(RegisterSideEffect.ShowError(firstNameValidation.error.toStringResource(isFirstName = true)))
+            emitSideEffect(
+                RegisterSideEffect.ShowError(
+                    firstNameValidation.error.toStringResource(
+                        isFirstName = true
+                    )
+                )
+            )
             return
         }
 
         // Validate last name
         val lastNameValidation = validateNameUseCase(lastName)
         if (lastNameValidation is ValidationResult.Error) {
-            emitSideEffect(RegisterSideEffect.ShowError(lastNameValidation.error.toStringResource(isFirstName = false)))
+            emitSideEffect(
+                RegisterSideEffect.ShowError(
+                    lastNameValidation.error.toStringResource(
+                        isFirstName = false
+                    )
+                )
+            )
             return
         }
 
@@ -197,6 +236,7 @@ class RegisterViewModel @Inject constructor(
                     is Resource.Loader -> {
                         updateState { it.copy(isLoading = resource.isLoading) }
                     }
+
                     is Resource.Success -> {
                         updateState { it.copy(isLoading = false) }
                         // If we get a success message from the server, use it, otherwise use our default
@@ -207,6 +247,7 @@ class RegisterViewModel @Inject constructor(
                         }
                         emitSideEffect(RegisterSideEffect.NavigateToLogin)
                     }
+
                     is Resource.Error -> {
                         updateState { it.copy(isLoading = false) }
                         // If we get a specific error message from the backend, use it
@@ -238,6 +279,7 @@ class RegisterViewModel @Inject constructor(
                             updateState { it.copy(otpFlowState = OtpFlowState.OtpSending) }
                         }
                     }
+
                     is Resource.Success -> {
                         updateState {
                             it.copy(
@@ -249,6 +291,7 @@ class RegisterViewModel @Inject constructor(
                         emitSideEffect(RegisterSideEffect.ShowMessageString(resource.data.message))
                         emitSideEffect(RegisterSideEffect.FocusOtpField)
                     }
+
                     is Resource.Error -> {
                         updateState { it.copy(otpFlowState = OtpFlowState.Initial) }
                         handleOtpError(resource.error)
@@ -301,6 +344,7 @@ class RegisterViewModel @Inject constructor(
                             updateState { it.copy(otpFlowState = OtpFlowState.OtpVerifying) }
                         }
                     }
+
                     is Resource.Success -> {
                         if (resource.data.isVerified) {
                             updateState {
@@ -314,17 +358,12 @@ class RegisterViewModel @Inject constructor(
                         } else {
                             updateState { it.copy(otpFlowState = OtpFlowState.OtpSent) }
                             emitSideEffect(RegisterSideEffect.ShowError(R.string.error_otp_invalid))
-                            // Clear OTP fields for retry
-                            otpDigits.fill("")
-                            emitSideEffect(RegisterSideEffect.ClearOtpFields)
                         }
                     }
+
                     is Resource.Error -> {
                         updateState { it.copy(otpFlowState = OtpFlowState.OtpSent) }
                         handleOtpError(resource.error)
-                        // Clear OTP fields for retry
-                        otpDigits.fill("")
-                        emitSideEffect(RegisterSideEffect.ClearOtpFields)
                     }
                 }
             }

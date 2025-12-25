@@ -1,12 +1,12 @@
 package com.example.eventapplication.presentation.extensions
 
-import androidx.fragment.app.Fragment
 import androidx.annotation.StringRes
+import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 
 
 fun Fragment.showSnackbar(
-    @StringRes messageResId: Int, 
+    @StringRes messageResId: Int,
     duration: Int = Snackbar.LENGTH_LONG,
     @StringRes actionTextResId: Int? = null,
     action: (() -> Unit)? = null
@@ -22,7 +22,7 @@ fun Fragment.showSnackbar(
 
 
 fun Fragment.showSnackbar(
-    message: String, 
+    message: String,
     duration: Int = Snackbar.LENGTH_LONG,
     actionText: String? = null,
     action: (() -> Unit)? = null

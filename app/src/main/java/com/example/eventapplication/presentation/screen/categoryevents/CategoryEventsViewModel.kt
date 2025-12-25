@@ -11,8 +11,8 @@ import com.example.eventapplication.domain.model.SortOption
 import com.example.eventapplication.domain.usecase.event.GetCategoriesUseCase
 import com.example.eventapplication.domain.usecase.event.GetEventRegistrationStatusUseCase
 import com.example.eventapplication.domain.usecase.event.GetEventsByCategoryUseCase
-import com.example.eventapplication.presentation.model.FilterType
 import com.example.eventapplication.presentation.common.BaseViewModel
+import com.example.eventapplication.presentation.model.FilterType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -42,12 +42,21 @@ class CategoryEventsViewModel @Inject constructor(
             is CategoryEventsEvent.OnSortChanged -> changeSorting(event.sortBy)
             is CategoryEventsEvent.OnFilterChanged -> changeFilter(event.filterType)
             is CategoryEventsEvent.OnFilterClicked -> emitSideEffect(CategoryEventsSideEffect.ShowFilterDialog)
-            is CategoryEventsEvent.OnEventClicked -> emitSideEffect(CategoryEventsSideEffect.NavigateToEventDetails(event.eventId))
+            is CategoryEventsEvent.OnEventClicked -> emitSideEffect(
+                CategoryEventsSideEffect.NavigateToEventDetails(
+                    event.eventId
+                )
+            )
+
             is CategoryEventsEvent.OnBackClicked -> emitSideEffect(CategoryEventsSideEffect.NavigateBack)
             is CategoryEventsEvent.OnNotificationClicked -> emitSideEffect(CategoryEventsSideEffect.NavigateToNotifications)
             is CategoryEventsEvent.OnRetry -> currentCategoryId?.let { loadEvents(it) }
             is CategoryEventsEvent.OnLocationSelected -> updateLocationFilter(event.location)
-            is CategoryEventsEvent.OnDateRangeSelected -> updateDateRangeFilter(event.startDate, event.endDate)
+            is CategoryEventsEvent.OnDateRangeSelected -> updateDateRangeFilter(
+                event.startDate,
+                event.endDate
+            )
+
             is CategoryEventsEvent.OnAvailabilityToggled -> updateAvailabilityFilter(event.onlyAvailable)
             is CategoryEventsEvent.OnClearFilters -> clearFilters()
         }
@@ -66,17 +75,22 @@ class CategoryEventsViewModel @Inject constructor(
                     return@launch
                 }
 
-                getEventsByCategoryUseCase(categoryId, currentFilters, currentSortBy).collect { resource ->
+                getEventsByCategoryUseCase(
+                    categoryId,
+                    currentFilters,
+                    currentSortBy
+                ).collect { resource ->
                     when (resource) {
                         is Resource.Loader -> {
                             updateState { CategoryEventsState.IsLoading(resource.isLoading) }
                         }
+
                         is Resource.Success -> {
                             val events = resource.data
 
                             // Extract unique locations
                             val locations = events
-                                .mapNotNull { it.location }
+                                .map { it.location }
                                 .filter { it != "TBA" && it.isNotBlank() }
                                 .distinct()
                                 .sorted()
@@ -96,6 +110,7 @@ class CategoryEventsViewModel @Inject constructor(
 
                             loadRegistrationStatuses(events.map { it.id })
                         }
+
                         is Resource.Error -> {
                             val error = mapNetworkError(resource.error)
                             updateState { CategoryEventsState.Error(error) }
@@ -104,8 +119,20 @@ class CategoryEventsViewModel @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
-                updateState { CategoryEventsState.Error(CategoryEventsError.UnknownError(e.message ?: "Unknown error")) }
-                emitSideEffect(CategoryEventsSideEffect.ShowError(CategoryEventsError.UnknownError(e.message ?: "Unknown error")))
+                updateState {
+                    CategoryEventsState.Error(
+                        CategoryEventsError.UnknownError(
+                            e.message ?: "Unknown error"
+                        )
+                    )
+                }
+                emitSideEffect(
+                    CategoryEventsSideEffect.ShowError(
+                        CategoryEventsError.UnknownError(
+                            e.message ?: "Unknown error"
+                        )
+                    )
+                )
             }
         }
     }
@@ -153,7 +180,7 @@ class CategoryEventsViewModel @Inject constructor(
                                 statusMap[eventId] = resource.data
                             }
                         }
-                    } catch (e: Exception) {
+                    } catch (_: Exception) {
                     }
                 }
             }
@@ -200,7 +227,10 @@ class CategoryEventsViewModel @Inject constructor(
             NetworkError.Forbidden -> CategoryEventsError.UnknownError(error.toString())
             NetworkError.NotFound -> CategoryEventsError.UnknownError(error.toString())
             NetworkError.Timeout -> CategoryEventsError.NetworkError
-            is NetworkError.Unknown -> CategoryEventsError.UnknownError(error.message ?: "Unknown error")
+            is NetworkError.Unknown -> CategoryEventsError.UnknownError(
+                error.message ?: "Unknown error"
+            )
+
             else -> CategoryEventsError.UnknownError("Unknown error")
         }
     }

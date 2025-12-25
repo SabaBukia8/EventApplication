@@ -41,11 +41,16 @@ sealed class RegisterEvent {
 sealed class RegisterSideEffect {
     data object NavigateToHome : RegisterSideEffect()
     data object NavigateToLogin : RegisterSideEffect()
+
     // Use string resource IDs instead of direct strings
     data class ShowError(val messageResId: Int) : RegisterSideEffect()
-    data class ShowErrorString(val message: String) : RegisterSideEffect() // For legacy/fallback cases
+    data class ShowErrorString(val message: String) :
+        RegisterSideEffect() // For legacy/fallback cases
+
     data class ShowMessage(val messageResId: Int) : RegisterSideEffect()
-    data class ShowMessageString(val message: String) : RegisterSideEffect() // For legacy/fallback cases
+    data class ShowMessageString(val message: String) :
+        RegisterSideEffect() // For legacy/fallback cases
+
     data object FocusOtpField : RegisterSideEffect()
     data class MoveFocusToOtpPosition(val position: Int) : RegisterSideEffect()
     data object ClearOtpFields : RegisterSideEffect()

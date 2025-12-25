@@ -62,11 +62,11 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(
                     binding.apply {
                         btnLogin.isEnabled = !state.isLoading
                         progressBar.visibility = if (state.isLoading) View.VISIBLE else View.GONE
-                        
+
                         if (state.email.isNotEmpty() && etEmail.text.isNullOrEmpty()) {
                             etEmail.setText(state.email)
                         }
-                        
+
                         if (cbRememberMe.isChecked != state.rememberMe) {
                             cbRememberMe.isChecked = state.rememberMe
                         }
@@ -86,14 +86,20 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(
                                 LoginFragmentDirections.Companion.actionLoginFragmentToHomeFragment()
                             )
                         }
+
                         is LoginSideEffect.NavigateToRegister -> {
                             findNavController().navigate(
                                 LoginFragmentDirections.Companion.actionLoginFragmentToRegisterFragment()
                             )
                         }
+
                         is LoginSideEffect.NavigateToForgotPassword -> {
-                            showSnackbar(getString(R.string.forgot_password_coming_soon), Snackbar.LENGTH_LONG)
+                            showSnackbar(
+                                getString(R.string.forgot_password_coming_soon),
+                                Snackbar.LENGTH_LONG
+                            )
                         }
+
                         is LoginSideEffect.ShowError -> {
                             showSnackbar(getString(sideEffect.messageResId), Snackbar.LENGTH_LONG)
                         }

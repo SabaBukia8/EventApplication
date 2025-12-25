@@ -28,7 +28,6 @@ class SplashViewModel @Inject constructor(
         viewModelScope.launch {
             delay(1500)
 
-            // Check if user has a valid token (session exists)
             val isLoggedIn = isUserLoggedInUseCase().first()
 
             if (isLoggedIn) {

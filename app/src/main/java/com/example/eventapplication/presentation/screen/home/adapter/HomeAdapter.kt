@@ -50,22 +50,27 @@ class HomeAdapter(
                 val binding = ItemHomeHeaderBinding.inflate(inflater, parent, false)
                 HeaderViewHolder(binding, onNotificationClick, onProfileClick)
             }
+
             VIEW_TYPE_WELCOME -> {
                 val binding = ItemHomeWelcomeBinding.inflate(inflater, parent, false)
                 WelcomeViewHolder(binding)
             }
+
             VIEW_TYPE_UPCOMING_EVENTS -> {
                 val binding = ItemHomeUpcomingEventsBinding.inflate(inflater, parent, false)
                 UpcomingEventsViewHolder(binding, onEventClick, onViewAllClick)
             }
+
             VIEW_TYPE_CATEGORIES -> {
                 val binding = ItemHomeCategoriesBinding.inflate(inflater, parent, false)
                 CategoriesViewHolder(binding, onCategoryClick)
             }
+
             VIEW_TYPE_TRENDING -> {
                 val binding = ItemHomeTrendingBinding.inflate(inflater, parent, false)
                 TrendingViewHolder(binding, onEventClick)
             }
+
             else -> throw IllegalArgumentException("Unknown view type: $viewType")
         }
     }

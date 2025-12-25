@@ -7,13 +7,12 @@ import com.example.eventapplication.data.remote.api.EventDetailsApiService
 import com.example.eventapplication.data.remote.api.EventRegistrationStatusApiService
 import com.example.eventapplication.data.remote.api.UserRegistrationsApiService
 import com.example.eventapplication.data.remote.dto.request.RegisterEventRequestDto
+import com.example.eventapplication.domain.common.Resource
 import com.example.eventapplication.domain.model.EventDetails
 import com.example.eventapplication.domain.model.RegistrationStatus
 import com.example.eventapplication.domain.repository.EventDetailsRepository
-import com.example.eventapplication.domain.common.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class EventDetailsRepositoryImpl @Inject constructor(
@@ -38,7 +37,11 @@ class EventDetailsRepositoryImpl @Inject constructor(
                 android.util.Log.d("EventDetailsRepo", "Parsed registration status: $status")
                 status
             } catch (e: Exception) {
-                android.util.Log.e("EventDetailsRepo", "Failed to fetch registration status: ${e.message}", e)
+                android.util.Log.e(
+                    "EventDetailsRepo",
+                    "Failed to fetch registration status: ${e.message}",
+                    e
+                )
                 null // User not registered or API error
             }
 
@@ -48,7 +51,13 @@ class EventDetailsRepositoryImpl @Inject constructor(
             emit(Resource.Success(eventDetails))
         } catch (e: Exception) {
             android.util.Log.e("EventDetailsRepo", "Failed to fetch event details", e)
-            emit(Resource.Error(com.example.eventapplication.domain.model.NetworkError.Unknown(e.message ?: "Unknown error")))
+            emit(
+                Resource.Error(
+                    com.example.eventapplication.domain.model.NetworkError.Unknown(
+                        e.message ?: "Unknown error"
+                    )
+                )
+            )
         } finally {
             emit(Resource.Loader(false))
         }

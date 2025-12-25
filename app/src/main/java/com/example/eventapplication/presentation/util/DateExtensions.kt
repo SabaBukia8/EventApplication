@@ -46,7 +46,12 @@ fun String.getDateCategory(): DateCategory {
 fun String.toFormattedDateTime(): String {
     return try {
         val dateTime = LocalDateTime.parse(this, DateTimeFormatter.ISO_DATE_TIME)
-        dateTime.format(DateTimeFormatter.ofPattern("MMM dd, yyyy 'at' hh:mm a", Locale.getDefault()))
+        dateTime.format(
+            DateTimeFormatter.ofPattern(
+                "MMM dd, yyyy 'at' hh:mm a",
+                Locale.getDefault()
+            )
+        )
     } catch (e: Exception) {
         this
     }

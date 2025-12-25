@@ -12,7 +12,11 @@ import com.example.eventapplication.databinding.ItemMyEventCardBinding
 import com.example.eventapplication.databinding.ItemMyEventsEmptyBinding
 import com.example.eventapplication.databinding.ItemMyEventsHeaderBinding
 import com.example.eventapplication.domain.model.RegistrationStatus
-import com.example.eventapplication.presentation.extensions.*
+import com.example.eventapplication.presentation.extensions.gone
+import com.example.eventapplication.presentation.extensions.toDayOfMonth
+import com.example.eventapplication.presentation.extensions.toMonthAbbreviation
+import com.example.eventapplication.presentation.extensions.toTimeString
+import com.example.eventapplication.presentation.extensions.visible
 import com.example.eventapplication.presentation.model.MyEventsItem
 
 class MyEventsAdapter(
@@ -42,14 +46,17 @@ class MyEventsAdapter(
                 val binding = ItemMyEventsHeaderBinding.inflate(inflater, parent, false)
                 HeaderViewHolder(binding, onCalendarClick)
             }
+
             VIEW_TYPE_EVENT_CARD -> {
                 val binding = ItemMyEventCardBinding.inflate(inflater, parent, false)
                 EventCardViewHolder(binding, onEventClick)
             }
+
             VIEW_TYPE_EMPTY -> {
                 val binding = ItemMyEventsEmptyBinding.inflate(inflater, parent, false)
                 EmptyViewHolder(binding, onBrowseEventsClick)
             }
+
             else -> throw IllegalArgumentException("Unknown view type: $viewType")
         }
     }
@@ -84,7 +91,8 @@ class MyEventsAdapter(
 
         fun bind(item: MyEventsItem.EventCard) {
             val registration = item.registration
-            val event = registration.event ?: return // Should never be null due to filtering in ViewModel
+            val event =
+                registration.event ?: return // Should never be null due to filtering in ViewModel
 
             with(binding) {
                 // Set left border color for highlighting
@@ -112,6 +120,7 @@ class MyEventsAdapter(
                             ContextCompat.getColor(root.context, R.color.badge_registered_text)
                         )
                     }
+
                     RegistrationStatus.WAITLISTED -> {
                         tvStatusBadge.visible()
                         tvStatusBadge.text = root.context.getString(R.string.badge_waitlisted)
@@ -122,6 +131,7 @@ class MyEventsAdapter(
                             ContextCompat.getColor(root.context, R.color.badge_waitlist_text)
                         )
                     }
+
                     else -> {
                         tvStatusBadge.gone()
                     }
@@ -141,7 +151,7 @@ class MyEventsAdapter(
     }
 
     class EmptyViewHolder(
-        private val binding: ItemMyEventsEmptyBinding,
+        binding: ItemMyEventsEmptyBinding,
         private val onBrowseEventsClick: () -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -159,6 +169,7 @@ class MyEventsAdapter(
                 oldItem is MyEventsItem.Empty && newItem is MyEventsItem.Empty -> true
                 oldItem is MyEventsItem.EventCard && newItem is MyEventsItem.EventCard ->
                     oldItem.registration.registrationId == newItem.registration.registrationId
+
                 else -> false
             }
         }

@@ -22,6 +22,7 @@ sealed class CategoryEventsState {
         val availableLocations: List<String> = emptyList(),
         val isLoadingStatuses: Boolean = false
     ) : CategoryEventsState()
+
     data class Error(val error: CategoryEventsError) : CategoryEventsState()
 }
 
@@ -35,7 +36,9 @@ sealed class CategoryEventsEvent {
     object OnNotificationClicked : CategoryEventsEvent()
     object OnRetry : CategoryEventsEvent()
     data class OnLocationSelected(val location: String?) : CategoryEventsEvent()
-    data class OnDateRangeSelected(val startDate: String?, val endDate: String?) : CategoryEventsEvent()
+    data class OnDateRangeSelected(val startDate: String?, val endDate: String?) :
+        CategoryEventsEvent()
+
     data class OnAvailabilityToggled(val onlyAvailable: Boolean) : CategoryEventsEvent()
     object OnClearFilters : CategoryEventsEvent()
 }

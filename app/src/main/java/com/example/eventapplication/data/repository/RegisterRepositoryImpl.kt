@@ -6,11 +6,11 @@ import com.example.eventapplication.data.remote.api.RegistrationApiService
 import com.example.eventapplication.data.remote.dto.request.RegisterRequestDto
 import com.example.eventapplication.data.remote.dto.request.SendOtpRequestDto
 import com.example.eventapplication.data.remote.dto.request.VerifyOtpRequestDto
+import com.example.eventapplication.domain.common.Resource
 import com.example.eventapplication.domain.model.RegisterResult
 import com.example.eventapplication.domain.model.SendOtpResult
 import com.example.eventapplication.domain.model.VerifyOtpResult
 import com.example.eventapplication.domain.repository.RegisterRepository
-import com.example.eventapplication.domain.common.Resource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

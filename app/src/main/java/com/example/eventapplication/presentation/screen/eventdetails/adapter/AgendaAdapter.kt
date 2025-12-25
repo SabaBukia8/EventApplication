@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.eventapplication.databinding.ItemAgendaItemBinding
 import com.example.eventapplication.domain.model.AgendaItem
 
-class AgendaAdapter : ListAdapter<AgendaItem, AgendaAdapter.AgendaViewHolder>(AgendaDiffCallback()) {
+class AgendaAdapter :
+    ListAdapter<AgendaItem, AgendaAdapter.AgendaViewHolder>(AgendaDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AgendaViewHolder {
         val binding = ItemAgendaItemBinding.inflate(
@@ -33,7 +34,7 @@ class AgendaAdapter : ListAdapter<AgendaItem, AgendaAdapter.AgendaViewHolder>(Ag
         fun bind(agendaItem: AgendaItem) {
             with(binding) {
                 tvStepNumber.text = agendaItem.step.toString()
-                
+
                 tvTitle.text = binding.root.context.getString(
                     com.example.eventapplication.R.string.agenda_item_format,
                     agendaItem.time,
@@ -41,9 +42,9 @@ class AgendaAdapter : ListAdapter<AgendaItem, AgendaAdapter.AgendaViewHolder>(Ag
                 )
 
                 tvDescription.text = agendaItem.description
-                
+
                 val isLast = bindingAdapterPosition == this@AgendaAdapter.itemCount - 1
-                
+
                 vVerticalLine.visibility = if (isLast) View.GONE else View.VISIBLE
             }
         }

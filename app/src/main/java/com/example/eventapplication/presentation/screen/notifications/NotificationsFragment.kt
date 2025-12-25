@@ -79,6 +79,7 @@ class NotificationsFragment : Fragment(),
                         }
                         viewModel.onEvent(NotificationsEvent.TabSelected(category))
                     }
+
                     override fun onTabUnselected(tab: TabLayout.Tab) {}
                     override fun onTabReselected(tab: TabLayout.Tab) {}
                 })
@@ -115,7 +116,10 @@ class NotificationsFragment : Fragment(),
             }
 
             is NotificationsState.Success -> {
-                Log.d("NotificationsFragment", "✓ Success with ${state.notifications.size} items, ${state.unreadCount} unread")
+                Log.d(
+                    "NotificationsFragment",
+                    "✓ Success with ${state.notifications.size} items, ${state.unreadCount} unread"
+                )
                 notificationsAdapter.submitList(state.notifications)
                 updateUnreadBadge(state.unreadCount)
                 binding.tvMarkAllRead.isEnabled = state.unreadCount > 0
@@ -142,9 +146,11 @@ class NotificationsFragment : Fragment(),
             is NotificationsSideEffect.ShowNotificationDetail -> {
                 showNotificationDetailBottomSheet(sideEffect.notification)
             }
+
             is NotificationsSideEffect.ShowError -> {
                 Toast.makeText(requireContext(), sideEffect.message, Toast.LENGTH_SHORT).show()
             }
+
             is NotificationsSideEffect.NavigateToEvent -> {
                 // Navigate to event details if needed
             }
@@ -168,7 +174,8 @@ class NotificationsFragment : Fragment(),
     override fun onViewEventClicked(eventId: String?) {
         // Handle null eventId
         if (eventId == null) {
-            Toast.makeText(requireContext(), "Event information not available", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Event information not available", Toast.LENGTH_SHORT)
+                .show()
             return
         }
 

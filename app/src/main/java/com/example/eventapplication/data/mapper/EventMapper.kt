@@ -5,7 +5,6 @@ import com.example.eventapplication.domain.model.Event
 import com.example.eventapplication.domain.model.Organizer
 
 fun EventDto.toDomain(): Event {
-    // Build location string from venueName, address, or onlineAddress
     val locationString = when {
         !venueName.isNullOrEmpty() && !address.isNullOrEmpty() -> "$venueName, $address"
         !venueName.isNullOrEmpty() -> venueName

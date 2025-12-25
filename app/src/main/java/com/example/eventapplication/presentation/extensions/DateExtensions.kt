@@ -1,7 +1,8 @@
 package com.example.eventapplication.presentation.extensions
 
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 fun String.toFormattedDate(): String {
     return try {
@@ -9,7 +10,7 @@ fun String.toFormattedDate(): String {
         val date = inputFormat.parse(this.replace("Z", "")) ?: return ""
         val outputFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
         outputFormat.format(date)
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         ""
     }
 }
@@ -20,7 +21,7 @@ fun String.toFormattedTime(): String {
         val date = inputFormat.parse(this) ?: return ""
         val outputFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
         outputFormat.format(date)
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         ""
     }
 }
@@ -40,13 +41,15 @@ fun String.toFormattedDateRange(endDateTime: String? = null): String {
         val endCal = Calendar.getInstance().apply { time = endDate }
 
         if (startCal.get(Calendar.YEAR) == endCal.get(Calendar.YEAR) &&
-            startCal.get(Calendar.DAY_OF_YEAR) == endCal.get(Calendar.DAY_OF_YEAR)) {
+            startCal.get(Calendar.DAY_OF_YEAR) == endCal.get(Calendar.DAY_OF_YEAR)
+        ) {
             val outputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
             return outputFormat.format(startDate)
         }
 
         if (startCal.get(Calendar.YEAR) == endCal.get(Calendar.YEAR) &&
-            startCal.get(Calendar.MONTH) == endCal.get(Calendar.MONTH)) {
+            startCal.get(Calendar.MONTH) == endCal.get(Calendar.MONTH)
+        ) {
             val monthFormat = SimpleDateFormat("MMM", Locale.getDefault())
             val startDay = startCal.get(Calendar.DAY_OF_MONTH)
             val endDay = endCal.get(Calendar.DAY_OF_MONTH)
@@ -56,7 +59,7 @@ fun String.toFormattedDateRange(endDateTime: String? = null): String {
 
         val outputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
         return "${outputFormat.format(startDate)} - ${outputFormat.format(endDate)}"
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         ""
     }
 }
@@ -77,7 +80,7 @@ fun String.toFormattedDateTime(): String {
         val date = inputFormat.parse(this) ?: return ""
         val outputFormat = SimpleDateFormat("EEEE, MMM dd", Locale.getDefault())
         outputFormat.format(date)
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         ""
     }
 }
@@ -89,7 +92,7 @@ fun String.toRegistrationDeadlineText(): String {
         val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
         val timeFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
         "Registration closes on ${dateFormat.format(date)} at ${timeFormat.format(date)}."
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         ""
     }
 }
@@ -100,7 +103,7 @@ fun String.toMonthAbbreviation(): String {
         val date = inputFormat.parse(this.replace("Z", "")) ?: return ""
         val outputFormat = SimpleDateFormat("MMM", Locale.getDefault())
         outputFormat.format(date).uppercase()
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         ""
     }
 }
@@ -111,7 +114,7 @@ fun String.toDayOfMonth(): String {
         val date = inputFormat.parse(this.replace("Z", "")) ?: return ""
         val outputFormat = SimpleDateFormat("dd", Locale.getDefault())
         outputFormat.format(date)
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         ""
     }
 }
@@ -123,7 +126,7 @@ fun String.toTimeString(endDateTime: String): String {
         val endDate = inputFormat.parse(endDateTime.replace("Z", "")) ?: return ""
         val outputFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
         "${outputFormat.format(startDate)} - ${outputFormat.format(endDate)}"
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         ""
     }
 }

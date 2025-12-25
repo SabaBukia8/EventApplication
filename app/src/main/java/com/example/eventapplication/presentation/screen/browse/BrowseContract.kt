@@ -16,6 +16,7 @@ sealed class BrowseState {
         val hasActiveFilters: Boolean,
         val filterState: FilterState
     ) : BrowseState()
+
     data class Error(val error: BrowseError) : BrowseState()
 }
 

@@ -86,11 +86,13 @@ class BrowseViewModel @Inject constructor(
 
                         loadEvents(categoryId = 0)
                     }
+
                     is Resource.Error -> {
                         val browseError = mapNetworkErrorToBrowseError(resource.error)
                         updateState { BrowseState.Error(browseError) }
                         emitSideEffect(BrowseSideEffect.ShowError(browseError))
                     }
+
                     is Resource.Loader -> {
                         if (state.value !is BrowseState.Success) {
                             updateState { BrowseState.IsLoading(resource.isLoading) }
@@ -114,7 +116,7 @@ class BrowseViewModel @Inject constructor(
     private fun handleCategorySelected(categoryId: Int?) {
         val currentState = state.value as? BrowseState.Success ?: return
 
-        val newId = if (categoryId == null) 0 else categoryId
+        val newId = categoryId ?: 0
 
         if (currentState.selectedCategoryId == newId) return
 
@@ -195,10 +197,12 @@ class BrowseViewModel @Inject constructor(
                             currentState.copy(events = sortedEvents)
                         }
                     }
+
                     is Resource.Error -> {
                         val browseError = mapNetworkErrorToBrowseError(resource.error)
                         emitSideEffect(BrowseSideEffect.ShowError(browseError))
                     }
+
                     is Resource.Loader -> {
                         if (state.value !is BrowseState.Success) {
                             updateState { BrowseState.IsLoading(resource.isLoading) }

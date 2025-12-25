@@ -1,8 +1,8 @@
 package com.example.eventapplication.domain.repository
 
+import com.example.eventapplication.domain.common.Resource
 import com.example.eventapplication.domain.model.EventDetails
 import com.example.eventapplication.domain.model.RegistrationStatus
-import com.example.eventapplication.domain.common.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface EventDetailsRepository {

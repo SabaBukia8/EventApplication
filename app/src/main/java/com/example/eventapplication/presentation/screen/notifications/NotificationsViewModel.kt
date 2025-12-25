@@ -66,11 +66,16 @@ class NotificationsViewModel @Inject constructor(
                         Log.d("NotificationsViewModel", "Loading: ${resource.isLoading}")
                         _state.value = NotificationsState.IsLoading(resource.isLoading)
                     }
+
                     is Resource.Success -> {
-                        Log.d("NotificationsViewModel", "✓ Success! ${resource.data.size} notifications")
+                        Log.d(
+                            "NotificationsViewModel",
+                            "✓ Success! ${resource.data.size} notifications"
+                        )
                         allNotifications = resource.data
                         updateStateWithFiltered()
                     }
+
                     is Resource.Error -> {
                         Log.e("NotificationsViewModel", "✗ Error: ${resource.error}")
                         val notificationError = when (val error = resource.error) {
@@ -165,9 +170,11 @@ class NotificationsViewModel @Inject constructor(
                         }
                         updateStateWithFiltered()
                     }
+
                     is Resource.Error -> {
                         _sideEffect.emit(NotificationsSideEffect.ShowError("Failed to mark as read"))
                     }
+
                     else -> {}
                 }
             }
@@ -184,9 +191,11 @@ class NotificationsViewModel @Inject constructor(
                         }
                         updateStateWithFiltered()
                     }
+
                     is Resource.Error -> {
                         _sideEffect.emit(NotificationsSideEffect.ShowError("Failed to mark all as read"))
                     }
+
                     else -> {}
                 }
             }

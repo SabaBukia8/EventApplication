@@ -85,6 +85,7 @@ class MyEventsFragment : BaseFragment<FragmentMyEventsBinding>(
                                 .actionMyEventsFragmentToEventDetailsFragment(effect.eventId)
                             findNavController().navigate(action)
                         }
+
                         is MyEventsSideEffect.ShowMessage -> {
                             showSnackbar(effect.message, Snackbar.LENGTH_SHORT)
                         }
@@ -173,7 +174,7 @@ class MyEventsFragment : BaseFragment<FragmentMyEventsBinding>(
             findNavController().navigate(
                 MyEventsFragmentDirections.actionMyEventsFragmentToBrowseFragment()
             )
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             showSnackbar("Unable to navigate to browse", Snackbar.LENGTH_SHORT)
         }
     }

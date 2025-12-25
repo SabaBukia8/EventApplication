@@ -38,6 +38,7 @@ class GetEventsByCategoryUseCase @Inject constructor(
                     }
                     Resource.Success(sortedEvents)
                 }
+
                 is Resource.Error -> resource
                 is Resource.Loader -> resource
             }

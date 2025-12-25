@@ -4,6 +4,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,14 +14,13 @@ import com.example.eventapplication.databinding.ItemBrowseEmptyStateBinding
 import com.example.eventapplication.databinding.ItemBrowseEventCardBinding
 import com.example.eventapplication.databinding.ItemBrowseHeaderBinding
 import com.example.eventapplication.domain.model.Event
-import com.example.eventapplication.presentation.model.BrowseItem
 import com.example.eventapplication.presentation.extensions.gone
 import com.example.eventapplication.presentation.extensions.toFormattedDate
 import com.example.eventapplication.presentation.extensions.toTimeRange
-import com.google.android.material.chip.Chip
-import com.example.eventapplication.presentation.screen.home.mapper.EventTypeMapper.toDisplayName
 import com.example.eventapplication.presentation.extensions.visible
-import androidx.core.graphics.toColorInt
+import com.example.eventapplication.presentation.model.BrowseItem
+import com.example.eventapplication.presentation.screen.home.mapper.EventTypeMapper.toDisplayName
+import com.google.android.material.chip.Chip
 
 class BrowseAdapter(
     private val onSearchQueryChanged: (String) -> Unit,
@@ -52,18 +52,22 @@ class BrowseAdapter(
                 val binding = ItemBrowseHeaderBinding.inflate(inflater, parent, false)
                 HeaderViewHolder(binding, onSearchQueryChanged, onFilterClick, onClearFilters)
             }
+
             VIEW_TYPE_CATEGORIES -> {
                 val binding = ItemBrowseCategoriesBinding.inflate(inflater, parent, false)
                 CategoriesViewHolder(binding, onCategoryClick)
             }
+
             VIEW_TYPE_EVENT -> {
                 val binding = ItemBrowseEventCardBinding.inflate(inflater, parent, false)
                 EventViewHolder(binding, onEventClick)
             }
+
             VIEW_TYPE_EMPTY -> {
                 val binding = ItemBrowseEmptyStateBinding.inflate(inflater, parent, false)
                 EmptyStateViewHolder(binding)
             }
+
             else -> throw IllegalArgumentException("Unknown view type: $viewType")
         }
     }
@@ -103,7 +107,15 @@ class BrowseAdapter(
                 override fun afterTextChanged(s: Editable?) {
                     onSearchQueryChanged(s?.toString() ?: "")
                 }
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             }
             etSearch.addTextChangedListener(textWatcher)
@@ -124,7 +136,7 @@ class BrowseAdapter(
         fun bind(item: BrowseItem.Categories) {
             with(binding.chipGroupCategories) {
                 removeAllViews()
-                
+
                 item.categories.forEach { category ->
                     val chip = LayoutInflater.from(context)
                         .inflate(R.layout.item_category_chip, this, false) as Chip
@@ -142,7 +154,7 @@ class BrowseAdapter(
 
                     addView(chip)
                 }
-                
+
                 setOnCheckedStateChangeListener { group, checkedIds ->
                     if (checkedIds.isNotEmpty()) {
                         val selectedId = checkedIds.first()
@@ -172,17 +184,19 @@ class BrowseAdapter(
 
                 val timeRange = (event.startDateTime to event.endDateTime).toTimeRange()
                 tvTime.text = timeRange
-                
+
                 tvCapacityBadge.visible()
                 when {
                     event.isFull -> {
                         tvCapacityBadge.text = root.context.getString(R.string.event_full)
                         tvCapacityBadge.setBackgroundColor("#737373".toColorInt())
                     }
+
                     event.isWaitlisted -> {
                         tvCapacityBadge.text = root.context.getString(R.string.event_waitlisted)
                         tvCapacityBadge.setBackgroundColor("#737373".toColorInt())
                     }
+
                     else -> {
                         tvCapacityBadge.text = root.context.getString(R.string.event_available)
                         tvCapacityBadge.setBackgroundColor("#737373".toColorInt())
@@ -208,6 +222,7 @@ class BrowseAdapter(
                 oldItem is BrowseItem.Categories && newItem is BrowseItem.Categories -> true
                 oldItem is BrowseItem.EventCard && newItem is BrowseItem.EventCard ->
                     oldItem.event.id == newItem.event.id
+
                 oldItem is BrowseItem.EmptyState && newItem is BrowseItem.EmptyState -> true
                 else -> false
             }

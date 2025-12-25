@@ -9,7 +9,8 @@ class GetRememberedEmailUseCase @Inject constructor(
     private val dataStoreManager: DataStoreManager
 ) {
     suspend operator fun invoke(): Pair<Boolean, String> {
-        val rememberMe = dataStoreManager.getPreference(PreferenceKeys.REMEMBER_ME_ENABLED, false).first()
+        val rememberMe =
+            dataStoreManager.getPreference(PreferenceKeys.REMEMBER_ME_ENABLED, false).first()
         val email = if (rememberMe) {
             dataStoreManager.getPreference(PreferenceKeys.REMEMBERED_EMAIL, "").first()
         } else {

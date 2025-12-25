@@ -13,13 +13,11 @@ import com.example.eventapplication.databinding.ItemCategoryEventCardNewBinding
 import com.example.eventapplication.databinding.ItemCategoryEventsHeaderBinding
 import com.example.eventapplication.domain.model.Event
 import com.example.eventapplication.domain.model.EventRegistrationStatus
-import com.example.eventapplication.domain.model.EventType
-import com.example.eventapplication.presentation.model.CategoryEventsItem
-import com.example.eventapplication.presentation.model.FilterType
 import com.example.eventapplication.presentation.extensions.gone
 import com.example.eventapplication.presentation.extensions.toFormattedDate
 import com.example.eventapplication.presentation.extensions.toTimeString
 import com.example.eventapplication.presentation.extensions.visible
+import com.example.eventapplication.presentation.model.CategoryEventsItem
 
 
 class NewCategoryEventsAdapter(
@@ -41,7 +39,7 @@ class NewCategoryEventsAdapter(
         return when (getItem(position)) {
             is CategoryEventsItem.Header -> VIEW_TYPE_HEADER
             is CategoryEventsItem.EventCard -> VIEW_TYPE_EVENT_CARD
-            is CategoryEventsItem.FilterChips -> VIEW_TYPE_HEADER 
+            is CategoryEventsItem.FilterChips -> VIEW_TYPE_HEADER
         }
     }
 
@@ -50,13 +48,17 @@ class NewCategoryEventsAdapter(
         return when (viewType) {
             VIEW_TYPE_HEADER -> {
                 val binding = ItemCategoryEventsHeaderBinding.inflate(inflater, parent, false)
-                HeaderViewHolder(binding, onBackClick, onNotificationClick, onLocationSelected,
-                    onDateRangeClick, onAvailabilityToggled, onClearFiltersClick)
+                HeaderViewHolder(
+                    binding, onBackClick, onNotificationClick, onLocationSelected,
+                    onDateRangeClick, onAvailabilityToggled, onClearFiltersClick
+                )
             }
+
             VIEW_TYPE_EVENT_CARD -> {
                 val binding = ItemCategoryEventCardNewBinding.inflate(inflater, parent, false)
                 EventCardViewHolder(binding, onEventClick)
             }
+
             else -> throw IllegalArgumentException("Unknown view type: $viewType")
         }
     }
@@ -95,7 +97,8 @@ class NewCategoryEventsAdapter(
 
                 setupLocationSpinner(item.availableLocations, item.selectedLocation)
 
-                btnDateRange.text = item.dateRangeText ?: root.context.getString(R.string.select_date_range)
+                btnDateRange.text =
+                    item.dateRangeText ?: root.context.getString(R.string.select_date_range)
                 btnDateRange.setOnClickListener { onDateRangeClick() }
 
                 switchOnlyAvailable.setOnCheckedChangeListener(null)
@@ -130,19 +133,25 @@ class NewCategoryEventsAdapter(
             binding.spinnerLocation.onItemSelectedListener = null
             binding.spinnerLocation.setSelection(selectedIndex)
 
-            binding.spinnerLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    val location = if (position == 0) null else locations[position - 1]
-                    if (location != selectedLocation) {
-                        onLocationSelected(location)
+            binding.spinnerLocation.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        val location = if (position == 0) null else locations[position - 1]
+                        if (location != selectedLocation) {
+                            onLocationSelected(location)
+                        }
                     }
-                }
 
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-            }
+                    override fun onNothingSelected(parent: AdapterView<*>?) {}
+                }
         }
     }
-    
+
     class EventCardViewHolder(
         private val binding: ItemCategoryEventCardNewBinding,
         private val onEventClick: (Int) -> Unit
@@ -192,7 +201,7 @@ class NewCategoryEventsAdapter(
         private fun displayRegistrationStatus(
             status: EventRegistrationStatus?,
             event: Event
-        ) = with(binding){
+        ) = with(binding) {
             val context = root.context
 
             val badgeText = when {
@@ -212,7 +221,7 @@ class NewCategoryEventsAdapter(
             tvCategoryBadge.visible()
         }
     }
-    
+
     private class CategoryEventsItemDiffCallback : DiffUtil.ItemCallback<CategoryEventsItem>() {
         override fun areItemsTheSame(
             oldItem: CategoryEventsItem,
@@ -222,6 +231,7 @@ class NewCategoryEventsAdapter(
                 oldItem is CategoryEventsItem.Header && newItem is CategoryEventsItem.Header -> true
                 oldItem is CategoryEventsItem.EventCard && newItem is CategoryEventsItem.EventCard ->
                     oldItem.event.id == newItem.event.id
+
                 else -> false
             }
         }

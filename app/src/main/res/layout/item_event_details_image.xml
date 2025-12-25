@@ -48,17 +48,23 @@
         android:layout_height="1dp"
         android:background="@color/border_light" />
 
-    <View
-        android:id="@+id/vImagePlaceholder"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:background="@color/placeholder_light" />
+        android:layout_height="240dp">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivEventImage"
-        android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:scaleType="centerCrop"
-        android:contentDescription="@string/event_image" />
+        <View
+            android:id="@+id/vImagePlaceholder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/placeholder_light" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivEventImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/event_image" />
+
+    </FrameLayout>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -19,7 +19,8 @@ class AuthInterceptor @Inject constructor(
 
         if (path.lowercase().contains("auth/login") ||
             path.lowercase().contains("auth/register") ||
-            path.lowercase().contains("departments")) {
+            path.lowercase().contains("departments")
+        ) {
             Log.d("AuthInterceptor", "Bypassing auth for: $path")
             return chain.proceed(originalRequest)
         }
@@ -29,7 +30,10 @@ class AuthInterceptor @Inject constructor(
                 .firstOrNull()
         }
 
-        Log.d("AuthInterceptor", "Request: $path | Token: ${if (token.isNullOrEmpty()) "MISSING" else "Present"}")
+        Log.d(
+            "AuthInterceptor",
+            "Request: $path | Token: ${if (token.isNullOrEmpty()) "MISSING" else "Present"}"
+        )
 
         return if (!token.isNullOrEmpty()) {
             val newRequest = originalRequest.newBuilder()

@@ -2,18 +2,18 @@ package com.example.eventapplication.presentation.screen.auth.login
 
 import androidx.lifecycle.viewModelScope
 import com.example.eventapplication.R
+import com.example.eventapplication.domain.common.Resource
+import com.example.eventapplication.domain.model.NetworkError
 import com.example.eventapplication.domain.usecase.auth.GetRememberedEmailUseCase
 import com.example.eventapplication.domain.usecase.auth.LoginUseCase
 import com.example.eventapplication.domain.usecase.auth.SaveRememberMeUseCase
 import com.example.eventapplication.domain.usecase.validation.ValidateEmailUseCase
 import com.example.eventapplication.domain.usecase.validation.ValidatePasswordUseCase
-import com.example.eventapplication.domain.common.Resource
-import com.example.eventapplication.domain.model.NetworkError
 import com.example.eventapplication.domain.validation.ValidationResult
 import com.example.eventapplication.presentation.common.BaseViewModel
 import com.example.eventapplication.presentation.extensions.toStringResource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay // <--- IMPORT THIS
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -51,19 +51,24 @@ class LoginViewModel @Inject constructor(
                 email = event.email
                 updateState { it.copy(email = event.email) }
             }
+
             is LoginEvent.PasswordChanged -> {
                 password = event.password
             }
+
             is LoginEvent.RememberMeChanged -> {
                 rememberMe = event.rememberMe
                 updateState { it.copy(rememberMe = event.rememberMe) }
             }
+
             is LoginEvent.LoginClicked -> {
                 handleLogin()
             }
+
             is LoginEvent.NavigateToRegisterClicked -> {
                 emitSideEffect(LoginSideEffect.NavigateToRegister)
             }
+
             is LoginEvent.ForgotPasswordClicked -> {
                 emitSideEffect(LoginSideEffect.ShowError(R.string.forgot_password_coming_soon))
             }
@@ -91,6 +96,7 @@ class LoginViewModel @Inject constructor(
                     is Resource.Loader -> {
                         updateState { it.copy(isLoading = resource.isLoading) }
                     }
+
                     is Resource.Success -> {
                         updateState { it.copy(isLoading = false) }
 
@@ -115,10 +121,13 @@ class LoginViewModel @Inject constructor(
 
                         emitSideEffect(LoginSideEffect.NavigateToHome)
                     }
+
                     is Resource.Error -> {
                         updateState { it.copy(isLoading = false) }
                         val errorMessageResId = when (resource.error) {
-                            is NetworkError.Unknown -> (resource.error as NetworkError.Unknown).message?.let { R.string.unknown_error } ?: R.string.login_failed
+                            is NetworkError.Unknown -> resource.error.message?.let { R.string.unknown_error }
+                                ?: R.string.login_failed
+
                             NetworkError.Unauthorized -> R.string.invalid_credentials
                             NetworkError.NoInternet -> R.string.error_no_internet
                             NetworkError.Forbidden -> R.string.login_failed

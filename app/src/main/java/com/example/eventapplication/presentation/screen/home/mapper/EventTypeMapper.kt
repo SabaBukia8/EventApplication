@@ -3,6 +3,7 @@ package com.example.eventapplication.presentation.screen.home.mapper
 import android.content.Context
 import com.example.eventapplication.R
 import com.example.eventapplication.domain.model.EventType
+
 object EventTypeMapper {
     fun EventType.toIconRes(): Int {
         return when (this) {

@@ -9,6 +9,7 @@ sealed class MyEventsState {
         val registrations: List<UserEventRegistration>,
         val nextUpcomingEventId: Int? = null
     ) : MyEventsState()
+
     object Empty : MyEventsState()
     data class Error(val message: String) : MyEventsState()
 }

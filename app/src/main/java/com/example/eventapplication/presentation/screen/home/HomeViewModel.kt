@@ -6,10 +6,10 @@ import com.example.eventapplication.domain.common.Resource
 import com.example.eventapplication.domain.model.Category
 import com.example.eventapplication.domain.model.Event
 import com.example.eventapplication.domain.model.User
+import com.example.eventapplication.domain.usecase.auth.GetUserProfileUseCase
 import com.example.eventapplication.domain.usecase.event.GetCategoriesUseCase
 import com.example.eventapplication.domain.usecase.event.GetTrendingEventsUseCase
 import com.example.eventapplication.domain.usecase.event.GetUpcomingEventsUseCase
-import com.example.eventapplication.domain.usecase.auth.GetUserProfileUseCase
 import com.example.eventapplication.presentation.common.BaseViewModel
 import com.example.eventapplication.presentation.util.StringResourceProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -68,7 +68,10 @@ class HomeViewModel @Inject constructor(
                 }
                 if (upcomingResult is Resource.Success) {
                     upcomingEvents = upcomingResult.data
-                    android.util.Log.d("HomeViewModel", "Upcoming events loaded: ${upcomingEvents.size}")
+                    android.util.Log.d(
+                        "HomeViewModel",
+                        "Upcoming events loaded: ${upcomingEvents.size}"
+                    )
 
                     upcomingEvents = upcomingEvents.map { event ->
                         try {
@@ -82,12 +85,19 @@ class HomeViewModel @Inject constructor(
                                 event
                             }
                         } catch (e: Exception) {
-                            android.util.Log.e("HomeViewModel", "Error loading registration status for event ${event.id}", e)
+                            android.util.Log.e(
+                                "HomeViewModel",
+                                "Error loading registration status for event ${event.id}",
+                                e
+                            )
                             event
                         }
                     }
                 } else if (upcomingResult is Resource.Error) {
-                    android.util.Log.e("HomeViewModel", "Error loading upcoming events: ${upcomingResult.error}")
+                    android.util.Log.e(
+                        "HomeViewModel",
+                        "Error loading upcoming events: ${upcomingResult.error}"
+                    )
                 }
             } catch (e: Exception) {
                 android.util.Log.e("HomeViewModel", "Exception loading upcoming events", e)
@@ -99,9 +109,15 @@ class HomeViewModel @Inject constructor(
                 }
                 if (trendingResult is Resource.Success) {
                     trendingEvents = trendingResult.data
-                    android.util.Log.d("HomeViewModel", "Trending events loaded: ${trendingEvents.size}")
+                    android.util.Log.d(
+                        "HomeViewModel",
+                        "Trending events loaded: ${trendingEvents.size}"
+                    )
                 } else if (trendingResult is Resource.Error) {
-                    android.util.Log.e("HomeViewModel", "Error loading trending events: ${trendingResult.error}")
+                    android.util.Log.e(
+                        "HomeViewModel",
+                        "Error loading trending events: ${trendingResult.error}"
+                    )
                 }
             } catch (e: Exception) {
                 android.util.Log.e("HomeViewModel", "Exception loading trending events", e)
@@ -115,10 +131,16 @@ class HomeViewModel @Inject constructor(
                     categories = categoriesResult.data
                     android.util.Log.d("HomeViewModel", "Categories loaded: ${categories.size}")
                     categories.forEach { cat ->
-                        android.util.Log.d("HomeViewModel", "Category: id=${cat.id}, type=${cat.type}, count=${cat.eventCount}")
+                        android.util.Log.d(
+                            "HomeViewModel",
+                            "Category: id=${cat.id}, type=${cat.type}, count=${cat.eventCount}"
+                        )
                     }
                 } else if (categoriesResult is Resource.Error) {
-                    android.util.Log.e("HomeViewModel", "Error loading categories: ${categoriesResult.error}")
+                    android.util.Log.e(
+                        "HomeViewModel",
+                        "Error loading categories: ${categoriesResult.error}"
+                    )
                 }
             } catch (e: Exception) {
                 android.util.Log.e("HomeViewModel", "Exception loading categories", e)

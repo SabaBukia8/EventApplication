@@ -3,13 +3,13 @@ package com.example.eventapplication.presentation.screen.eventdetails
 import androidx.lifecycle.viewModelScope
 import com.example.eventapplication.R
 import com.example.eventapplication.data.local.datastore.DataStoreManager
+import com.example.eventapplication.domain.common.Resource
 import com.example.eventapplication.domain.model.EventDetailsError
 import com.example.eventapplication.domain.model.NetworkError
 import com.example.eventapplication.domain.model.RegistrationStatus
 import com.example.eventapplication.domain.usecase.auth.CancelRegistrationUseCase
-import com.example.eventapplication.domain.usecase.event.GetEventDetailsUseCase
 import com.example.eventapplication.domain.usecase.auth.RegisterForEventUseCase
-import com.example.eventapplication.domain.common.Resource
+import com.example.eventapplication.domain.usecase.event.GetEventDetailsUseCase
 import com.example.eventapplication.domain.util.preferences.PreferenceKeys
 import com.example.eventapplication.presentation.common.BaseViewModel
 import com.example.eventapplication.presentation.util.StringResourceProvider
@@ -40,10 +40,15 @@ class EventDetailsViewModel @Inject constructor(
                 android.util.Log.d("EventDetailsViewModel", "RegisterClicked event received")
                 registerForEvent()
             }
+
             is EventDetailsEvent.CancelRegistrationClicked -> {
-                android.util.Log.d("EventDetailsViewModel", "CancelRegistrationClicked event received")
+                android.util.Log.d(
+                    "EventDetailsViewModel",
+                    "CancelRegistrationClicked event received"
+                )
                 cancelRegistration()
             }
+
             is EventDetailsEvent.BackClicked -> emitSideEffect(EventDetailsSideEffect.NavigateBack)
         }
     }
@@ -54,7 +59,8 @@ class EventDetailsViewModel @Inject constructor(
         updateState { EventDetailsState.IsLoading(true) }
 
         viewModelScope.launch {
-            val userId = dataStoreManager.getPreference(PreferenceKeys.USER_ID, "0").first().toIntOrNull()
+            val userId =
+                dataStoreManager.getPreference(PreferenceKeys.USER_ID, "0").first().toIntOrNull()
             currentUserId = userId
             android.util.Log.d("EventDetailsViewModel", "Retrieved userId: $userId")
 
@@ -62,19 +68,24 @@ class EventDetailsViewModel @Inject constructor(
                 android.util.Log.d("EventDetailsViewModel", "Received resource: $resource")
                 when (resource) {
                     is Resource.Loader -> {
-                        android.util.Log.d("EventDetailsViewModel", "Loading: ${resource.isLoading}")
-                        // Only update to loading state if we're not already in Success or Error state
-                        // This prevents Loader(false) from overwriting Success state
+                        android.util.Log.d(
+                            "EventDetailsViewModel",
+                            "Loading: ${resource.isLoading}"
+                        )
                         updateState { currentState ->
                             if (currentState is EventDetailsState.Success || currentState is EventDetailsState.Error) {
-                                currentState // Keep current state
+                                currentState
                             } else {
                                 EventDetailsState.IsLoading(resource.isLoading)
                             }
                         }
                     }
+
                     is Resource.Success -> {
-                        android.util.Log.d("EventDetailsViewModel", "Success! Event details: ${resource.data}")
+                        android.util.Log.d(
+                            "EventDetailsViewModel",
+                            "Success! Event details: ${resource.data}"
+                        )
                         updateState {
                             EventDetailsState.Success(
                                 eventDetails = resource.data,
@@ -82,8 +93,12 @@ class EventDetailsViewModel @Inject constructor(
                             )
                         }
                     }
+
                     is Resource.Error -> {
-                        android.util.Log.e("EventDetailsViewModel", "Error loading event details: ${resource.error}")
+                        android.util.Log.e(
+                            "EventDetailsViewModel",
+                            "Error loading event details: ${resource.error}"
+                        )
                         updateState { EventDetailsState.Error(EventDetailsError.UnknownError) }
                         emitSideEffect(EventDetailsSideEffect.ShowError(EventDetailsError.UnknownError))
                     }
@@ -102,7 +117,10 @@ class EventDetailsViewModel @Inject constructor(
             return
         }
         val userId = currentUserId?.takeIf { it > 0 } ?: run {
-            android.util.Log.e("EventDetailsViewModel", "currentUserId is null or invalid: $currentUserId")
+            android.util.Log.e(
+                "EventDetailsViewModel",
+                "currentUserId is null or invalid: $currentUserId"
+            )
             emitSideEffect(EventDetailsSideEffect.ShowToastResource(R.string.user_not_logged_in))
             return
         }
@@ -125,15 +143,23 @@ class EventDetailsViewModel @Inject constructor(
                 android.util.Log.d("EventDetailsViewModel", "Registration resource: $resource")
                 when (resource) {
                     is Resource.Loader -> {
-                        android.util.Log.d("EventDetailsViewModel", "Loading: ${resource.isLoading}")
+                        android.util.Log.d(
+                            "EventDetailsViewModel",
+                            "Loading: ${resource.isLoading}"
+                        )
                     }
+
                     is Resource.Success -> {
                         android.util.Log.d("EventDetailsViewModel", "Registration successful!")
                         emitSideEffect(EventDetailsSideEffect.ShowToastResource(R.string.registration_successful))
                         loadEventDetails(eventId)
                     }
+
                     is Resource.Error -> {
-                        android.util.Log.e("EventDetailsViewModel", "Registration error: ${resource.error}")
+                        android.util.Log.e(
+                            "EventDetailsViewModel",
+                            "Registration error: ${resource.error}"
+                        )
                         updateState {
                             if (it is EventDetailsState.Success) {
                                 it.copy(isRegistering = false)
@@ -150,19 +176,27 @@ class EventDetailsViewModel @Inject constructor(
                             else -> null
                         }
 
-                        // Handle specific error cases
                         when {
-                            errorMessage?.contains("already registered", ignoreCase = true) == true -> {
-                                android.util.Log.d("EventDetailsViewModel", "User already registered, reloading event details")
+                            errorMessage?.contains(
+                                "already registered",
+                                ignoreCase = true
+                            ) == true -> {
+                                android.util.Log.d(
+                                    "EventDetailsViewModel",
+                                    "User already registered, reloading event details"
+                                )
                                 loadEventDetails(eventId)
                             }
+
                             errorMessage?.contains("event is full", ignoreCase = true) == true -> {
                                 emitSideEffect(EventDetailsSideEffect.ShowToast("Event is now full. Please try joining the waitlist instead."))
                                 loadEventDetails(eventId) // Reload to show "Join Waitlist" button
                             }
+
                             errorMessage != null -> {
                                 emitSideEffect(EventDetailsSideEffect.ShowToast(errorMessage))
                             }
+
                             else -> {
                                 emitSideEffect(EventDetailsSideEffect.ShowToastResource(R.string.operation_failed))
                             }
@@ -187,10 +221,12 @@ class EventDetailsViewModel @Inject constructor(
                 when (resource) {
                     is Resource.Loader -> {
                     }
+
                     is Resource.Success -> {
                         emitSideEffect(EventDetailsSideEffect.ShowToastResource(R.string.registration_cancelled))
                         loadEventDetails(eventId)
                     }
+
                     is Resource.Error -> {
                         updateState {
                             if (it is EventDetailsState.Success) {

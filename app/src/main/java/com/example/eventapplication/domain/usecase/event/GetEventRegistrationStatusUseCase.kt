@@ -9,7 +9,7 @@ import javax.inject.Inject
 class GetEventRegistrationStatusUseCase @Inject constructor(
     private val repository: RegistrationsRepository
 ) {
-    suspend operator fun invoke(eventId: Int): Flow<Resource<EventRegistrationStatus>> {
+    operator fun invoke(eventId: Int): Flow<Resource<EventRegistrationStatus>> {
         return repository.getEventRegistrationStatus(eventId)
     }
 }

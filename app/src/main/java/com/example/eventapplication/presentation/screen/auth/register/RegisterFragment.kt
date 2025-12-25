@@ -14,7 +14,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.eventapplication.R
 import com.example.eventapplication.databinding.FragmentRegisterBinding
-import com.example.eventapplication.presentation.screen.auth.register.RegisterFragmentDirections
 import com.example.eventapplication.presentation.common.BaseFragment
 import com.example.eventapplication.presentation.extensions.showSnackbar
 import com.google.android.material.snackbar.Snackbar
@@ -159,31 +158,40 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
                                 RegisterFragmentDirections.Companion.actionRegisterFragmentToHomeFragment()
                             )
                         }
+
                         is RegisterSideEffect.NavigateToLogin -> {
                             findNavController().popBackStack()
                         }
+
                         is RegisterSideEffect.ShowError -> {
                             showSnackbar(sideEffect.messageResId, Snackbar.LENGTH_LONG)
                         }
+
                         is RegisterSideEffect.ShowErrorString -> {
                             showSnackbar(sideEffect.message, Snackbar.LENGTH_LONG)
                         }
+
                         is RegisterSideEffect.ShowMessage -> {
                             showSnackbar(sideEffect.messageResId, Snackbar.LENGTH_SHORT)
                         }
+
                         is RegisterSideEffect.ShowMessageString -> {
                             showSnackbar(sideEffect.message, Snackbar.LENGTH_SHORT)
                         }
+
                         is RegisterSideEffect.FocusOtpField -> {
                             otpInputs.first().requestFocus()
-                            val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                            val imm =
+                                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                             imm.showSoftInput(otpInputs.first(), InputMethodManager.SHOW_IMPLICIT)
                         }
+
                         is RegisterSideEffect.MoveFocusToOtpPosition -> {
                             if (sideEffect.position in otpInputs.indices) {
                                 otpInputs[sideEffect.position].requestFocus()
                             }
                         }
+
                         is RegisterSideEffect.ClearOtpFields -> {
                             otpInputs.forEach { it.text?.clear() }
                             otpInputs.first().requestFocus()
@@ -205,9 +213,11 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
                     otpInputs.forEach { it.isEnabled = false }
                     tvCodeExpires.visibility = View.GONE
                 }
+
                 OtpFlowState.OtpSending -> {
                     btnSendOtp.isEnabled = false
                 }
+
                 OtpFlowState.OtpSent -> {
                     etPhone.isEnabled = false
                     btnSendOtp.isEnabled = false
@@ -216,15 +226,19 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
                     tvCodeExpires.visibility = View.VISIBLE
                     updateTimerDisplay(timerSeconds)
                 }
+
                 OtpFlowState.OtpVerifying -> {
                     otpInputs.forEach { it.isEnabled = false }
                 }
+
                 OtpFlowState.OtpVerified -> {
+                    etPhone.isEnabled = false
                     llOtpSection.alpha = 0.5f
                     otpInputs.forEach { it.isEnabled = false }
                     tvCodeExpires.visibility = View.GONE
                     btnSendOtp.visibility = View.GONE
                 }
+
                 OtpFlowState.OtpExpired -> {
                     btnSendOtp.isEnabled = true
                     btnSendOtp.text = getString(R.string.resend_otp_button)

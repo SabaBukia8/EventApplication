@@ -1,6 +1,5 @@
 package com.example.eventapplication.data.repository
 
-import com.example.eventapplication.data.common.HandleResponse
 import com.example.eventapplication.data.local.datastore.DataStoreManager
 import com.example.eventapplication.domain.common.Resource
 import com.example.eventapplication.domain.model.AuthResult
@@ -88,6 +87,7 @@ class TokenRepositoryImpl @Inject constructor(
     }
 
     override suspend fun shouldSessionPersist(): Boolean {
-        return dataStoreManager.getPreference(PreferenceKeys.SESSION_SHOULD_PERSIST, false).map { it }.first()
+        return dataStoreManager.getPreference(PreferenceKeys.SESSION_SHOULD_PERSIST, false)
+            .map { it }.first()
     }
 }

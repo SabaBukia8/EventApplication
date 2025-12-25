@@ -9,21 +9,27 @@ import com.example.eventapplication.domain.model.UserEventRegistration
 fun UserEventRegistrationDto.toDomain(): UserEventRegistration? {
     val registrationStatus = status.toRegistrationStatus()
 
-    // Log for debugging
-    android.util.Log.d("UserRegistrationMapper", "Mapping registration $registrationId: status='$status' → $registrationStatus")
+    android.util.Log.d(
+        "UserRegistrationMapper",
+        "Mapping registration $registrationId: status='$status' → $registrationStatus"
+    )
 
     if (registrationStatus == null) {
-        android.util.Log.w("UserRegistrationMapper", "Skipping registration $registrationId - invalid status: '$status'")
+        android.util.Log.w(
+            "UserRegistrationMapper",
+            "Skipping registration $registrationId - invalid status: '$status'"
+        )
         return null
     }
 
-    // Filter out cancelled registrations
     if (registrationStatus == RegistrationStatus.CANCELLED) {
-        android.util.Log.d("UserRegistrationMapper", "Skipping registration $registrationId - status is CANCELLED")
+        android.util.Log.d(
+            "UserRegistrationMapper",
+            "Skipping registration $registrationId - status is CANCELLED"
+        )
         return null
     }
 
-    // Try to build event from flat fields first, then fall back to nested eventDetails
     val event = if (eventTitle != null && eventType != null && startDateTime != null) {
         RegisteredEvent(
             id = eventId,

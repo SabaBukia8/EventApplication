@@ -1,8 +1,5 @@
 package com.example.eventapplication.data.remote.api
 
-import com.example.eventapplication.data.remote.dto.response.UserResponseDto
-import retrofit2.http.GET
-
 interface UserApiService {
 
     // REMOVED: No API endpoint exists to fetch current user profile

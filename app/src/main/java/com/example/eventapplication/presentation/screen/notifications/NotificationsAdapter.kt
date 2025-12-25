@@ -39,6 +39,7 @@ class NotificationsAdapter(
                     false
                 )
             )
+
             VIEW_TYPE_NOTIFICATION -> NotificationViewHolder(
                 ItemNotificationBinding.inflate(
                     LayoutInflater.from(parent.context),
@@ -46,6 +47,7 @@ class NotificationsAdapter(
                     false
                 )
             )
+
             VIEW_TYPE_EMPTY -> EmptyStateViewHolder(
                 ItemNotificationEmptyBinding.inflate(
                     LayoutInflater.from(parent.context),
@@ -53,6 +55,7 @@ class NotificationsAdapter(
                     false
                 )
             )
+
             else -> throw IllegalArgumentException("Unknown view type: $viewType")
         }
     }
@@ -106,8 +109,10 @@ class NotificationItemDiffCallback : DiffUtil.ItemCallback<NotificationItem>() {
         return when {
             oldItem is NotificationItem.Header && newItem is NotificationItem.Header ->
                 oldItem.dateCategory == newItem.dateCategory
+
             oldItem is NotificationItem.NotificationCard && newItem is NotificationItem.NotificationCard ->
                 oldItem.notification.id == newItem.notification.id
+
             oldItem is NotificationItem.EmptyState && newItem is NotificationItem.EmptyState -> true
             else -> false
         }

@@ -1,5 +1,7 @@
 package com.example.eventapplication.presentation.screen.categoryevents
 
+import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -7,25 +9,23 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import android.os.Bundle
-import android.view.View
 import com.example.eventapplication.R
 import com.example.eventapplication.databinding.FragmentCategoryEventsBinding
-import com.example.eventapplication.presentation.screen.categoryevents.CategoryEventsFragmentArgs
-import com.example.eventapplication.presentation.screen.categoryevents.CategoryEventsFragmentDirections
-import com.example.eventapplication.presentation.screen.categoryevents.adapter.NewCategoryEventsAdapter
-import com.example.eventapplication.presentation.model.CategoryEventsItem
 import com.example.eventapplication.presentation.common.BaseFragment
 import com.example.eventapplication.presentation.extensions.gone
 import com.example.eventapplication.presentation.extensions.showSnackbar
 import com.example.eventapplication.presentation.extensions.toErrorMessage
 import com.example.eventapplication.presentation.extensions.visible
+import com.example.eventapplication.presentation.model.CategoryEventsItem
+import com.example.eventapplication.presentation.screen.categoryevents.adapter.NewCategoryEventsAdapter
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
+import java.util.TimeZone
 
 @AndroidEntryPoint
 class CategoryEventsFragment : BaseFragment<FragmentCategoryEventsBinding>(
@@ -45,7 +45,7 @@ class CategoryEventsFragment : BaseFragment<FragmentCategoryEventsBinding>(
 
         viewModel.onEvent(CategoryEventsEvent.LoadEvents(args.categoryId))
     }
-    
+
     override fun listeners() {
     }
 
@@ -105,15 +105,19 @@ class CategoryEventsFragment : BaseFragment<FragmentCategoryEventsBinding>(
                                 .actionCategoryEventsFragmentToEventDetailsFragment(effect.eventId)
                             findNavController().navigate(action)
                         }
+
                         is CategoryEventsSideEffect.NavigateBack -> {
                             findNavController().navigateUp()
                         }
+
                         is CategoryEventsSideEffect.NavigateToNotifications -> {
                             showSnackbar("Notifications not yet implemented", Snackbar.LENGTH_SHORT)
                         }
+
                         is CategoryEventsSideEffect.ShowFilterDialog -> {
                             showSnackbar("Filter dialog not yet implemented", Snackbar.LENGTH_SHORT)
                         }
+
                         is CategoryEventsSideEffect.ShowError -> {
                             val errorMessage = effect.error.toErrorMessage(requireContext())
                             showSnackbar(
@@ -229,7 +233,7 @@ class CategoryEventsFragment : BaseFragment<FragmentCategoryEventsBinding>(
             val date = inputFormat.parse(isoDate)
             val outputFormat = SimpleDateFormat("MMM dd", Locale.US)
             outputFormat.format(date!!)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             isoDate
         }
     }

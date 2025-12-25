@@ -1,6 +1,5 @@
 package com.example.eventapplication.domain.model
 
-// Pure Kotlin sealed class for errors - no string messages
 sealed class EventDetailsError {
     object NetworkError : EventDetailsError()
     object UnauthorizedError : EventDetailsError()

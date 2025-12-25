@@ -4,9 +4,9 @@ import com.example.eventapplication.data.common.HandleResponse
 import com.example.eventapplication.data.mapper.toDomain
 import com.example.eventapplication.data.remote.api.LoginApiService
 import com.example.eventapplication.data.remote.dto.request.LoginRequestDto
+import com.example.eventapplication.domain.common.Resource
 import com.example.eventapplication.domain.model.AuthResult
 import com.example.eventapplication.domain.repository.LoginRepository
-import com.example.eventapplication.domain.common.Resource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

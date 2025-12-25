@@ -1,8 +1,8 @@
 package com.example.eventapplication.presentation.screen.eventdetails.adapter
 
-import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -57,26 +57,32 @@ class EventDetailsAdapter(
                 val binding = ItemEventDetailsImageBinding.inflate(inflater, parent, false)
                 ImageViewHolder(binding, onBackClick, onMenuClick)
             }
+
             VIEW_TYPE_INFO -> {
                 val binding = ItemEventDetailsInfoBinding.inflate(inflater, parent, false)
                 InfoViewHolder(binding)
             }
+
             VIEW_TYPE_ACTION -> {
                 val binding = ItemEventDetailsActionBinding.inflate(inflater, parent, false)
                 ActionViewHolder(binding, onActionClick)
             }
+
             VIEW_TYPE_DESCRIPTION -> {
                 val binding = ItemEventDetailsDescriptionBinding.inflate(inflater, parent, false)
                 DescriptionViewHolder(binding)
             }
+
             VIEW_TYPE_AGENDA -> {
                 val binding = ItemEventDetailsAgendaBinding.inflate(inflater, parent, false)
                 AgendaViewHolder(binding)
             }
+
             VIEW_TYPE_SPEAKERS -> {
                 val binding = ItemEventDetailsSpeakersBinding.inflate(inflater, parent, false)
                 SpeakersViewHolder(binding)
             }
+
             else -> throw IllegalArgumentException("Unknown view type: $viewType")
         }
     }
@@ -112,8 +118,8 @@ class EventDetailsAdapter(
             item.imageUrl?.let { url ->
                 binding.ivEventImage.load(url) {
                     crossfade(true)
-                    placeholder(ColorDrawable(color))
-                    error(ColorDrawable(color))
+                    placeholder(color.toDrawable())
+                    error(color.toDrawable())
                 }
             }
         }
@@ -127,7 +133,8 @@ class EventDetailsAdapter(
             with(binding) {
                 val event = item.eventDetails
 
-                tvCategory.text = with(EventTypeMapper) { event.eventType.toDisplayName(root.context) }
+                tvCategory.text =
+                    with(EventTypeMapper) { event.eventType.toDisplayName(root.context) }
 
                 tvTitle.text = event.title
 
@@ -238,11 +245,17 @@ class EventDetailsAdapter(
     }
 
     private class EventDetailsItemDiffCallback : DiffUtil.ItemCallback<EventDetailsItem>() {
-        override fun areItemsTheSame(oldItem: EventDetailsItem, newItem: EventDetailsItem): Boolean {
+        override fun areItemsTheSame(
+            oldItem: EventDetailsItem,
+            newItem: EventDetailsItem
+        ): Boolean {
             return oldItem::class == newItem::class
         }
 
-        override fun areContentsTheSame(oldItem: EventDetailsItem, newItem: EventDetailsItem): Boolean {
+        override fun areContentsTheSame(
+            oldItem: EventDetailsItem,
+            newItem: EventDetailsItem
+        ): Boolean {
             return oldItem == newItem
         }
     }

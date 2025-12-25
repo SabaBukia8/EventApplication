@@ -1,7 +1,7 @@
 package com.example.eventapplication.data.common
 
-import com.example.eventapplication.domain.model.NetworkError
 import com.example.eventapplication.domain.common.Resource
+import com.example.eventapplication.domain.model.NetworkError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -23,10 +23,8 @@ class HandleResponse @Inject constructor() {
                 is SocketTimeoutException -> NetworkError.Timeout
                 is IOException -> NetworkError.NoInternet
                 is HttpException -> {
-                    // Try to parse error message from response body
                     val errorMessage = try {
                         e.response()?.errorBody()?.string()?.let { errorBody ->
-                            // Try to extract "message" field from JSON
                             val messageRegex = """"message"\s*:\s*"([^"]+)"""".toRegex()
                             messageRegex.find(errorBody)?.groupValues?.get(1)
                         }
@@ -38,11 +36,15 @@ class HandleResponse @Inject constructor() {
                         401 -> NetworkError.Unauthorized
                         403 -> NetworkError.Forbidden
                         404 -> NetworkError.NotFound
-                        409 -> NetworkError.Unknown(errorMessage ?: "Conflict: Resource already exists")
+                        409 -> NetworkError.Unknown(
+                            errorMessage ?: "Conflict: Resource already exists"
+                        )
+
                         in 500..599 -> NetworkError.ServerError
                         else -> NetworkError.Unknown(errorMessage ?: e.message())
                     }
                 }
+
                 else -> NetworkError.Unknown(e.message)
             }
             emit(Resource.Error(error))

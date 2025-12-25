@@ -78,6 +78,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                                 .actionHomeFragmentToEventDetailsFragment(effect.eventId)
                             findNavController().navigate(action)
                         }
+
                         is HomeSideEffect.NavigateToCategory -> {
                             try {
                                 val action = HomeFragmentDirections.Companion
@@ -88,24 +89,32 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                                 showSnackbar(errorMsg, Snackbar.LENGTH_LONG)
                             }
                         }
+
                         is HomeSideEffect.NavigateToAllEvents -> {
                             val action = HomeFragmentDirections.Companion
                                 .actionHomeFragmentToBrowseFragment(-1)
                             findNavController().navigate(action)
                         }
+
                         is HomeSideEffect.NavigateToNotifications -> {
                         }
+
                         is HomeSideEffect.NavigateToLogin -> {
                             val action = HomeFragmentDirections.actionHomeFragmentToLoginFragment()
                             findNavController().navigate(action)
                         }
+
                         is HomeSideEffect.ShowErrorMessage -> {
                             if (effect.formatArgs.isEmpty()) {
                                 showSnackbar(getString(effect.messageResId), Snackbar.LENGTH_SHORT)
                             } else {
-                                showSnackbar(getString(effect.messageResId, *effect.formatArgs), Snackbar.LENGTH_SHORT)
+                                showSnackbar(
+                                    getString(effect.messageResId, *effect.formatArgs),
+                                    Snackbar.LENGTH_SHORT
+                                )
                             }
                         }
+
                         is HomeSideEffect.ShowError -> {
                             val errorMessage = effect.error.toErrorMessage(requireContext())
                             showSnackbar(errorMessage, Snackbar.LENGTH_LONG)

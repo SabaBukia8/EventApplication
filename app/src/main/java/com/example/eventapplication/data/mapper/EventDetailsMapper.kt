@@ -4,7 +4,6 @@ import com.example.eventapplication.data.remote.dto.response.AgendaItemDto
 import com.example.eventapplication.data.remote.dto.response.EventDetailsDto
 import com.example.eventapplication.data.remote.dto.response.OrganizerDto
 import com.example.eventapplication.data.remote.dto.response.SpeakerDto
-import com.example.eventapplication.data.remote.dto.response.UserRegistrationDto
 import com.example.eventapplication.domain.model.AgendaItem
 import com.example.eventapplication.domain.model.EventDetails
 import com.example.eventapplication.domain.model.EventType
@@ -100,6 +99,4 @@ fun String.toRegistrationStatus(): RegistrationStatus? {
     }
 }
 
-fun UserRegistrationDto.toRegistrationStatus(): RegistrationStatus? {
-    return status.toRegistrationStatus()
-}
+

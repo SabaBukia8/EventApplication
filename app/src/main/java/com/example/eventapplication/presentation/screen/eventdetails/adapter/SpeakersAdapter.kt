@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.eventapplication.databinding.ItemSpeakerBinding
 import com.example.eventapplication.domain.model.Speaker
 
-class SpeakersAdapter : ListAdapter<Speaker, SpeakersAdapter.SpeakerViewHolder>(SpeakerDiffCallback()) {
+class SpeakersAdapter :
+    ListAdapter<Speaker, SpeakersAdapter.SpeakerViewHolder>(SpeakerDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpeakerViewHolder {
         val binding = ItemSpeakerBinding.inflate(
@@ -31,7 +32,6 @@ class SpeakersAdapter : ListAdapter<Speaker, SpeakersAdapter.SpeakerViewHolder>(
             with(binding) {
                 tvName.text = speaker.name
                 tvTitle.text = speaker.title
-                // TODO: Load avatar image if avatarUrl is not null using Coil/Glide
             }
         }
     }

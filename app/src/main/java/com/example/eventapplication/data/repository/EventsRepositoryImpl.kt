@@ -47,6 +47,7 @@ class EventsRepositoryImpl @Inject constructor(
                 is Resource.Success -> Resource.Success(
                     resource.data.toDomain { eventDto -> eventDto.toDomain() }
                 )
+
                 is Resource.Error -> resource
                 is Resource.Loader -> resource
             }
@@ -67,6 +68,7 @@ class EventsRepositoryImpl @Inject constructor(
                 is Resource.Success -> Resource.Success(
                     resource.data.map { it.toDomain() }
                 )
+
                 is Resource.Error -> resource
                 is Resource.Loader -> resource
             }

@@ -50,15 +50,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
-        
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
         setupNavigation()
     }
 
     private fun setupNavigation() = with(binding) {
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as androidx.navigation.fragment.NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.navHostFragment) as androidx.navigation.fragment.NavHostFragment
         navController = navHostFragment.navController
 
         appBarConfiguration = AppBarConfiguration(topLevelDestinations)
@@ -71,16 +72,18 @@ class MainActivity : AppCompatActivity() {
             updateBottomNavVisibility(destination)
         }
     }
-    
+
     private fun updateBottomNavVisibility(destination: NavDestination) = with(binding) {
         when (destination.id) {
             in authScreens -> {
                 bottomNavigation.gone()
             }
+
             in detailScreens -> {
                 bottomNavigation.visible()
                 bottomNavigation.menu.setGroupCheckable(0, false, true)
             }
+
             else -> {
                 bottomNavigation.visible()
                 bottomNavigation.menu.setGroupCheckable(0, true, true)
@@ -88,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    
+
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }

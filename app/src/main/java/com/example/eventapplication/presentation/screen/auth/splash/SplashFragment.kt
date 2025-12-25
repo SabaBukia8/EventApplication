@@ -6,7 +6,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.eventapplication.databinding.FragmentSplashBinding
-import com.example.eventapplication.presentation.screen.auth.splash.SplashFragmentDirections
 import com.example.eventapplication.presentation.common.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -32,6 +31,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(
                                 SplashFragmentDirections.Companion.actionSplashFragmentToLoginFragment()
                             )
                         }
+
                         is SplashSideEffect.NavigateToHome -> {
                             findNavController().navigate(
                                 SplashFragmentDirections.Companion.actionSplashFragmentToHomeFragment()
