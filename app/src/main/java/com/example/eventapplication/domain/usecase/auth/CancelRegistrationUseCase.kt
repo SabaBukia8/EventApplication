@@ -8,7 +8,7 @@ import javax.inject.Inject
 class CancelRegistrationUseCase @Inject constructor(
     private val repository: EventDetailsRepository
 ) {
-    operator fun invoke(registrationId: Int): Flow<Resource<Unit>> {
-        return repository.cancelRegistration(registrationId)
+    operator fun invoke(eventId: Int): Flow<Resource<Unit>> {
+        return repository.cancelRegistration(eventId)
     }
 }

@@ -28,6 +28,7 @@ class EventDetailsFragment : BaseFragment<FragmentEventDetailsBinding>(
     private val viewModel: EventDetailsViewModel by viewModels()
     private lateinit var detailsAdapter: EventDetailsAdapter
     private val args: EventDetailsFragmentArgs by navArgs()
+    private var lastSuccessState: EventDetailsState.Success? = null
 
     override fun listeners() {
         setupAdapter()
@@ -46,16 +47,31 @@ class EventDetailsFragment : BaseFragment<FragmentEventDetailsBinding>(
                 showSnackbar(R.string.menu, Snackbar.LENGTH_SHORT)
             },
             onActionClick = {
+                android.util.Log.d("EventDetailsFragment", "Action button clicked!")
                 val state = viewModel.state.value
+                android.util.Log.d("EventDetailsFragment", "Current state: $state")
+
                 if (state is EventDetailsState.Success) {
-                    val registrationStatus = state.eventDetails.registrationStatus
-                    if (registrationStatus != null &&
-                        (registrationStatus == RegistrationStatus.CONFIRMED ||
-                         registrationStatus == RegistrationStatus.WAITLISTED)) {
-                        viewModel.onEvent(EventDetailsEvent.CancelRegistrationClicked)
-                    } else {
-                        viewModel.onEvent(EventDetailsEvent.RegisterClicked)
+                    val status = state.eventDetails.registrationStatus
+                    android.util.Log.d("EventDetailsFragment", "Registration status: $status")
+
+                    when {
+                        status == RegistrationStatus.CONFIRMED || status == RegistrationStatus.WAITLISTED -> {
+                            android.util.Log.d("EventDetailsFragment", "Sending CancelRegistrationClicked event")
+                            viewModel.onEvent(EventDetailsEvent.CancelRegistrationClicked)
+                        }
+                        status == RegistrationStatus.CANCELLED -> {
+                            // Show toast explaining they can't re-register
+                            android.util.Log.d("EventDetailsFragment", "Cannot re-register after cancellation")
+                            android.widget.Toast.makeText(requireContext(), "You cannot re-register after cancelling", android.widget.Toast.LENGTH_SHORT).show()
+                        }
+                        else -> {
+                            android.util.Log.d("EventDetailsFragment", "Sending RegisterClicked event")
+                            viewModel.onEvent(EventDetailsEvent.RegisterClicked)
+                        }
                     }
+                } else {
+                    android.util.Log.e("EventDetailsFragment", "State is not Success! State: $state")
                 }
             }
         )
@@ -103,9 +119,17 @@ class EventDetailsFragment : BaseFragment<FragmentEventDetailsBinding>(
     }
 
     private fun handleLoading(isLoading: Boolean) {
+        // If we have previous data, show it with button disabled during loading
+        lastSuccessState?.let { state ->
+            if (isLoading) {
+                buildEventDetailsItems(state, canPerformAction = false)
+            }
+        }
     }
 
-    private fun buildEventDetailsItems(state: EventDetailsState.Success) {
+    private fun buildEventDetailsItems(state: EventDetailsState.Success, canPerformAction: Boolean = true) {
+        lastSuccessState = state
+
         val event = state.eventDetails
         val items = mutableListOf<EventDetailsItem>()
 
@@ -124,18 +148,13 @@ class EventDetailsFragment : BaseFragment<FragmentEventDetailsBinding>(
             isEnabled = isEnabled,
             capacityText = event.capacityText,
             isRegistering = state.isRegistering,
-            registrationDeadline = registrationDeadline
+            registrationDeadline = registrationDeadline,
+            canPerformAction = canPerformAction
         ))
 
         items.add(EventDetailsItem.Description(event.description))
 
-        if (event.agenda.isNotEmpty()) {
-            items.add(EventDetailsItem.AgendaSection(event.agenda))
-        }
-
-        if (event.speakers.isNotEmpty()) {
-            items.add(EventDetailsItem.SpeakersSection(event.speakers))
-        }
+        // Agenda and Speakers sections skipped - backend doesn't provide this data yet
 
         detailsAdapter.submitList(items)
     }

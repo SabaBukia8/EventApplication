@@ -84,7 +84,7 @@ class MyEventsAdapter(
 
         fun bind(item: MyEventsItem.EventCard) {
             val registration = item.registration
-            val event = registration.event
+            val event = registration.event ?: return // Should never be null due to filtering in ViewModel
 
             with(binding) {
                 // Set left border color for highlighting

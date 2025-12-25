@@ -1,5 +1,6 @@
 package com.example.eventapplication.presentation.screen.eventdetails.adapter
 
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -7,6 +8,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil3.load
+import coil3.request.crossfade
+import coil3.request.error
+import coil3.request.placeholder
 import com.example.eventapplication.R
 import com.example.eventapplication.databinding.ItemEventDetailsActionBinding
 import com.example.eventapplication.databinding.ItemEventDetailsAgendaBinding
@@ -99,11 +104,17 @@ class EventDetailsAdapter(
         }
 
         fun bind(item: EventDetailsItem.Image) {
-            with(binding) {
-                val colorRes = with(EventTypeMapper) { item.eventType.toPlaceholderColor() }
-                val color = root.context.getColor(colorRes)
-                vImagePlaceholder.setBackgroundColor(color)
-                // TODO: Load image if imageUrl is not null using Coil/Glide
+            val colorRes = with(EventTypeMapper) { item.eventType.toPlaceholderColor() }
+            val color = binding.root.context.getColor(colorRes)
+            binding.vImagePlaceholder.setBackgroundColor(color)
+
+            // Load image if available
+            item.imageUrl?.let { url ->
+                binding.ivEventImage.load(url) {
+                    crossfade(true)
+                    placeholder(ColorDrawable(color))
+                    error(ColorDrawable(color))
+                }
             }
         }
     }
@@ -149,14 +160,20 @@ class EventDetailsAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
-            binding.btnAction.setOnClickListener { onActionClick() }
+            binding.btnAction.setOnClickListener {
+                android.util.Log.d("EventDetailsAdapter", "Button clicked in ActionViewHolder")
+                onActionClick()
+            }
         }
 
         fun bind(item: EventDetailsItem.Action) {
             with(binding) {
-                btnAction.text = item.buttonText
-                btnAction.isEnabled = item.isEnabled && !item.isRegistering
-
+                btnAction.text = if (item.isRegistering) {
+                    "Processing..."
+                } else {
+                    item.buttonText
+                }
+                btnAction.isEnabled = item.canPerformAction && !item.isRegistering
 
                 if (item.registrationDeadline != null) {
                     tvRegistrationDeadline.isVisible = true

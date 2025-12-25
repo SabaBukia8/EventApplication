@@ -154,6 +154,7 @@
     <string name="featured_speakers">Featured Speakers</string>
     <string name="event_date_time">%1$s • %2$s</string>
     <string name="event_capacity_info">%1$d/%2$d Registered • %3$d spots left</string>
+    <string name="event_image">Event image</string>
 
     <!-- Placeholder strings (used by existing layouts) -->
     <string name="enter_your_email">Enter your email</string>
@@ -204,6 +205,7 @@
     <string name="operation_failed">Operation failed</string>
     <string name="no_active_registration">No active registration found</string>
     <string name="registration_cancelled">Registration cancelled</string>
+    <string name="registration_cancelled_permanent">Registration Cancelled</string>
     <string name="waitlisted">Waitlisted</string>
     <string name="join_waitlist">Join Waitlist</string>
     <string name="register_now_button">Register Now</string>

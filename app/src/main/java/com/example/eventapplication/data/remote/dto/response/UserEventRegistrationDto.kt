@@ -6,10 +6,22 @@ import kotlinx.serialization.Serializable
 data class UserEventRegistrationDto(
     val registrationId: Int,
     val eventId: Int,
-    val userId: Int,
+    val userId: Int? = null,
     val status: String,
     val registeredAt: String,
-    val eventDetails: RegistrationEventDetailsDto
+    // Flat fields from API response
+    val eventTitle: String? = null,
+    val eventType: String? = null,
+    val startDateTime: String? = null,
+    val endDateTime: String? = null,
+    val venueName: String? = null,
+    val address: String? = null,
+    val onlineAddress: String? = null,
+    val imageUrl: String? = null,
+    val description: String? = null,
+    val organizerName: String? = null,
+    // Legacy nested structure (keep for backwards compatibility)
+    val eventDetails: RegistrationEventDetailsDto? = null
 )
 
 @Serializable

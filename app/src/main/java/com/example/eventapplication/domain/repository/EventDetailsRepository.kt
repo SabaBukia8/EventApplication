@@ -10,7 +10,7 @@ interface EventDetailsRepository {
 
     fun registerForEvent(eventId: Int, userId: Int): Flow<Resource<Int>>
 
-    fun cancelRegistration(registrationId: Int): Flow<Resource<Unit>>
+    fun cancelRegistration(eventId: Int): Flow<Resource<Unit>>
 
     fun checkRegistrationStatus(eventId: Int, userId: Int): Flow<Resource<RegistrationStatus?>>
 }

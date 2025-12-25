@@ -33,37 +33,57 @@ class EventDetailsViewModel @Inject constructor(
     private var currentUserId: Int? = null
 
     override fun onEvent(event: EventDetailsEvent) {
+        android.util.Log.d("EventDetailsViewModel", "onEvent called with: $event")
         when (event) {
             is EventDetailsEvent.LoadEventDetails -> loadEventDetails(event.eventId)
-            is EventDetailsEvent.RegisterClicked -> registerForEvent()
-            is EventDetailsEvent.CancelRegistrationClicked -> cancelRegistration()
+            is EventDetailsEvent.RegisterClicked -> {
+                android.util.Log.d("EventDetailsViewModel", "RegisterClicked event received")
+                registerForEvent()
+            }
+            is EventDetailsEvent.CancelRegistrationClicked -> {
+                android.util.Log.d("EventDetailsViewModel", "CancelRegistrationClicked event received")
+                cancelRegistration()
+            }
             is EventDetailsEvent.BackClicked -> emitSideEffect(EventDetailsSideEffect.NavigateBack)
         }
     }
 
     private fun loadEventDetails(eventId: Int) {
         currentEventId = eventId
+        android.util.Log.d("EventDetailsViewModel", "loadEventDetails called for eventId: $eventId")
         updateState { EventDetailsState.IsLoading(true) }
 
         viewModelScope.launch {
             val userId = dataStoreManager.getPreference(PreferenceKeys.USER_ID, "0").first().toIntOrNull()
             currentUserId = userId
+            android.util.Log.d("EventDetailsViewModel", "Retrieved userId: $userId")
 
             getEventDetailsUseCase(eventId).collect { resource ->
+                android.util.Log.d("EventDetailsViewModel", "Received resource: $resource")
                 when (resource) {
                     is Resource.Loader -> {
-                        updateState { EventDetailsState.IsLoading(resource.isLoading) }
+                        android.util.Log.d("EventDetailsViewModel", "Loading: ${resource.isLoading}")
+                        // Only update to loading state if we're not already in Success or Error state
+                        // This prevents Loader(false) from overwriting Success state
+                        updateState { currentState ->
+                            if (currentState is EventDetailsState.Success || currentState is EventDetailsState.Error) {
+                                currentState // Keep current state
+                            } else {
+                                EventDetailsState.IsLoading(resource.isLoading)
+                            }
+                        }
                     }
                     is Resource.Success -> {
+                        android.util.Log.d("EventDetailsViewModel", "Success! Event details: ${resource.data}")
                         updateState {
                             EventDetailsState.Success(
                                 eventDetails = resource.data,
-                                registrationId = null,
                                 isRegistering = false
                             )
                         }
                     }
                     is Resource.Error -> {
+                        android.util.Log.e("EventDetailsViewModel", "Error loading event details: ${resource.error}")
                         updateState { EventDetailsState.Error(EventDetailsError.UnknownError) }
                         emitSideEffect(EventDetailsSideEffect.ShowError(EventDetailsError.UnknownError))
                     }
@@ -73,29 +93,47 @@ class EventDetailsViewModel @Inject constructor(
     }
 
     private fun registerForEvent() {
-        val eventId = currentEventId ?: return
-        val userId = currentUserId ?: run {
+        android.util.Log.d("EventDetailsViewModel", "registerForEvent() called")
+        android.util.Log.d("EventDetailsViewModel", "currentEventId: $currentEventId")
+        android.util.Log.d("EventDetailsViewModel", "currentUserId: $currentUserId")
+
+        val eventId = currentEventId ?: run {
+            android.util.Log.e("EventDetailsViewModel", "currentEventId is null!")
+            return
+        }
+        val userId = currentUserId?.takeIf { it > 0 } ?: run {
+            android.util.Log.e("EventDetailsViewModel", "currentUserId is null or invalid: $currentUserId")
             emitSideEffect(EventDetailsSideEffect.ShowToastResource(R.string.user_not_logged_in))
             return
         }
 
         val currentState = state.value
-        if (currentState !is EventDetailsState.Success) return
-        
+        android.util.Log.d("EventDetailsViewModel", "Current state: $currentState")
+        if (currentState !is EventDetailsState.Success) {
+            android.util.Log.e("EventDetailsViewModel", "State is not Success, returning")
+            return
+        }
+
+        android.util.Log.d("EventDetailsViewModel", "Setting isRegistering to true")
         updateState {
             (it as EventDetailsState.Success).copy(isRegistering = true)
         }
 
         viewModelScope.launch {
+            android.util.Log.d("EventDetailsViewModel", "Calling registerForEventUseCase")
             registerForEventUseCase(eventId, userId).collect { resource ->
+                android.util.Log.d("EventDetailsViewModel", "Registration resource: $resource")
                 when (resource) {
                     is Resource.Loader -> {
+                        android.util.Log.d("EventDetailsViewModel", "Loading: ${resource.isLoading}")
                     }
                     is Resource.Success -> {
+                        android.util.Log.d("EventDetailsViewModel", "Registration successful!")
                         emitSideEffect(EventDetailsSideEffect.ShowToastResource(R.string.registration_successful))
                         loadEventDetails(eventId)
                     }
                     is Resource.Error -> {
+                        android.util.Log.e("EventDetailsViewModel", "Registration error: ${resource.error}")
                         updateState {
                             if (it is EventDetailsState.Success) {
                                 it.copy(isRegistering = false)
@@ -111,10 +149,23 @@ class EventDetailsViewModel @Inject constructor(
                             NetworkError.Timeout -> null
                             else -> null
                         }
-                        if (errorMessage != null) {
-                            emitSideEffect(EventDetailsSideEffect.ShowToast(errorMessage))
-                        } else {
-                            emitSideEffect(EventDetailsSideEffect.ShowToastResource(R.string.operation_failed))
+
+                        // Handle specific error cases
+                        when {
+                            errorMessage?.contains("already registered", ignoreCase = true) == true -> {
+                                android.util.Log.d("EventDetailsViewModel", "User already registered, reloading event details")
+                                loadEventDetails(eventId)
+                            }
+                            errorMessage?.contains("event is full", ignoreCase = true) == true -> {
+                                emitSideEffect(EventDetailsSideEffect.ShowToast("Event is now full. Please try joining the waitlist instead."))
+                                loadEventDetails(eventId) // Reload to show "Join Waitlist" button
+                            }
+                            errorMessage != null -> {
+                                emitSideEffect(EventDetailsSideEffect.ShowToast(errorMessage))
+                            }
+                            else -> {
+                                emitSideEffect(EventDetailsSideEffect.ShowToastResource(R.string.operation_failed))
+                            }
                         }
                     }
                 }
@@ -127,17 +178,12 @@ class EventDetailsViewModel @Inject constructor(
         val currentState = state.value
         if (currentState !is EventDetailsState.Success) return
 
-        val registrationId = currentState.registrationId ?: run {
-            emitSideEffect(EventDetailsSideEffect.ShowToastResource(R.string.no_active_registration))
-            return
-        }
-        
         updateState {
             (it as EventDetailsState.Success).copy(isRegistering = true)
         }
 
         viewModelScope.launch {
-            cancelRegistrationUseCase(registrationId).collect { resource ->
+            cancelRegistrationUseCase(eventId).collect { resource ->
                 when (resource) {
                     is Resource.Loader -> {
                     }
@@ -174,15 +220,16 @@ class EventDetailsViewModel @Inject constructor(
 
     fun getButtonText(registrationStatus: RegistrationStatus?, isFull: Boolean): String {
         return when {
-            registrationStatus == RegistrationStatus.CONFIRMED -> stringProvider.getString(R.string.registered)
-            registrationStatus == RegistrationStatus.WAITLISTED -> stringProvider.getString(R.string.waitlisted)
+            registrationStatus == RegistrationStatus.CONFIRMED -> stringProvider.getString(R.string.cancel_registration)
+            registrationStatus == RegistrationStatus.WAITLISTED -> stringProvider.getString(R.string.cancel_registration)
+            registrationStatus == RegistrationStatus.CANCELLED -> stringProvider.getString(R.string.registration_cancelled_permanent)
             isFull -> stringProvider.getString(R.string.join_waitlist)
             else -> stringProvider.getString(R.string.register_now_button)
         }
     }
 
     fun isButtonEnabled(registrationStatus: RegistrationStatus?): Boolean {
-        return registrationStatus != RegistrationStatus.CONFIRMED &&
-                registrationStatus != RegistrationStatus.WAITLISTED
+        // Disable button if user has cancelled registration (permanent block)
+        return registrationStatus != RegistrationStatus.CANCELLED
     }
 }

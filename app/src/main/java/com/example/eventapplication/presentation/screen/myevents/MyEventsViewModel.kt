@@ -44,10 +44,12 @@ class MyEventsViewModel @Inject constructor(
                     is Resource.Success -> {
                         val activeRegistrations = result.data
                             .filter {
-                                it.status == RegistrationStatus.CONFIRMED ||
-                                it.status == RegistrationStatus.WAITLISTED
+                                it.event != null && (
+                                    it.status == RegistrationStatus.CONFIRMED ||
+                                    it.status == RegistrationStatus.WAITLISTED
+                                )
                             }
-                            .sortedBy { parseDateTime(it.event.startDateTime) }
+                            .sortedBy { parseDateTime(it.event!!.startDateTime) }
 
                         if (activeRegistrations.isEmpty()) {
                             updateState { MyEventsState.Empty }
@@ -92,11 +94,13 @@ class MyEventsViewModel @Inject constructor(
 
         return registrations
             .filter {
-                it.status == RegistrationStatus.CONFIRMED ||
-                it.status == RegistrationStatus.WAITLISTED
+                it.event != null && (
+                    it.status == RegistrationStatus.CONFIRMED ||
+                    it.status == RegistrationStatus.WAITLISTED
+                )
             }
             .firstOrNull { registration ->
-                val eventTime = parseDateTime(registration.event.startDateTime)
+                val eventTime = parseDateTime(registration.event!!.startDateTime)
                 eventTime > now
             }
             ?.eventId

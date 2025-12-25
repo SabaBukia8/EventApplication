@@ -3,10 +3,10 @@ package com.example.eventapplication.domain.model
 data class UserEventRegistration(
     val registrationId: Int,
     val eventId: Int,
-    val userId: Int,
+    val userId: Int?,
     val status: RegistrationStatus,
     val registeredAt: String,
-    val event: RegisteredEvent
+    val event: RegisteredEvent?
 )
 
 data class RegisteredEvent(

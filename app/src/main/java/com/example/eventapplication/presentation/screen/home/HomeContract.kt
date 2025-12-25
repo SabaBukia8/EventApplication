@@ -35,5 +35,5 @@ sealed class HomeSideEffect {
     object NavigateToNotifications : HomeSideEffect()
     object NavigateToLogin : HomeSideEffect()
     data class ShowError(val error: HomeError) : HomeSideEffect()
-    data class ShowErrorMessage(@androidx.annotation.StringRes val messageResId: Int, val formatArgs: Array<Any> = emptyArray()) : HomeSideEffect()
+    data class ShowErrorMessage(@param:androidx.annotation.StringRes val messageResId: Int, val formatArgs: Array<Any> = emptyArray()) : HomeSideEffect()
 }

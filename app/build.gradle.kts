@@ -52,11 +52,14 @@ android {
         viewBinding = true
         buildConfig = true
     }
+    kotlinOptions {
+    }
 
 }
 
 kotlin {
     compilerOptions {
+        listOf("-XXLanguage:+PropertyParamAnnotationDefaultTargetMode")
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
     }
 }

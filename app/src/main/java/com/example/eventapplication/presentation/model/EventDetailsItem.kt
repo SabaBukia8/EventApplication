@@ -20,7 +20,8 @@ sealed class EventDetailsItem {
         val isEnabled: Boolean,
         val capacityText: String,
         val isRegistering: Boolean,
-        val registrationDeadline: String? = null
+        val registrationDeadline: String? = null,
+        val canPerformAction: Boolean = true
     ) : EventDetailsItem()
 
     data class Description(

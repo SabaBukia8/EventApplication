@@ -14,9 +14,9 @@ interface EventDetailsApiService {
     @GET("api/events/{id}")
     suspend fun getEventDetails(@Path("id") eventId: Int): EventDetailsDto
 
-    @POST("api/registrations")
+    @POST("api/Registrations")
     suspend fun registerForEvent(@Body request: RegisterEventRequestDto): RegistrationResponseDto
 
-    @DELETE("api/registrations/{id}")
-    suspend fun cancelRegistration(@Path("id") registrationId: Int)
+    @DELETE("api/Registrations/event/{eventId}/cancel")
+    suspend fun cancelRegistrationByEventId(@Path("eventId") eventId: Int)
 }

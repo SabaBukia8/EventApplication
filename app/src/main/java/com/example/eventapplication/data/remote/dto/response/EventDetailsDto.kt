@@ -56,9 +56,9 @@ data class UserRegistrationDto(
 
 @Serializable
 data class RegistrationResponseDto(
-    val registrationId: Int,
-    val eventId: Int,
-    val userId: Int,
-    val status: String,
-    val registeredAt: String
+    val registrationId: Int? = null,
+    val eventId: Int? = null,
+    val userId: Int? = null,
+    val status: String? = null,
+    val registeredAt: String? = null
 )

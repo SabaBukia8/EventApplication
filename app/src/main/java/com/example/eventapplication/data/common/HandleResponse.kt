@@ -23,12 +23,24 @@ class HandleResponse @Inject constructor() {
                 is SocketTimeoutException -> NetworkError.Timeout
                 is IOException -> NetworkError.NoInternet
                 is HttpException -> {
+                    // Try to parse error message from response body
+                    val errorMessage = try {
+                        e.response()?.errorBody()?.string()?.let { errorBody ->
+                            // Try to extract "message" field from JSON
+                            val messageRegex = """"message"\s*:\s*"([^"]+)"""".toRegex()
+                            messageRegex.find(errorBody)?.groupValues?.get(1)
+                        }
+                    } catch (ex: Exception) {
+                        null
+                    }
+
                     when (e.code()) {
                         401 -> NetworkError.Unauthorized
                         403 -> NetworkError.Forbidden
                         404 -> NetworkError.NotFound
+                        409 -> NetworkError.Unknown(errorMessage ?: "Conflict: Resource already exists")
                         in 500..599 -> NetworkError.ServerError
-                        else -> NetworkError.Unknown(e.message())
+                        else -> NetworkError.Unknown(errorMessage ?: e.message())
                     }
                 }
                 else -> NetworkError.Unknown(e.message)

@@ -8,7 +8,6 @@ sealed class EventDetailsState {
     data class IsLoading(val isLoading: Boolean) : EventDetailsState()
     data class Success(
         val eventDetails: EventDetails,
-        val registrationId: Int? = null,
         val isRegistering: Boolean = false
     ) : EventDetailsState()
     data class Error(val error: EventDetailsError) : EventDetailsState()
